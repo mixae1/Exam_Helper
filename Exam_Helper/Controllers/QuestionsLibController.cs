@@ -18,14 +18,14 @@ namespace Exam_Helper.Controllers
             _context = context;
         }
 
-        // GET: QuestionsLib
+        /*// GET: QuestionsLib
         public async Task<IActionResult> Index()
         {   
             // тестили сортировку вопросов по тегам 
             var ques = await _context.Question.Where(x => x.TagIds.Contains("1")).ToListAsync();
             return View(ques);
         }
-
+*/
        
 
         // GET: QuestionsLib/Details/5
