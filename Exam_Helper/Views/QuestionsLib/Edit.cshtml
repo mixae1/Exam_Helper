@@ -33,16 +33,18 @@
                 <input asp-for="Author" class="form-control" />
                 <span asp-validation-for="Author" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" hidden="true">
                 <label asp-for="CreationDate" class="control-label"></label>
                 <input asp-for="CreationDate" class="form-control" />
                 <span asp-validation-for="CreationDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="UpdateDate" class="control-label"></label>
-                <input asp-for="UpdateDate" class="form-control" />
-                <span asp-validation-for="UpdateDate" class="text-danger"></span>
-            </div>
+            <!--
+    <div class="form-group">
+        <label asp-for="UpdateDate" class="control-label"></label>
+        <input asp-for="UpdateDate" class="form-control" />
+        <span asp-validation-for="UpdateDate" class="text-danger"></span>
+    </div>
+        -->
             <div class="form-group">
                 <label asp-for="TagIds" class="control-label"></label>
                 <input asp-for="TagIds" class="form-control" />
