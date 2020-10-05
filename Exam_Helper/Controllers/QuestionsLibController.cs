@@ -95,7 +95,7 @@ namespace Exam_Helper.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Definition,Title,Proof,Author,CreationDate,TagIds")] Question question)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Definition,Title,Proof,Author,TagIds")] Question question)
         {
             if (id != question.Id)
             {
@@ -106,8 +106,8 @@ namespace Exam_Helper.Controllers
             {
                 try
                 {
-                    //var old = await _context.Question.FindAsync(id);
-                    //question.CreationDate = old.CreationDate;
+                    var old = await _context.Question.AsNoTracking().FirstAsync(x => x.Id == id);
+                    question.CreationDate = old.CreationDate;
                     question.UpdateDate = DateTime.Now;
                     _context.Update(question);
                     await _context.SaveChangesAsync();
