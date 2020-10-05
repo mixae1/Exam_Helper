@@ -23,7 +23,7 @@ namespace Exam_Helper.Controllers
         public async Task<IActionResult> Index()
         {
             // тестили сортировку вопросов по тегам 
-            var ques = _context.Question;//.Where(x => x.TagIds.Contains("1")).ToListAsync();
+            var ques = await _context.Question.ToListAsync();//.Where(x => x.TagIds.Contains("1")).ToListAsync();
             return View(ques);
         }
 
@@ -60,10 +60,13 @@ namespace Exam_Helper.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Definition,Title,Proof,Author,CreationDate,UpdateDate,TagIds")] Question question)
+        public async Task<IActionResult> Create([Bind("Id,Definition,Title,Proof,TagIds")] Question question)
         {
             if (ModelState.IsValid)
             {
+                question.CreationDate = DateTime.Now;
+                question.UpdateDate = DateTime.Now;
+                question.Author = "Admin";
                 _context.Add(question);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -92,7 +95,7 @@ namespace Exam_Helper.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Definition,Title,Proof,Author,CreationDate,UpdateDate,TagIds")] Question question)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Definition,Title,Proof,Author,CreationDate,TagIds")] Question question)
         {
             if (id != question.Id)
             {
@@ -103,6 +106,9 @@ namespace Exam_Helper.Controllers
             {
                 try
                 {
+                    //var old = await _context.Question.FindAsync(id);
+                    //question.CreationDate = old.CreationDate;
+                    question.UpdateDate = DateTime.Now;
                     _context.Update(question);
                     await _context.SaveChangesAsync();
                 }
