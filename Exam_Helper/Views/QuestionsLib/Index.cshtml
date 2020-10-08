@@ -17,11 +17,13 @@
 
             <button type="button" class="btn btn-warning">Удалить Вопрос</button>
         </div>
-
+        <form asp-controller="QuestionsLib" asp-action="Index">
         <div class="form-group pt-3 pb-3">
             Поиск вопроса:
-            <input type="text" class="form-control w-50">
+            <input type="text"  name="SearchString" class="form-control w-50">
+        
         </div>
+            </form>
         <div class="pt-3">
             <!-- Массив вопросов, отображение потом настроим -->
             <ul class="list-group">

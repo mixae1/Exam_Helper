@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Exam_Helper;
 
 namespace Exam_Helper.Controllers
 {
@@ -20,11 +19,18 @@ namespace Exam_Helper.Controllers
 
         
         // GET: QuestionsLib
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SearchString)
         {
-            // тестили сортировку вопросов по тегам 
-            var ques = await _context.Question.ToListAsync();//.Where(x => x.TagIds.Contains("1")).ToListAsync();
-            return View(ques);
+            
+            var ques = from que in _context.Question
+                       select que; //await _context.Question.ToListAsync();
+            if (!string.IsNullOrEmpty(SearchString))
+                ques = ques.Where(x => x.Title.Contains(SearchString)
+                                 || x.Proof.Contains(SearchString)
+                                 || x.TagIds.Contains(SearchString)
+                                 || x.Definition.Contains(SearchString));
+            
+            return View(await ques.ToListAsync());
         }
 
        
@@ -87,6 +93,7 @@ namespace Exam_Helper.Controllers
             {
                 return NotFound();
             }
+
             return View(question);
         }
 
@@ -95,7 +102,7 @@ namespace Exam_Helper.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Definition,Title,Proof,Author,TagIds")] Question question)
+        public async Task<IActionResult> Edit(int id,  [Bind("Id,Definition,Title,Proof,Author,TagIds")] Question question)
         {
             if (id != question.Id)
             {
@@ -106,6 +113,7 @@ namespace Exam_Helper.Controllers
             {
                 try
                 {
+
                     var old = await _context.Question.AsNoTracking().FirstAsync(x => x.Id == id);
                     question.CreationDate = old.CreationDate;
                     question.UpdateDate = DateTime.Now;
