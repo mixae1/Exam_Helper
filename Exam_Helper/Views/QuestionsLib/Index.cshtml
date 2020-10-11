@@ -12,86 +12,80 @@
 
         <hr color="brown" />
 
-        <div class="d-flex justify-content-between pt-3 pb-3">
-            <button type="button" class="btn btn-warning" ><a asp-action="Create">Добавить вопрос</a></button>
+        <div class="d-flex  bd-highlight pt-3 pb-3">
+            <button type="button" class="btn btn-warning bd-highlight">Добавить Вопрос</button>
 
-            <button type="button" class="btn btn-warning">Удалить Вопрос</button>
-        </div>
-        <form asp-controller="QuestionsLib" asp-action="Index">
-        <div class="form-group pt-3 pb-3">
-            Поиск вопроса:
-            <input type="text"  name="SearchString" class="form-control w-50">
-        
-        </div>
+            <div class="form-group pt-3 pb-3 bd-highlight ml-auto p-2"></div>
+            <span class="mr-3"> Поиск вопроса: </span>
+            <form asp-controller="QuestionsLib" asp-action="Index">
+                <input type="text" name="SearchString" class="form-control">
             </form>
-        <div class="pt-3">
-            <!-- Массив вопросов, отображение потом настроим -->
-            <ul class="list-group">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Definition)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Title)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Proof)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.Author)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.CreationDate)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.UpdateDate)
-                            </th>
-                            <th>
-                                Tags
-                            </th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Definition)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Title)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Proof)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.Author)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.CreationDate.GetDateTimeFormats()[0])
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.UpdateDate.GetDateTimeFormats()[0])
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.TagIds)
-                                </td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </ul>
-
         </div>
+    </div>
 
+    <div class="pt-3">
+        <!-- Массив вопросов, отображение потом настроим -->
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Definition)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Proof)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Author)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CreationDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.UpdateDate)
+                        </th>
+                        <th>
+                            Tags
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Definition)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Proof)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Author)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreationDate.GetDateTimeFormats()[0])
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UpdateDate.GetDateTimeFormats()[0])
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TagIds)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
 
     </div>
 </main>
