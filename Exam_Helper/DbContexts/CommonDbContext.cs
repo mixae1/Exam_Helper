@@ -24,12 +24,14 @@ namespace Exam_Helper
         public virtual DbSet<User> User { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
+        { 
+            /*
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseNpgsql("Host=ec2-52-207-124-89.compute-1.amazonaws.com;Port=5432;Database=ds38mc84b76g4;Username=cfxdaexdfxisyl;Password=9e9e4125262f940ee3e007f56412917c23e01f2a15b40d325f1a5206ccc8de0b;SslMode=Require;Trustservercertificate=true");
+                //optionsBuilder.UseNpgsql("Host=ec2-52-207-124-89.compute-1.amazonaws.com;Port=5432;Database=ds38mc84b76g4;Username=cfxdaexdfxisyl;Password=9e9e4125262f940ee3e007f56412917c23e01f2a15b40d325f1a5206ccc8de0b;SslMode=Require;Trustservercertificate=true");
             }
+            */
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -45,7 +47,7 @@ namespace Exam_Helper
                 entity.Property(e => e.Serviceinfo)
                     .IsRequired()
                     .HasColumnName("serviceinfo")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(256);
 
                 entity.Property(e => e.TypeId).HasColumnName("type_id");
 
@@ -87,7 +89,7 @@ namespace Exam_Helper
                 entity.Property(e => e.Author)
                     .IsRequired()
                     .HasColumnName("author")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(64);
 
                 entity.Property(e => e.CreationDate)
                     .HasColumnName("creation_date")
@@ -96,12 +98,12 @@ namespace Exam_Helper
                 entity.Property(e => e.QuestionSet)
                     .IsRequired()
                     .HasColumnName("question_set")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(256);
 
                 entity.Property(e => e.TagsId)
                     .IsRequired()
                     .HasColumnName("tags_id")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(64);
 
                 entity.Property(e => e.UpdateDate)
                     .HasColumnName("update_date")
@@ -113,7 +115,7 @@ namespace Exam_Helper
                 entity.Property(e => e.Author)
                     .IsRequired()
                     .HasColumnName("author")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(16);
 
                 entity.Property(e => e.CreationDate)
                     .HasColumnName("creation_date")
@@ -122,12 +124,12 @@ namespace Exam_Helper
                 entity.Property(e => e.Definition)
                     .IsRequired()
                     .HasColumnName("definition")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(256);
 
                 entity.Property(e => e.Proof)
                     .IsRequired()
                     .HasColumnName("proof")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(1024);
 
                 entity.Property(e => e.TagIds)
                     .IsRequired()
@@ -136,7 +138,7 @@ namespace Exam_Helper
                 entity.Property(e => e.Title)
                     .IsRequired()
                     .HasColumnName("title")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(64);
 
                 entity.Property(e => e.UpdateDate)
                     .HasColumnName("update_date")
@@ -150,7 +152,7 @@ namespace Exam_Helper
                 entity.Property(e => e.Title)
                     .IsRequired()
                     .HasColumnName("title")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(64);
             });
 
             modelBuilder.Entity<Tests>(entity =>
@@ -160,12 +162,12 @@ namespace Exam_Helper
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnName("name")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(64);
 
                 entity.Property(e => e.Type)
                     .IsRequired()
                     .HasColumnName("type")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(64) ;
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -176,38 +178,38 @@ namespace Exam_Helper
 
                 entity.Property(e => e.IgnorePacks)
                     .HasColumnName("ignore_packs")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(256);
 
                 entity.Property(e => e.IgnoreQues)
                     .HasColumnName("ignore_ques")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(256);
 
                 entity.Property(e => e.Img)
                     .HasColumnName("img")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(256) ;
 
                 entity.Property(e => e.Login)
                     .IsRequired()
                     .HasColumnName("login")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(256);
 
                 entity.Property(e => e.PackSet)
                     .HasColumnName("pack_set")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(64);
 
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasColumnName("password")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(16);
 
                 entity.Property(e => e.QuestionSet)
                     .HasColumnName("question_set")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(64);
 
                 entity.Property(e => e.Username)
                     .IsRequired()
                     .HasColumnName("username")
-                    .HasColumnType("character varying");
+                    .HasColumnType("character varying").HasMaxLength(8);
             });
 
             OnModelCreatingPartial(modelBuilder);
