@@ -56,6 +56,7 @@ namespace Exam_Helper.Controllers
         }
 
         // GET: QuestionsLib/Create
+        [HttpGet]
         public IActionResult Create()
         {
             return View();

@@ -84,7 +84,7 @@ namespace Exam_Helper
             {
                 entity.HasComment("Pack");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                //entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Author)
                     .IsRequired()
