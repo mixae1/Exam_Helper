@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Exam_Helper;
+using Exam_Helper.ViewsModel;
 
 namespace Exam_Helper.Controllers
 {
@@ -43,9 +43,12 @@ namespace Exam_Helper.Controllers
         }
 
         // GET: PacksLib/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var temp = await _context.Question.Select(x => new QuestionForPackCreatingModel()
+            { Id = x.Id, Name = x.Title, IsSelected = false }).ToListAsync();
+
+            return View(temp);
         }
 
         // POST: PacksLib/Create
@@ -53,17 +56,27 @@ namespace Exam_Helper.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,QuestionSet,Author,CreationDate,UpdateDate,TagsId,Name")] Pack pack)
-        {
+        public async Task<IActionResult> Create(IEnumerable<QuestionForPackCreatingModel> ques)
+        {    
+            Pack pack = new Pack();
             if (ModelState.IsValid)
             {
-                pack.CreationDate = DateTime.Now;
+                
+                var temp = ques.Where(x => x.IsSelected).Select(x=>x.Id);
+
+                var StringIds = string.Join(';', temp);
+                pack.Name = "test";
                 pack.UpdateDate = DateTime.Now;
+                pack.CreationDate = DateTime.Now;
                 pack.Author = "Admin";
+                pack.QuestionSet = StringIds;
+                pack.TagsId = "someIDS";
                 _context.Add(pack);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
+            
             return View(pack);
         }
 

@@ -182,3 +182,4 @@ C:\Users\Anton\source\repos\Exam_Helper\Exam_Helper\obj\Debug\netcoreapp3.1\Razo
 C:\Users\Anton\source\repos\Exam_Helper\Exam_Helper\obj\Debug\netcoreapp3.1\Razor\Views\PacksLib\Details.cshtml.g.cs
 C:\Users\Anton\source\repos\Exam_Helper\Exam_Helper\obj\Debug\netcoreapp3.1\Razor\Views\PacksLib\Edit.cshtml.g.cs
 C:\Users\Anton\source\repos\Exam_Helper\Exam_Helper\obj\Debug\netcoreapp3.1\Razor\Views\PacksLib\Index.cshtml.g.cs
+C:\Users\Anton\source\repos\Exam_Helper\Exam_Helper\obj\Debug\netcoreapp3.1\Razor\Views\PacksLib\Create1.cshtml.g.cs
