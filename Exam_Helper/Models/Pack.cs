@@ -16,7 +16,8 @@ namespace Exam_Helper
         public DateTime CreationDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string TagsId { get; set; }
-
+         
+        public string Name { get; set; }
         public virtual ICollection<ATest> ATest { get; set; }
     }
 }

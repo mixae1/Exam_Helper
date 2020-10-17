@@ -53,7 +53,7 @@ namespace Exam_Helper.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,QuestionSet,Author,CreationDate,UpdateDate,TagsId")] Pack pack)
+        public async Task<IActionResult> Create([Bind("Id,QuestionSet,Author,CreationDate,UpdateDate,TagsId,Name")] Pack pack)
         {
             if (ModelState.IsValid)
             {
@@ -74,21 +74,21 @@ namespace Exam_Helper.Controllers
             {
                 return NotFound();
             }
-
+            
             var pack = await _context.Pack.FindAsync(id);
             if (pack == null)
             {
                 return NotFound();
             }
             return View(pack);
-        }
+        }  
 
         // POST: PacksLib/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,QuestionSet,Author,CreationDate,UpdateDate,TagsId")] Pack pack)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,QuestionSet,Author,TagsId")] Pack pack)
         {
             if (id != pack.Id)
             {
