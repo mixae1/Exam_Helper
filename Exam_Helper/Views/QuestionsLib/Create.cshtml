@@ -17,16 +17,19 @@
                 <input asp-for="@Model.question.Definition" class="form-control" />
                 <span asp-validation-for="@Model.question.Definition" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="@Model.question.Title" class="control-label"></label>
                 <input asp-for="@Model.question.Title" class="form-control" />
                 <span asp-validation-for="@Model.question.Title" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="@Model.question.Proof" class="control-label"></label>
                 <input asp-for="@Model.question.Proof" class="form-control" />
                 <span asp-validation-for="@Model.question.Proof" class="text-danger"></span>
             </div>
+
             <div class="form-group">
                 <label asp-for="@Model.tags" class="control-label"></label>
                 <ul>
@@ -49,9 +52,9 @@
     </div>
 </div>
 
-<div>
+<button type="button" class="btn btn-light">
     <a asp-action="Index">Back to List</a>
-</div>
+</button>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

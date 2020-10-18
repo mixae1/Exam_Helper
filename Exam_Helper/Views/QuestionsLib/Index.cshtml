@@ -3,7 +3,6 @@
     ViewData["Title"] = "Library Page";
 }
 
-
 <main class="container" style="padding-top: 3vh;">
     <div class="container">
 
@@ -15,80 +14,49 @@
 
         <div class="d-flex  bd-highlight pt-3 pb-3">
             <a asp-action="Create">
-            <button name="Create" asp-action="Create" type="button" class="btn btn-warning bd-highlight">Добавить Вопрос</button>
-            </a>
-
-            <div class="form-group pt-3 pb-3 bd-highlight ml-auto p-2"></div>
-            <span class="mr-3"> Поиск вопроса: </span>
-            <form asp-controller="QuestionsLib" asp-action="Index">
-                <input type="text" name="SearchString" class="form-control">
-            </form>
+                <button type="button" class="btn btn-warning bd-highlight">Добавить Вопрос</button>
+                </a>
+                <div class="form-group pt-3 pb-3 bd-highlight ml-auto p-2"></div>
+                <span class="mr-3"> Поиск вопроса: </span>
+                <form asp-controller="QuestionsLib" asp-action="Index">
+                    <input type="text" name="SearchString" class="form-control">
+                </form>
         </div>
     </div>
+    <!-- Массив вопросов, отображение потом настроим -->
+    <table class="table">
+        <thead>
+            <tr>
 
-    <div class="pt-3">
-        <!-- Массив вопросов, отображение потом настроим -->
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Definition)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Title)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Proof)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.Author)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.CreationDate)
-                        </th>
-                        <th>
-                            @Html.DisplayNameFor(model => model.UpdateDate)
-                        </th>
-                        <th>
-                            Tags
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Definition)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Title)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Proof)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Author)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.CreationDate.GetDateTimeFormats()[0])
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.UpdateDate.GetDateTimeFormats()[0])
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.TagIds)
-                            </td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                <th scope="col"> <span>@Html.DisplayNameFor(model => model.Definition)</span> </th>
+                <th scope="col"> <span>@Html.DisplayNameFor(model => model.Title) </span></th>
+                <th scope="col">tags</th>
+                <th scope="col"> </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td> <span>@Html.DisplayFor(modelItem => item.Definition) </span></td>
+                    <td> <span>@Html.DisplayFor(modelItem => item.Title) </span></td>
+                    <td> <span>@Html.DisplayFor(modelItem => item.TagIds) </span></td>
+                    <td>
+                        <div class=" d-flex justify-content-center dropdown">
+                            <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Actions
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                <a class="dropdown-item" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                <a class="dropdown-item" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </div>
 
-    </div>
+                        </div>
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
 </main>

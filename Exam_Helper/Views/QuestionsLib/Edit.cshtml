@@ -35,18 +35,17 @@
             </div>
             <!--hidden="true"-->
             <!--
-            <div class="form-group" >
-                <label asp-for="CreationDate" class="control-label"></label>
-                <input asp-for="CreationDate" class="form-control" />
-                <span asp-validation-for="CreationDate" class="text-danger"></span>
+                    <div class="form-group" >
+                        <label asp-for="CreationDate" class="control-label"></label>
+                        <input asp-for="CreationDate" class="form-control" />
+                        <span asp-validation-for="CreationDate" class="text-danger"></span>
+                    </div>
+            <div class="form-group">
+                <label asp-for="UpdateDate" class="control-label"></label>
+                <input asp-for="UpdateDate" class="form-control" />
+                <span asp-validation-for="UpdateDate" class="text-danger"></span>
             </div>
-
-    <div class="form-group">
-        <label asp-for="UpdateDate" class="control-label"></label>
-        <input asp-for="UpdateDate" class="form-control" />
-        <span asp-validation-for="UpdateDate" class="text-danger"></span>
-    </div>
-        -->
+                -->
             <div class="form-group">
                 <label asp-for="TagIds" class="control-label"></label>
                 <input asp-for="TagIds" class="form-control" />
@@ -59,9 +58,9 @@
     </div>
 </div>
 
-<div>
+<button type="button" class="btn btn-light">
     <a asp-action="Index">Back to List</a>
-</div>
+</button>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
