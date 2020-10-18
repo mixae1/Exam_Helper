@@ -5,6 +5,12 @@ using System.Threading.Tasks;
 
 namespace Exam_Helper.ViewsModel
 {   
+    public class ClassForPackCreatingModel
+    {
+        public List<QuestionForPackCreatingModel> questions { get; set; }
+        public Pack pack { get; set; }
+    }
+
     public class QuestionForPackCreatingModel
     {
         public int Id { get; set; }
