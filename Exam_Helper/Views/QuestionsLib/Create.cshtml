@@ -1,4 +1,4 @@
-﻿@model Exam_Helper.Question
+﻿@model Exam_Helper.ViewsModel.ClassForQuestionCreatingModel;
 
 @{
     ViewData["Title"] = "Create";
@@ -13,39 +13,37 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Definition" class="control-label"></label>
-                <input asp-for="Definition" class="form-control" />
-                <span asp-validation-for="Definition" class="text-danger"></span>
+                <label asp-for="@Model.question.Definition" class="control-label"></label>
+                <input asp-for="@Model.question.Definition" class="form-control" />
+                <span asp-validation-for="@Model.question.Definition" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <label asp-for="@Model.question.Title" class="control-label"></label>
+                <input asp-for="@Model.question.Title" class="form-control" />
+                <span asp-validation-for="@Model.question.Title" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Proof" class="control-label"></label>
-                <input asp-for="Proof" class="form-control" />
-                <span asp-validation-for="Proof" class="text-danger"></span>
+                <label asp-for="@Model.question.Proof" class="control-label"></label>
+                <input asp-for="@Model.question.Proof" class="form-control" />
+                <span asp-validation-for="@Model.question.Proof" class="text-danger"></span>
             </div>
-            <!--<div class="form-group">
-        <label asp-for="Author" class="control-label"></label>
-        <input asp-for="Author" class="form-control" />
-        <span asp-validation-for="Author" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="CreationDate" class="control-label"></label>
-        <input asp-for="CreationDate" class="form-control" />
-        <span asp-validation-for="CreationDate" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="UpdateDate" class="control-label"></label>
-        <input asp-for="UpdateDate" class="form-control" />
-        <span asp-validation-for="UpdateDate" class="text-danger"></span>
-    </div>-->
+
             <div class="form-group">
-                <label asp-for="TagIds" class="control-label"></label>
-                <input asp-for="TagIds" class="form-control" />
-                <span asp-validation-for="TagIds" class="text-danger"></span>
+                <label asp-for="@Model.tags" class="control-label"></label>
+                <ul>
+                    @for (int i = 0; i < Model.tags.Count; i++)
+                    {
+                        <li>
+                            <input type="checkbox" asp-for="@Model.tags[i].IsSelected" />
+                            <label asp-for="@Model.tags[i].IsSelected"> @Model.tags[i].Name</label>
+                            <input type="hidden" asp-for="@Model.tags[i].Id" />
+                            <input type="hidden" asp-for="@Model.tags[i].Name" />
+                        </li>
+                    }
+                </ul>
+                <span asp-validation-for="@Model.tags" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -54,9 +52,9 @@
     </div>
 </div>
 
-<div>
+<button type="button" class="btn btn-light">
     <a asp-action="Index">Back to List</a>
-</div>
+</button>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

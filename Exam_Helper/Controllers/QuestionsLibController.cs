@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Exam_Helper.ViewsModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -56,9 +57,13 @@ namespace Exam_Helper.Controllers
         }
 
         // GET: QuestionsLib/Create
-        public IActionResult Create()
+        [HttpGet]
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var tags = await _context.Tags.Select(x => new TagForQuestionCreatingModel()
+            { Id = x.Id, Name = x.Title, IsSelected = false }).ToListAsync();
+            
+            return View(new ClassForQuestionCreatingModel() { question = new Question(), tags = tags});
         }
 
         // POST: QuestionsLib/Create
@@ -66,18 +71,21 @@ namespace Exam_Helper.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Definition,Title,Proof,TagIds")] Question question)
+        public async Task<IActionResult> Create(ClassForQuestionCreatingModel obj)
         {
             if (ModelState.IsValid)
             {
-                question.CreationDate = DateTime.Now;
-                question.UpdateDate = DateTime.Now;
-                question.Author = "Admin";
-                _context.Add(question);
+                var StringTags = string.Join(";", obj.tags.Where(x=>x.IsSelected).Select(x=>x.Id));
+
+                obj.question.CreationDate = DateTime.Now;
+                obj.question.UpdateDate = DateTime.Now;
+                obj.question.Author = "Admin";
+                obj.question.TagIds = StringTags;
+                _context.Add(obj.question);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(question);
+            return View(obj.question);
         }
 
         // GET: QuestionsLib/Edit/5
