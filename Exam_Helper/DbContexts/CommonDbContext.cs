@@ -40,7 +40,7 @@ namespace Exam_Helper
             {
                 entity.ToTable("aTest");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+               // entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.ObjectId).HasColumnName("object_id");
 
@@ -147,7 +147,7 @@ namespace Exam_Helper
 
             modelBuilder.Entity<Tags>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                //entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Title)
                     .IsRequired()
@@ -157,7 +157,7 @@ namespace Exam_Helper
 
             modelBuilder.Entity<Tests>(entity =>
             {
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                //entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Name)
                     .IsRequired()
@@ -174,7 +174,7 @@ namespace Exam_Helper
             {
                 entity.HasComment("User");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                //entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.IgnorePacks)
                     .HasColumnName("ignore_packs")
