@@ -9,6 +9,7 @@ namespace Exam_Helper.ViewsModel
     {
         public List<QuestionForPackCreatingModel> questions { get; set; }
         public Pack pack { get; set; }
+        public List<TagForPackCreatingModel> tags { get; set; }
     }
 
     public class QuestionForPackCreatingModel
@@ -18,5 +19,11 @@ namespace Exam_Helper.ViewsModel
 
        public bool IsSelected { get; set; }
     }
+    public class TagForPackCreatingModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
 
+        public bool IsSelected { get; set; }
+    }
 }

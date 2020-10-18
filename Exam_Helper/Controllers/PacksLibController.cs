@@ -45,10 +45,12 @@ namespace Exam_Helper.Controllers
         // GET: PacksLib/Create
         public async Task<IActionResult> Create()
         {
-            var temp = await _context.Question.Select(x => new QuestionForPackCreatingModel()
+            var ques = await _context.Question.Select(x => new QuestionForPackCreatingModel()
+            { Id = x.Id, Name = x.Title, IsSelected = false }).ToListAsync();
+            var tags = await _context.Tags.Select(x => new TagForPackCreatingModel()
             { Id = x.Id, Name = x.Title, IsSelected = false }).ToListAsync();
 
-            return View(temp);
+            return View(new ClassForPackCreatingModel() { questions = ques, pack = new Pack(), tags = tags});
         }
 
         // POST: PacksLib/Create
@@ -56,21 +58,24 @@ namespace Exam_Helper.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IEnumerable<QuestionForPackCreatingModel> ques)
+        public async Task<IActionResult> Create(ClassForPackCreatingModel obj)
         {    
             Pack pack = new Pack();
             if (ModelState.IsValid)
             {
                 
-                var temp = ques.Where(x => x.IsSelected).Select(x=>x.Id);
+                var ques = obj.questions.Where(x => x.IsSelected).Select(x=>x.Id);
+                var StringIds = string.Join(';', ques);
 
-                var StringIds = string.Join(';', temp);
-                pack.Name = "test";
+                var tags = obj.tags.Where(x => x.IsSelected).Select(x => x.Id);
+                var TagsIds = string.Join(';', tags);
+
+                pack.Name = obj.pack.Name;
                 pack.UpdateDate = DateTime.Now;
                 pack.CreationDate = DateTime.Now;
                 pack.Author = "Admin";
                 pack.QuestionSet = StringIds;
-                pack.TagsId = "someIDS";
+                pack.TagsId = TagsIds;
                 _context.Add(pack);
                 await _context.SaveChangesAsync();
 
