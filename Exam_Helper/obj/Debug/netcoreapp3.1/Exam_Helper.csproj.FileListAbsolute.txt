@@ -368,3 +368,4 @@ C:\Users\Mixael\source\repos\Exam_Helper\Exam_Helper\obj\Debug\netcoreapp3.1\sta
 C:\Users\Mixael\source\repos\Exam_Helper\Exam_Helper\obj\Debug\netcoreapp3.1\Exam_Helper.dll
 C:\Users\Mixael\source\repos\Exam_Helper\Exam_Helper\obj\Debug\netcoreapp3.1\Exam_Helper.pdb
 C:\Users\Mixael\source\repos\Exam_Helper\Exam_Helper\obj\Debug\netcoreapp3.1\Exam_Helper.genruntimeconfig.cache
+C:\Users\Anton\source\repos\Exam_Helper\Exam_Helper\obj\Debug\netcoreapp3.1\Razor\Views\Tests\Index.cshtml.g.cs
