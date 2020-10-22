@@ -1,0 +1,43 @@
+﻿@model Exam_Helper.ViewsModel.TestInfoMissedWords;
+@{
+    ViewData["Title"] = "View";
+}
+
+
+
+<form asp-action="Index" method="post">
+
+    <p>
+        @{   
+            int j = 0;
+           
+
+            @for (int i = 0; i < Model.Teorem.Length; i++)
+            {
+                if (!@Model.Teorem[i].Contains("text"))
+                {   
+                    @Model.Teorem[i]
+                }
+                else
+                {
+                        <input asp-for="@Model.Answer[j]" size="5" class="test" />
+                        <input type="hidden" asp-for="@Model.Answer[j]" />
+                        <input type="hidden" asp-for=@Model.Check_Answers[j] />
+                       <span asp-validation-for="@Model.Answer[i]" class="text-danger"></span>
+                    j++;
+                }
+                    
+                }
+        }
+    </p>
+
+    <div class="form-group">
+        <input type="submit" value="Check answers" class="btn btn-primary" />
+    </div>
+
+</form>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
