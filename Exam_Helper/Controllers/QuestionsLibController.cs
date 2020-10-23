@@ -173,6 +173,12 @@ namespace Exam_Helper.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public RedirectToActionResult RedirectToTest(int id)
+        {
+            TempData["question_id"] = id;
+            return RedirectToAction(nameof(Index), nameof(Tests));
+        }
+
         private bool QuestionExists(int id)
         {
             return _context.Question.Any(e => e.Id == id);
