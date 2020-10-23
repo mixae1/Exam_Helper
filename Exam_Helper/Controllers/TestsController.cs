@@ -7,9 +7,33 @@ using Microsoft.AspNetCore.Mvc;
 using Exam_Helper.ViewsModel;
 using Exam_Helper.TestMethods;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System.Text.Json;
 
 namespace Exam_Helper.Controllers
 {
+    
+    public static class TempDataExtensions
+    {
+        public static void Put<T>(this ITempDataDictionary tempData, string key, T value) where T : class
+        {
+            tempData[key] = JsonSerializer.Serialize(value);
+        }
+
+        public static T Get<T>(this ITempDataDictionary tempData, string key) where T : class
+        {
+            tempData.TryGetValue(key, out object o);
+            return o == null ? null : JsonSerializer.Deserialize<T>((string)o);
+        }
+
+        public static T Peek<T>(this ITempDataDictionary tempData, string key) where T : class
+        {
+            object o = tempData.Peek(key);
+            return o == null ? null : JsonSerializer.Deserialize<T>((string)o);
+        }
+    }
+    
+
     public class TestsController : Controller
     {
 
@@ -19,11 +43,22 @@ namespace Exam_Helper.Controllers
         {
             _dbContext = db;
         }
+       
 
         // GET: Tests 
         [HttpGet]
-        public async Task<IActionResult> Index(Question question)
-        {
+        public async Task<IActionResult> Index()
+        {   
+           var ind=TempData["question_id"] as int?;
+            if(!ind.HasValue)
+                throw new Exception("What a fuck");
+
+           
+
+            var temp = await _dbContext.Question.FindAsync(ind.Value);
+
+            TempData.Put("question", temp);
+
             var tests = await _dbContext.Tests.ToListAsync();
             var models = new TestChoiceViewModel()
             {
@@ -34,9 +69,15 @@ namespace Exam_Helper.Controllers
         }
 
         [HttpPost]
-        public string Index(TestChoiceViewModel temp)
-        {
-            return temp?.SelectedId.ToString();
+        public RedirectToActionResult Index([Bind("SelectedId")]TestChoiceViewModel temp)
+        {   
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(MissingWordsTest));
+
+            }
+            Console.WriteLine(ModelState.Values);
+            return RedirectToAction(nameof(Index));
         }
 
         // для подключения к библиотеки question нужно сюда в параметры передать question
@@ -44,7 +85,9 @@ namespace Exam_Helper.Controllers
         public IActionResult MissingWordsTest()
         {
             //передал значение так для теста , а вообще из question взять 
-            TestMissedWords testMissed = new TestMissedWords("Если функция монотонна и непрерывна на некотором отрезке и на концах этого отрезка принимает значения разных знаков, то существует точка, в которой значение функции равно нулю");
+            Question question = TempData.Peek<Question>("question");
+            if (question==null) throw new Exception("What a fuck");
+            TestMissedWords testMissed = new TestMissedWords(question.Definition);
             TestInfoMissedWords ts = new TestInfoMissedWords() { Teorem=testMissed.GetTestString().ToArray()};
             ts.Check_Answers = testMissed.GetAnswersHashCodes();
             
