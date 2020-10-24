@@ -34,22 +34,6 @@ namespace Exam_Helper.Controllers
         }
     }
 
-    public class AnswersForMissingWordsTest
-    {
-     public  Dictionary<string, string> Data_Checks { get; set; }
-        [JsonIgnore]
-        public  List<int> User_Answers_HashCodes { get; set; }
-        [JsonIgnore]
-        public List<bool> Answer_IsRight { get; set; }
-
-        public AnswersForMissingWordsTest()
-        {
-            User_Answers_HashCodes = new List<int>();
-            Answer_IsRight = new List<bool>();
-        }
-
-    }
-
     public class TestsController : Controller
     {
 
@@ -66,10 +50,8 @@ namespace Exam_Helper.Controllers
         public async Task<IActionResult> Index()
         {   
            var ind=TempData["question_id"] as int?;
-            if(!ind.HasValue)
-                throw new Exception("What a fuck");
-
-           
+            if (!ind.HasValue)
+                return View();
 
             var temp = await _dbContext.Question.FindAsync(ind.Value);
 
@@ -123,14 +105,13 @@ namespace Exam_Helper.Controllers
         [HttpPost]
         public string  CheckAnswerForMissingTest(string answers)
         {
-            var jsdata = JsonSerializer.Deserialize<AnswersForMissingWordsTest>(answers);
-            /*
-            Dictionary<string, string> ans = jsdata.Data_Checks;
+            var jsdata = JsonSerializer.Deserialize<Dictionary<string,string>>(answers);
+      
             List<bool> Is_Right = new List<bool>();
-            foreach (var x in ans)
+            foreach (var x in jsdata)
                Is_Right.Add(x.Key.GetHashCode() == int.Parse(x.Value));
-            */
-            return JsonSerializer.Serialize(jsdata);
+           
+            return JsonSerializer.Serialize(Is_Right);
             
         }
 
