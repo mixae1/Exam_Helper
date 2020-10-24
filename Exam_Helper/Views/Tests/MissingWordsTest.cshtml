@@ -3,9 +3,11 @@
     ViewData["Title"] = "View";
 }
 
+    <head>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    </head>
 
 
-<form asp-action="MissingWordsTest" method="post">
 
     <p>
         @{   
@@ -21,9 +23,9 @@
                 else
                 {
                         <input asp-for="@Model.Answer[j]" size="5" class="test" />
-                        <input type="hidden" asp-for="@Model.Answer[j]" />
+                       
                         <input type="hidden" asp-for=@Model.Check_Answers[j] />
-                       <span asp-validation-for="@Model.Answer[i]" class="text-danger"></span>
+                       <span asp-validation-for="@Model.Answer[j]" class="text-danger"></span>
                     j++;
                 }
                     
@@ -32,10 +34,34 @@
     </p>
 
     <div class="form-group">
-        <input type="submit" value="Check answers" class="btn btn-primary" />
+        <input type="submit" value="Check answers" onclick="CheckAnswers()" class="btn btn-primary" />
     </div>
 
-</form>
+<script>
+
+    function CheckAnswers() {
+        var data = {};
+        @for(int i = 0; i <Model.Answer.Length; i++)
+        { 
+          @:data["@Model.Answer[i]"] =@Model.Check_Answers[i];
+         }
+     
+
+        $.ajax(
+            {
+                type: "Post",
+                data: { answers: JSON.stringify(data) },
+                dataType: "json",
+                url: '@Url.Action("CheckAnswerForMissingTest")',
+                success: function (msg) {
+                    console.log(msg);
+                }
+            })
+
+    };
+
+
+</script>
 
 
 @section Scripts {

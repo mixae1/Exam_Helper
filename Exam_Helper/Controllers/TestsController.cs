@@ -8,6 +8,7 @@ using Exam_Helper.ViewsModel;
 using Exam_Helper.TestMethods;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System.Text.Json.Serialization;
 using System.Text.Json;
 
 namespace Exam_Helper.Controllers
@@ -32,7 +33,22 @@ namespace Exam_Helper.Controllers
             return o == null ? null : JsonSerializer.Deserialize<T>((string)o);
         }
     }
-    
+
+    public class AnswersForMissingWordsTest
+    {
+     public  Dictionary<string, string> Data_Checks { get; set; }
+        [JsonIgnore]
+        public  List<int> User_Answers_HashCodes { get; set; }
+        [JsonIgnore]
+        public List<bool> Answer_IsRight { get; set; }
+
+        public AnswersForMissingWordsTest()
+        {
+            User_Answers_HashCodes = new List<int>();
+            Answer_IsRight = new List<bool>();
+        }
+
+    }
 
     public class TestsController : Controller
     {
@@ -104,8 +120,19 @@ namespace Exam_Helper.Controllers
                  else s+= (i + 1) + ") fuck you";
             return s;
         }
-
-      
+        [HttpPost]
+        public string  CheckAnswerForMissingTest(string answers)
+        {
+            var jsdata = JsonSerializer.Deserialize<AnswersForMissingWordsTest>(answers);
+            /*
+            Dictionary<string, string> ans = jsdata.Data_Checks;
+            List<bool> Is_Right = new List<bool>();
+            foreach (var x in ans)
+               Is_Right.Add(x.Key.GetHashCode() == int.Parse(x.Value));
+            */
+            return JsonSerializer.Serialize(jsdata);
+            
+        }
 
 
         // GET: Tests/Details/5
