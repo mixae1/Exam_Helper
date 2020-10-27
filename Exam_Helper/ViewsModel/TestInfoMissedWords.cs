@@ -11,11 +11,9 @@ namespace Exam_Helper.ViewsModel
         public string[] Answer { get; set; }
         
         public int[] Check_Answers { get; set; }
-
         public TestInfoMissedWords()
         {
             Answer = new string[2];
-           
         }
     }
     

@@ -43,7 +43,7 @@ namespace Exam_Helper.Controllers
         {
             _dbContext = db;
         }
-       
+
 
         // GET: Tests 
         [HttpGet]
@@ -82,12 +82,12 @@ namespace Exam_Helper.Controllers
         [HttpGet]
         public IActionResult MissingWordsTest()
         {
-            //передал значение так для теста , а вообще из question взять 
+             
             Question question = TempData.Peek<Question>("question");
             if (question==null) throw new Exception("What a fuck");
             TestMissedWords testMissed = new TestMissedWords(question.Definition);
-            TestInfoMissedWords ts = new TestInfoMissedWords() { Teorem=testMissed.GetTestString().ToArray()};
-            ts.Check_Answers = testMissed.GetAnswersHashCodes();
+            TestInfoMissedWords ts = new TestInfoMissedWords() { Teorem=testMissed.GetTestString().ToArray() 
+             , Check_Answers=testMissed.GetAnswersHashCodes() };
             
             return View(ts);
         }
@@ -98,8 +98,10 @@ namespace Exam_Helper.Controllers
             string s = "";
             for (int i = 0; i < tst.Answer.Length; i++)
                 if (tst.Answer[i].GetHashCode() == tst.Check_Answers[i])
+                {
                     s += (i + 1) + ") is correct";
-                 else s+= (i + 1) + ") fuck you";
+                }
+                else s += (i + 1) + ") fuck you : user answer :" + tst.Answer[i];
             return s;
         }
         [HttpPost]

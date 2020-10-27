@@ -8,12 +8,11 @@ namespace Exam_Helper.TestMethods
     public class TestMissedWords
     {
         //множество индексов слов которые из строки вычленияем 
-        private HashSet<int> wordsind;
+        private SortedDictionary<int,int> wordsind;
         public string Thereom { get; set; }
         private string[] words;
         //настройка кол-ва слов которые вытаскивать будем
         private int missedwords;
-      
 
         private string HtmlTagIput = "text";
 
@@ -31,14 +30,13 @@ namespace Exam_Helper.TestMethods
             }
         }
 
-        public int[] GetAnswersHashCodes() => wordsind.ToArray();
-
+        public int[] GetAnswersHashCodes() => wordsind.Values.ToArray();
         public TestMissedWords(string Thereom)
         {
             if (string.IsNullOrEmpty(Thereom))
                 throw new Exception("incorrect string");
             words = Thereom.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            wordsind = new HashSet<int>();
+            wordsind = new SortedDictionary<int, int>();
             missedwords = 2;
         }
         /*
@@ -78,17 +76,19 @@ namespace Exam_Helper.TestMethods
 
             Random r = new Random((int)DateTime.Now.Ticks);
 
-            wordsind = new HashSet<int>();
+            wordsind = new SortedDictionary<int, int>();
+            int i = 0;
             while (wordsind.Count != missedwords)
             {
                 int t = r.Next() % temp.Count;
-                if (!wordsind.Contains(temp[t].ToLower().GetHashCode()))
+                if (!wordsind.ContainsKey(t))
                 {
-                    wordsind.Add(temp[t].ToLower().GetHashCode());
+                    wordsind.Add(t,temp[t].ToLower().GetHashCode());
+                    i++;
                 }
             }
             //если совсем долго будет( что врядли ) можно юзать string builder 
-            return words.Select(x => wordsind.Contains(x.GetHashCode()) ? HtmlTagIput : " " + x + " ");
+            return words.Select(x => wordsind.ContainsValue(x.GetHashCode()) ? HtmlTagIput : " " + x + " ");
         }
 
     }
