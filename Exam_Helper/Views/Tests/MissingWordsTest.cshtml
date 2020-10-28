@@ -61,7 +61,16 @@
                 success: function (msg) {
                     //msg - массив булеан
                     console.log(msg);
-
+                    $("input.test").each(function (index) {
+                        if (msg[index] == true) {
+                            $(this).removeClass("wrong");
+                            $(this).addClass("right");
+                        }
+                        else {
+                            $(this).removeClass("right");
+                            $(this).addClass("wrong");
+                        }
+                    });
                 },
             })
     });
