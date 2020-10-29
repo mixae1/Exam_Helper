@@ -1,0 +1,97 @@
+﻿@model Exam_Helper.ViewsModel.TestInfoMissedWords;
+@{
+    ViewData["Title"] = "View";
+}
+
+    <head>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    </head>
+
+
+ 
+    <p>
+        @{
+            int j = 0;
+
+
+            for (int i = 0; i < @Model.Teorem.Length; i++)
+            {
+                if (!@Model.Teorem[i].Contains("text"))
+                {
+                    @Model.Teorem[i];
+                }
+                else
+                {
+                    <input asp-for="@Model.Answer[j]" size="5" class="test"  id=@(j.ToString()+ "answer" )/>
+                    <input type="hidden" asp-for="@Model.Check_Answers[j]" id=@(j.ToString()+"hash") />
+                    j++;
+                }
+
+            }
+
+
+
+        }
+        <div class="form-group">
+            <input type="submit" value="Check answers" class="btn btn-primary" id="CheckAnswers"/>
+        </div>
+    </p>
+  
+   
+
+   
+
+    
+
+    <script>
+
+    $("#CheckAnswers").click(function CheckAnswers() {
+        var data = {};
+        for(var i = 0; i <@Model.Answer.Length; i++)
+        {
+            data[($("#"+i+"answer").val())] = $("#"+i+"hash").val();
+        }
+
+        $.ajax(
+            {
+                type: "Post",
+                data: { answers: JSON.stringify(data) },
+                dataType: "json",
+                url: '@Url.Action("CheckAnswerForMissingTest")',
+                success: function (msg) {
+                    //msg - массив булеан
+                    console.log(msg);
+                    $("input.test").each(function (index) {
+                        if (msg[index] == true) {
+                            $(this).removeClass("wrong");
+                            $(this).addClass("right");
+                        }
+                        else {
+                            $(this).removeClass("right");
+                            $(this).addClass("wrong");
+                        }
+                    });
+                },
+            })
+    });
+
+
+    </script>
+
+    <style>
+
+        .right {
+            background-color: green;
+        }
+
+        .wrong {
+            background-color: red;
+        }
+
+    </style>
+
+
+@section Scripts {
+        
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
