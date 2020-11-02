@@ -41,7 +41,6 @@ namespace Exam_Helper.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    login = table.Column<string>(type: "character varying", maxLength: 256, nullable: false),
                     pack_set = table.Column<string>(type: "character varying", maxLength: 64, nullable: true),
                     question_set = table.Column<string>(type: "character varying", maxLength: 64, nullable: true),
                     img = table.Column<string>(type: "character varying", maxLength: 256, nullable: true),

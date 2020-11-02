@@ -193,10 +193,6 @@ namespace Exam_Helper
                     .HasColumnName("img")
                     .HasColumnType("character varying").HasMaxLength(256) ;
 
-                entity.Property(e => e.Login)
-                    .IsRequired()
-                    .HasColumnName("login")
-                    .HasColumnType("character varying").HasMaxLength(256);
 
                 entity.Property(e => e.PackSet)
                     .HasColumnName("pack_set")

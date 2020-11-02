@@ -26,7 +26,8 @@ namespace Exam_Helper
             
             var temp = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<CommonDbContext>(opt=>opt.UseNpgsql(temp));
-            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<CommonDbContext>();
+            services.AddIdentity<User, IdentityRole>(
+                opt=>opt.User.RequireUniqueEmail=true ).AddEntityFrameworkStores<CommonDbContext>().AddDefaultTokenProviders();
             services.AddSession();
         }
 

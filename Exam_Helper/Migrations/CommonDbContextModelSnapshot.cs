@@ -242,11 +242,6 @@ namespace Exam_Helper.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("Login")
-                        .IsRequired()
-                        .HasColumnName("login")
-                        .HasColumnType("character varying")
-                        .HasMaxLength(256);
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("character varying(256)")

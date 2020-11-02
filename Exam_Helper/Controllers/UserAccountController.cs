@@ -24,6 +24,7 @@ namespace Exam_Helper.Controllers
             return View();
         }
 
+        [HttpPost]
         public  async Task<IActionResult> Registration(UserRegistration user)
         {
             if (ModelState.IsValid)
@@ -32,9 +33,8 @@ namespace Exam_Helper.Controllers
                 {
                     UserName = user.UserName,
                     Email=user.Login,
-                    Login=user.Login
                 };
-
+                
                 var res = await _userManager.CreateAsync(new_user, user.Password);
                 if (res.Succeeded)
                 {
@@ -44,6 +44,8 @@ namespace Exam_Helper.Controllers
 
                 else
                 {
+
+                   
                     foreach (var error in res.Errors)
                     {
                         ModelState.AddModelError(string.Empty, error.Description);
@@ -51,6 +53,44 @@ namespace Exam_Helper.Controllers
                 }
             }
             return View();
+        }
+
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(UserLogin user)
+        {
+            if (ModelState.IsValid)
+            {
+                var _user = await _userManager.FindByEmailAsync(user.Email);
+                if (_user != null)
+                {
+                    var res = await _signInManager.PasswordSignInAsync(_user, user.Password, false, false);
+                    if (res.Succeeded)
+                    {
+                        return RedirectToAction("Index", "PublicLibrary");
+                    }
+                    else
+                    { 
+                        
+                        ModelState.AddModelError(string.Empty,"incorrect email or password");
+                        
+                    }
+
+                }
+            }
+            return View();
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
 
     }
