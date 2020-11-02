@@ -16,7 +16,7 @@
             <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseAllQuestion" aria-expanded="true" aria-controls="collapseAllQuestion">
                 Вопросы
             </button>
-            <button class="btn btn-primary ml-1" type="button" data-toggle="collapse" data-target="#collapsePack" aria-expanded="true" aria-controls="collapsePack">
+            <button class="btn btn-primary ml-1" type="button" data-toggle="collapse" data-target="#collapseAllPacks" aria-expanded="true" aria-controls="collapseAllPacks">
                 Паки
             </button>
             <a asp-controller="PublicLibrary" asp-action="QCreate">
@@ -60,73 +60,33 @@
 
             }
         </div>
-        <div class="collapse" id="collapsePack">
-            <div class="accordion" id="accordionExample">
-                <div class="card">
-                    <div class="card-header" id="headingOne">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                Collapsible Group Item #1
-                            </button>
-                        </h2>
-                    </div>
+        <div class="collapse" id="collapseAllPacks">
+            @foreach (var item in Model.packs)
+            {
+                <div class="accordion" id="accordionExample">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="collapse_@item.Id.ToString()">
+                                    <span> @Html.DisplayFor(modelItem => item.Name) </span>
+                                </button>
+                            </h5>
+                        </div>
 
-                    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                        <div class="card-body">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-
-                                        <th scope="col"> <span>@Html.DisplayNameFor(model => model.questions)</span> </th>
-                                        <th scope="col"> <span>@Html.DisplayNameFor(model => model.questions) </span></th>
-                                        <th scope="col">tags</th>
-                                        <th scope="col"> </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.questions)
-                                    {
-                                        <tr>
-                                            <td> <p style="max-width: 50ch;">@Html.DisplayFor(modelItem => item.Definition) </p></td>
-                                            <td> <span>@Html.DisplayFor(modelItem => item.Title) </span></td>
-                                            <td> <span>@Html.DisplayFor(modelItem => item.TagIds) </span></td>
-                                            <td>
-                                                <div class=" d-flex justify-content-center dropdown">
-                                                    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        Actions
-                                                    </button>
-                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a class="dropdown-item" asp-controller="PublicLibrary" asp-action="QEdit" asp-route-id="@item.Id">Edit</a>
-                                                        <a class="dropdown-item" asp-controller="PublicLibrary" asp-action="QDetails" asp-route-id="@item.Id">Details</a>
-                                                        <a class="dropdown-item" asp-controller="PublicLibrary" asp-action="QDelete" asp-route-id="@item.Id">Delete</a>
-                                                        <a class="dropdown-item" asp-controller="PublicLibrary" asp-action="QRedirectToTest" asp-route-id="@item.Id">Tests</a>
-                                                    </div>
-
-                                                </div>
-                                            </td>
-                                        </tr>
-
-                                    }
-                                </tbody>
-                            </table>
+                        <div id="collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                            <div class="card-body">
+                                @foreach (var quesId in item.QuestionSet.Split(";"))
+                                {
+                                    <div class="d-flex justify-content-between pt-3 pb-3">
+                                        @Html.DisplayFor(model => model.questions.Find(x => x.Id.ToString() == quesId).Title)
+                                    </div>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-header" id="headingTwo">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                Collapsible Group Item #2
-                            </button>
-                        </h2>
-                    </div>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                        <div class="card-body">
-                            Пак
-                        </div>
-                    </div>
-                </div>
-            </div>
+
+            }
         </div>
     </div>
 
