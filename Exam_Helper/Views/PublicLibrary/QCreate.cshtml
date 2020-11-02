@@ -14,7 +14,7 @@
 <div class="instruction">
     <span>Поля,помеченные (<span class="colortext" style="color:red">*</span>) ,обязательны для заполнения :</span>
 </div>
-<form asp-action="Create">
+<form asp-action="QCreate">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="d-flex justify-content-between pt-3 pb-3">
         <span><b>Наименование вопроса<span class="colortext" style="color:red">*</span>:</b><input asp-for="@Model.question.Definition" type="text" class="form-control w-100"></span>

@@ -19,12 +19,16 @@
             <button class="btn btn-primary ml-1" type="button" data-toggle="collapse" data-target="#collapsePack" aria-expanded="true" aria-controls="collapsePack">
                 Паки
             </button>
-            <button class="btn btn-primary ml-1" type="button">
-                +Вопрос
-            </button>
-            <button class="btn btn-primary ml-1" type="button">
-                +Пак
-            </button>
+            <a asp-controller="PublicLibrary" asp-action="QCreate">
+                <button class="btn btn-primary ml-1" type="button">
+                    Добавить вопрос
+                </button>
+            </a>
+            <a asp-controller="PublicLibrary" asp-action="PCreate">
+                <button class="btn btn-primary ml-1" type="button">
+                    Добавить пак
+                </button>
+            </a>
         </div>
         <div class="form-group pb-3 bd-highlight ml-auto p-2">
             <span class="mr-3"> Поиск вопроса: </span>
@@ -92,10 +96,10 @@
                                                         Actions
                                                     </button>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        <a class="dropdown-item" asp-action="QPEdit" asp-route-id="@item.Id">Edit</a>
-                                                        <a class="dropdown-item" asp-action="QDetails" asp-route-id="@item.Id">Details</a>
-                                                        <a class="dropdown-item" asp-action="QDelete" asp-route-id="@item.Id">Delete</a>
-                                                        <a class="dropdown-item" asp-action="QRedirectToTest" asp-route-id="@item.Id">Tests</a>
+                                                        <a class="dropdown-item" asp-controller="PublicLibrary" asp-action="QEdit" asp-route-id="@item.Id">Edit</a>
+                                                        <a class="dropdown-item" asp-controller="PublicLibrary" asp-action="QDetails" asp-route-id="@item.Id">Details</a>
+                                                        <a class="dropdown-item" asp-controller="PublicLibrary" asp-action="QDelete" asp-route-id="@item.Id">Delete</a>
+                                                        <a class="dropdown-item" asp-controller="PublicLibrary" asp-action="QRedirectToTest" asp-route-id="@item.Id">Tests</a>
                                                     </div>
 
                                                 </div>
