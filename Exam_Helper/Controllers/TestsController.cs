@@ -97,7 +97,7 @@ namespace Exam_Helper.Controllers
         {
             string s = "";
             for (int i = 0; i < tst.Answer.Length; i++)
-                if (tst.Answer[i].GetHashCode() == tst.Check_Answers[i])
+                if (tst.Answer[i].Trim().GetHashCode() == tst.Check_Answers[i])
                 {
                     s += (i + 1) + ") is correct";
                 }
@@ -111,7 +111,7 @@ namespace Exam_Helper.Controllers
       
             List<bool> Is_Right = new List<bool>();
             foreach (var x in jsdata)
-               Is_Right.Add(x.Key.GetHashCode() == int.Parse(x.Value));
+               Is_Right.Add(x.Key.Trim().GetHashCode() == int.Parse(x.Value));
            
             return JsonSerializer.Serialize(Is_Right);
             
