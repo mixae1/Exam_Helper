@@ -113,6 +113,10 @@ namespace Exam_Helper
                 entity.Property(e => e.UpdateDate)
                     .HasColumnName("update_date")
                     .HasColumnType("date");
+
+                entity.Property(e => e.IsPrivate)
+                .HasColumnName("isprivate").
+                HasColumnType("boolean");
             });
 
             modelBuilder.Entity<Question>(entity =>
@@ -130,6 +134,11 @@ namespace Exam_Helper
                     .IsRequired()
                     .HasColumnName("definition")
                     .HasColumnType("character varying").HasMaxLength(256);
+
+
+                entity.Property(e => e.IsPrivate)
+               .HasColumnName("isprivate").
+               HasColumnType("boolean");
 
                 entity.Property(e => e.Proof)
                     .IsRequired()

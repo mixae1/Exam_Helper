@@ -17,6 +17,7 @@ namespace Exam_Helper
         public DateTime UpdateDate { get; set; }
         public string TagsId { get; set; }
          
+        public bool IsPrivate { get; set; }
         public string Name { get; set; }
         public virtual ICollection<ATest> ATest { get; set; }
     }
