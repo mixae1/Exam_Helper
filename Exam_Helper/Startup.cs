@@ -26,9 +26,13 @@ namespace Exam_Helper
             
             var temp = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<CommonDbContext>(opt=>opt.UseNpgsql(temp));
+
             services.AddIdentity<User, IdentityRole>(
                 opt=>opt.User.RequireUniqueEmail=true
                 ).AddEntityFrameworkStores<CommonDbContext>().AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(opt => opt.LoginPath = "/UserAccount/Login");
+
             services.AddSession();
         }
 
@@ -50,8 +54,9 @@ namespace Exam_Helper
 
             app.UseRouting();
 
-            app.UseAuthorization();
+           
             app.UseAuthentication();    // подключение аутентификации
+            app.UseAuthorization();
 
             app.UseSession();
             app.UseEndpoints(endpoints =>

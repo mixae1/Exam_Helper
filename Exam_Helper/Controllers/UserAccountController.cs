@@ -71,6 +71,7 @@ namespace Exam_Helper.Controllers
                 if (_user != null)
                 {
                     var res = await _signInManager.PasswordSignInAsync(_user, user.Password, false, false);
+                    
                     if (res.Succeeded)
                     {
                         return RedirectToAction("Index", "PublicLibrary");
