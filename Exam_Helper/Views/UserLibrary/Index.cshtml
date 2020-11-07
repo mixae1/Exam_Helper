@@ -19,10 +19,20 @@
             <button class="btn btn-primary ml-1" type="button" data-toggle="collapse" data-target="#collapseAllPacks" aria-expanded="true" aria-controls="collapseAllPacks">
                 Паки
             </button>
+            <a  asp-action="QCreate">
+                <button class="btn btn-primary ml-1" type="button">
+                    Добавить вопрос
+                </button>
+            </a>
+            <a  asp-action="PCreate">
+                <button class="btn btn-primary ml-1" type="button">
+                    Добавить пак
+                </button>
+            </a>
         </div>
         <div class="form-group pb-3 bd-highlight ml-auto p-2">
             <span class="mr-3"> Поиск вопроса: </span>
-            <form asp-action="Index">
+            <form  asp-action="Index">
                 <input type="text" name="SearchString" class="form-control">
             </form>
         </div>

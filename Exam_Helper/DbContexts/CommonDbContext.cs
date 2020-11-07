@@ -141,7 +141,7 @@ namespace Exam_Helper
                HasColumnType("boolean");
 
                 entity.Property(e => e.Proof)
-                    .IsRequired()
+                    //.IsRequired()
                     .HasColumnName("proof")
                     .HasColumnType("character varying").HasMaxLength(1024);
 
