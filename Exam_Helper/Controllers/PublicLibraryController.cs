@@ -6,22 +6,29 @@ using Exam_Helper.ViewsModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Exam_Helper.Controllers
-{
+{    
+    [Authorize]
     public class PublicLibraryController : Controller
     {
         private readonly CommonDbContext _context;
 
+        
         public PublicLibraryController(CommonDbContext context)
         {
             _context = context;
         }
-
+      
         // GET: PublicLibraryController
         public async Task<IActionResult> Index(string SearchString)
-        {
-            var _ques = from _que in _context.Question
+        {  
+            //  ОСТАВИТЬ ЗДЕСЬ  А ТО МАЛО ЛИ ПОТОМ ЭТУ ХУЙНЮ ЕЩЕ ИСКАТЬ
+          //  if (!User.Identity.IsAuthenticated)
+            //    return RedirectToAction("Login","UserAccount");
+
+            var _ques = from _que in _context.Question where _que.IsPrivate==false
                        select _que;
             if (!string.IsNullOrEmpty(SearchString))
                _ques = _ques.Where(
@@ -30,8 +37,9 @@ namespace Exam_Helper.Controllers
                     x.TagIds.Contains(SearchString)     ||
                     x.Definition.Contains(SearchString));
 
-            var _packs = from _pack in _context.Pack
+            var _packs = from _pack in _context.Pack where _pack.IsPrivate==false
                          select _pack;
+
             if (!string.IsNullOrEmpty(SearchString))
                 _packs = _packs.Where(
                     x => x.Author.Contains(SearchString) ||

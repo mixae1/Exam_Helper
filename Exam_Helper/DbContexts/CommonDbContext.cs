@@ -1,10 +1,12 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Exam_Helper
 {
-    public partial class CommonDbContext : DbContext
+    public partial class CommonDbContext : IdentityDbContext<User>
     {
         public CommonDbContext()
         {
@@ -36,6 +38,9 @@ namespace Exam_Helper
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+           
+
             modelBuilder.Entity<ATest>(entity =>
             {
                 entity.ToTable("aTest");
@@ -108,6 +113,10 @@ namespace Exam_Helper
                 entity.Property(e => e.UpdateDate)
                     .HasColumnName("update_date")
                     .HasColumnType("date");
+
+                entity.Property(e => e.IsPrivate)
+                .HasColumnName("isprivate").
+                HasColumnType("boolean");
             });
 
             modelBuilder.Entity<Question>(entity =>
@@ -125,6 +134,11 @@ namespace Exam_Helper
                     .IsRequired()
                     .HasColumnName("definition")
                     .HasColumnType("character varying").HasMaxLength(256);
+
+
+                entity.Property(e => e.IsPrivate)
+               .HasColumnName("isprivate").
+               HasColumnType("boolean");
 
                 entity.Property(e => e.Proof)
                     .IsRequired()
@@ -188,16 +202,12 @@ namespace Exam_Helper
                     .HasColumnName("img")
                     .HasColumnType("character varying").HasMaxLength(256) ;
 
-                entity.Property(e => e.Login)
-                    .IsRequired()
-                    .HasColumnName("login")
-                    .HasColumnType("character varying").HasMaxLength(256);
 
                 entity.Property(e => e.PackSet)
                     .HasColumnName("pack_set")
                     .HasColumnType("character varying").HasMaxLength(64);
 
-                entity.Property(e => e.Password)
+                entity.Property(e => e.PasswordHash)
                     .IsRequired()
                     .HasColumnName("password")
                     .HasColumnType("character varying").HasMaxLength(16);
@@ -206,13 +216,14 @@ namespace Exam_Helper
                     .HasColumnName("question_set")
                     .HasColumnType("character varying").HasMaxLength(64);
 
-                entity.Property(e => e.Username)
+                entity.Property(e => e.UserName)
                     .IsRequired()
                     .HasColumnName("username")
                     .HasColumnType("character varying").HasMaxLength(8);
             });
 
             OnModelCreatingPartial(modelBuilder);
+
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

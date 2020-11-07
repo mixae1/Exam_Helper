@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace Exam_Helper
 {
-    public partial class User
+    public partial class User:IdentityUser
     {
-        public int Id { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Login { get; set; }
         public string PackSet { get; set; }
         public string QuestionSet { get; set; }
         public string Img { get; set; }

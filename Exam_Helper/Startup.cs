@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -9,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Exam_Helper
 {
@@ -28,6 +26,13 @@ namespace Exam_Helper
             
             var temp = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<CommonDbContext>(opt=>opt.UseNpgsql(temp));
+
+            services.AddIdentity<User, IdentityRole>(
+                opt=>opt.User.RequireUniqueEmail=true
+                ).AddEntityFrameworkStores<CommonDbContext>().AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(opt => opt.LoginPath = "/UserAccount/Login");
+
             services.AddSession();
         }
 
@@ -49,6 +54,8 @@ namespace Exam_Helper
 
             app.UseRouting();
 
+           
+            app.UseAuthentication();    // подключение аутентификации
             app.UseAuthorization();
 
             app.UseSession();

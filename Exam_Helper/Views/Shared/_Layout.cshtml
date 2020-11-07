@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿
+@using Microsoft.AspNetCore.Identity;
+
+@inject UserManager<User> _userManager
+@inject SignInManager<User> _signInManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -26,9 +32,25 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="PublicLibrary" asp-action="Index">Library</a>
                     </li>
                 </ul>
-                <span class="mr-2"> Какое-то Имя</span>
-                <img style="height: 4vh; border-radius: 15%;" src="https://shwanoff.ru/wp-content/uploads/2017/12/bootstrap-social.png" alt="">
+                @{
+                    if (!_signInManager.IsSignedIn(User))
+                    {
+                        <a class="mr-2" id="registration" asp-controller="UserAccount" asp-action="Registration" method="get">Registration</a>
+                        <a class="mr-2" id="login" asp-controller="UserAccount" asp-action="Login" method="get">Login</a>
+                        <img style="height: 4vh; border-radius: 15%;" src="https://shwanoff.ru/wp-content/uploads/2017/12/bootstrap-social.png" alt="">
+                    }
+                    else
+                    {
+
+                    <span class="mr-2"> @_userManager.GetUserName(User) </span>
+                    <a class="mr-2" id="logout" asp-controller="UserAccount" asp-action="Logout" >Log out</a>
+                    <img style="height: 4vh; border-radius: 15%;" src="https://shwanoff.ru/wp-content/uploads/2017/12/bootstrap-social.png" alt="">
+                        
+                    }
+
+                    }
             </div>
+                    
         </nav>
 
     </header>
