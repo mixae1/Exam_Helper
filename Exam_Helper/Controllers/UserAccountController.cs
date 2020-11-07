@@ -39,7 +39,7 @@ namespace Exam_Helper.Controllers
                 if (res.Succeeded)
                 {
                     await _signInManager.SignInAsync(new_user, false);
-                    return RedirectToAction("Index", "PublicLibrary");
+                    return RedirectToAction("Index", "UserLibrary");
                 }
 
                 else

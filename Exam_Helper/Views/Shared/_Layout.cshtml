@@ -29,8 +29,12 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="UserLibrary" asp-action="Index">My Library</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="PublicLibrary" asp-action="Index">Library</a>
                     </li>
+
                 </ul>
                 @{
                     if (!_signInManager.IsSignedIn(User))
