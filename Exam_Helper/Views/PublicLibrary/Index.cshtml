@@ -44,8 +44,9 @@
                         <div class="card-header" id="headingOne">
                             <h5 class="mb-0">
                                 <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="collapse_@item.Id.ToString()">
-                                    <span> @Html.DisplayFor(modelItem => item.Title) </span>
-                                </button>
+                                    <span>@item.Title </span>
+                                    <span><a asp-action="QRedirectToTest" asp-route-id="@item.Id">Tests</a></span>
+</button>
                             </h5>
                         </div>
 

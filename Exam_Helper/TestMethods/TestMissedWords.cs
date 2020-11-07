@@ -2,63 +2,81 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+//using Newtonsoft.Json;
+using System.Text.Json;
 
 namespace Exam_Helper.TestMethods
 {
     public class TestMissedWords
     {
-        //множество индексов слов которые из строки вычленияем 
-        private SortedDictionary<int,int> wordsind;
         public string Thereom { get; set; }
         private string[] words;
         //настройка кол-ва слов которые вытаскивать будем
         private int missedwords;
+        private bool isPossible;
 
-        private string HtmlTagIput = "text";
+        private SortedDictionary<int, string> answers;
 
         //свойство лучше их юзать а не автосвойства 
-        public int Missedwords
+        public int AmountOfMissed
         {
             get
             {
                 return missedwords;
             }
-            set
+            
+        }
+
+        public bool IsSuccessed
+        {
+            get
             {
-                if (value > 0)
-                    missedwords = value;
+                return isPossible;
             }
         }
 
-        public int[] GetAnswersHashCodes() => wordsind.Values.ToArray();
-        public TestMissedWords(string Thereom)
+        public string[] Words
+        {
+            get
+            {
+                return words;
+            }
+        }
+
+        public string[] Answers
+        {
+            get
+            {
+                return answers.Select(x => x.Value).ToArray();
+            }
+        }
+
+        public string[] GetWordsWithInputs()
+        {
+            if (answers.Count != 0)
+            {
+                return Words.Select((x, i) => answers.ContainsKey(i) ? " " + Words[i] : Words[i]).ToArray();
+            }
+            else return Words;
+        }
+
+        public TestMissedWords(string Thereom, float percent = 0.15f)
         {
             if (string.IsNullOrEmpty(Thereom))
                 throw new Exception("incorrect string");
+            if (percent < 0 || percent > 0.5) 
+                throw new Exception("incorrect percent");
+            
             words = Thereom.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            wordsind = new SortedDictionary<int, int>();
-            missedwords = 2;
-        }
-        /*
-        //одиночный тест
-        public void Start()
-        {
-            Console.WriteLine("please enter missing words + \n" + GetTestString());
-            string s = Console.ReadLine().ToLower();
-            string s1 = Console.ReadLine().ToLower();
-            int counter = 0;
-            if (wordsind.Contains(s.GetHashCode())) counter++;
-            if (wordsind.Contains(s1.GetHashCode())) counter++;
-          вернуть статистику    Console.WriteLine($"you ve made {counter}/2");
+            
+            missedwords = (int)(words.Length * percent);
+            if (missedwords == 0) missedwords++;
 
-        }
-
-       */
-       
+            CreateTest();
+        }       
         
-        //вспомогательный метод проверки на прилагательное , достаточно просто дописать окончание в регулярку 
-        //также может захватывать глаголы , в этом ничего страшного нет, фиксить смысла нет
-        //если уж совсем захочется исключить какие-нибудь слова можно просто создать множество этих слов и проверять на принадлженсоть
+        //вспомогательный метод проверки на прилагательное
+        //также может захватывать глаголы
         bool isPril(string x)
         {
             if (x.Length >= 3 && Regex.IsMatch(x, @"((ая)|ое|на|о|ых)\b"))
@@ -68,27 +86,30 @@ namespace Exam_Helper.TestMethods
         }
 
         //получаем строку из которой выкидываем слова 
-        public IEnumerable<string> GetTestString()
+        private bool CreateTest()
         {
-            var temp = words.Where(x => isPril(x)).ToList();
+            List<(int, string)> temp = new List<(int, string)>();
+            for(int i = 0; i<words.Length; i++)
+            {
+                if (isPril(words[i])) temp.Add((i, words[i]));
+            }
+
             if (temp.Count() < missedwords)
-                return new string[] { "sorry we cannot make test with this data" };
+                return isPossible = false;
 
             Random r = new Random((int)DateTime.Now.Ticks);
 
-            wordsind = new SortedDictionary<int, int>();
-            int i = 0;
-            while (wordsind.Count != missedwords)
+            answers = new SortedDictionary<int, string>();
+
+            while (answers.Count != missedwords)
             {
                 int t = r.Next() % temp.Count;
-                if (!wordsind.ContainsKey(t))
+                if (!answers.ContainsKey(temp[t].Item1))
                 {
-                    wordsind.Add(t,temp[t].ToLower().GetHashCode());
-                    i++;
+                    answers.Add(temp[t].Item1, temp[t].Item2);
                 }
             }
-            //если совсем долго будет( что врядли ) можно юзать string builder 
-            return words.Select(x => wordsind.ContainsValue(x.GetHashCode()) ? HtmlTagIput : " " + x + " ");
+            return isPossible = true;
         }
 
     }
