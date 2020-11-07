@@ -146,11 +146,9 @@ namespace Exam_Helper.Controllers
 
             var qs = qa.QuestionSet;
             List<QuestionForPackCreatingModel> ques = new List<QuestionForPackCreatingModel>();
-            List<TagForPackCreatingModel> tags = new List<TagForPackCreatingModel>();
             if (string.IsNullOrEmpty(qs))
             {
                 ques = null;
-                tags = null;
             } else
             {
 
@@ -159,10 +157,9 @@ namespace Exam_Helper.Controllers
                 ques=await _context.Question.Where(x=>temp.Contains(x.Id))
                 .Select(x => new QuestionForPackCreatingModel()
                 { Id = x.Id, Name = x.Title, IsSelected = false }).ToListAsync();
-
-                 tags = await _context.Tags.Select(x => new TagForPackCreatingModel()
-                { Id = x.Id, Name = x.Title, IsSelected = false }).ToListAsync();
             }
+                 var tags = await _context.Tags.Select(x => new TagForPackCreatingModel()
+                { Id = x.Id, Name = x.Title, IsSelected = false }).ToListAsync();
             return View(new ClassForPackCreatingModel() { questions = ques, pack = new Pack(), tags = tags });
         }
 

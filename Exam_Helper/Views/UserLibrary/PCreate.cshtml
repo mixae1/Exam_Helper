@@ -3,67 +3,73 @@
 @{
     ViewData["Title"] = "Create";
 }
+<main class="container d-flex flex-column align-items-center">
+    <h1>Create</h1>
 
-<h1>Create</h1>
+    <h4>Pack</h4>
+    <hr />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <form asp-action="PCreate">
 
-<h4>Pack</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <form asp-action="PCreate">
+        <div class="form-group">
+            <label asp-for="@Model.pack.Name" class="control-label"></label>
+            <input asp-for="@Model.pack.Name" class="form-control" />
+            <span asp-validation-for="@Model.pack.Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.questions" class="control-label"></label>
+            <ul class="list-group">
+                @if(Model.questions == null)
+                {
+                    <span>У вас нет вопросов.</span>
+                }
+                else
+                {
 
-                <div class="form-group">
-                    <label asp-for="@Model.pack.Name" class="control-label"></label>
-                    <input asp-for="@Model.pack.Name" class="form-control" />
-                    <span asp-validation-for="@Model.pack.Name" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="@Model.questions" class="control-label"></label>
-                    <ul>
-                        @for (int i = 0; i < Model.questions.Count; i++)
-                        {
-                            <li>
-                                <input type="checkbox" asp-for="@Model.questions[i].IsSelected" />
-                                <label asp-for="@Model.questions[i].IsSelected"> @Model.questions[i].Name</label>
-                                <input type="hidden" asp-for="@Model.questions[i].Id" />
-                                <input type="hidden" asp-for="@Model.questions[i].Name" />
-                            </li>
-                        }
-                    </ul>
-                    <span asp-validation-for="@Model.questions" class="text-danger"></span>
-                </div>
-                    <!--<div class="form-group">
-        <label asp-for="@Model.pack.Author" class="control-label"></label>
-        <input asp-for="@Model.pack.Author" class="form-control" />
-        <span asp-validation-for="@Model.pack.Author" class="text-danger"></span>
-    </div>
-    -->
+                    @for (int i = 0; i < Model.questions.Count; i++)
+                    {
+                        <li class="list-group-item">
+                            <input type="checkbox" asp-for="@Model.questions[i].IsSelected" />
+                            <label asp-for="@Model.questions[i].IsSelected"> @Model.questions[i].Name</label>
+                            <input type="hidden" asp-for="@Model.questions[i].Id" />
+                            <input type="hidden" asp-for="@Model.questions[i].Name" />
+                        </li>
+                    }
+                }
+            </ul>
+            <span asp-validation-for="@Model.questions" class="text-danger"></span>
+        </div>
+        <!--<div class="form-group">
+            <label asp-for="@Model.pack.Author" class="control-label"></label>
+            <input asp-for="@Model.pack.Author" class="form-control" />
+            <span asp-validation-for="@Model.pack.Author" class="text-danger"></span>
+        </div>
+        -->
 
-                    <div class="form-group">
-                        <label asp-for="@Model.pack.TagsId" class="control-label"></label>
-                        <ul>
-                            @for (int i = 0; i < Model.tags.Count; i++)
-                            {
-                                <li>
-                                    <input type="checkbox" asp-for="@Model.tags[i].IsSelected" />
-                                    <label asp-for="@Model.tags[i].IsSelected"> @Model.tags[i].Name</label>
-                                    <input type="hidden" asp-for="@Model.tags[i].Id" />
-                                    <input type="hidden" asp-for="@Model.tags[i].Name" />
-                                </li>
-                            }
-                        </ul>
-                        <span asp-validation-for="@Model.pack.TagsId" class="text-danger"></span>
-                    </div>
+        <div class="form-group">
+            <label asp-for="@Model.pack.TagsId" class="control-label"></label>
+            <ul class="list-group">
+                @for (int i = 0; i < Model.tags.Count; i++)
+                {
+                    <li class="list-group-item">
+                        <input type="checkbox" asp-for="@Model.tags[i].IsSelected" />
+                        <label asp-for="@Model.tags[i].IsSelected"> @Model.tags[i].Name</label>
+                        <input type="hidden" asp-for="@Model.tags[i].Id" />
+                        <input type="hidden" asp-for="@Model.tags[i].Name" />
+                    </li>
+}
+            </ul>
+            <span asp-validation-for="@Model.pack.TagsId" class="text-danger"></span>
+        </div>
+        <input type="submit" value="Create" class="btn btn-primary mt-3" />
+    </form>
 
-                    <input type="submit" value="Create" class="btn btn-primary" />
-            </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <a asp-action="Index">
+        <button type="button" class="btn btn-danger mt-3">Back to List</button>
+    </a>
+</main>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
