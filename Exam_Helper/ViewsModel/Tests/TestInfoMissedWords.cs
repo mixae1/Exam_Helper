@@ -8,12 +8,14 @@ namespace Exam_Helper.ViewsModel
     public class TestInfoMissedWords
     {   
         public string[] Teorem { get; set; }
-        public string[] Answer { get; set; }
-        
-        public int[] Check_Answers { get; set; }
+
+        public string[] Answers { get; set; }
+
+        public bool IsSuccessed { get; set; }
+
         public TestInfoMissedWords()
         {
-            Answer = new string[2];
+
         }
     }
     

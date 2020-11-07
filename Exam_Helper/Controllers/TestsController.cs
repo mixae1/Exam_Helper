@@ -72,7 +72,6 @@ namespace Exam_Helper.Controllers
             if (ModelState.IsValid)
             {
                 return RedirectToAction(nameof(MissingWordsTest));
-
             }
             Console.WriteLine(ModelState.Values);
             return RedirectToAction(nameof(Index));
@@ -84,26 +83,20 @@ namespace Exam_Helper.Controllers
         {
              
             Question question = TempData.Peek<Question>("question");
-            if (question==null) throw new Exception("What a fuck");
-            TestMissedWords testMissed = new TestMissedWords(question.Definition);
-            TestInfoMissedWords ts = new TestInfoMissedWords() { Teorem=testMissed.GetTestString().ToArray() 
-             , Check_Answers=testMissed.GetAnswersHashCodes() };
+            if (question==null) throw new Exception("question==null");
             
+            TestMissedWords testMissed = new TestMissedWords(question.Definition);
+            TestInfoMissedWords ts = new TestInfoMissedWords()
+            {
+                Teorem = testMissed.GetWordsWithInputs(),
+                Answers = testMissed.Answers,
+                IsSuccessed = testMissed.IsSuccessed
+            };
+
             return View(ts);
         }
 
-        [HttpPost]
-        public string MissingWordsTest(TestInfoMissedWords tst)
-        {
-            string s = "";
-            for (int i = 0; i < tst.Answer.Length; i++)
-                if (tst.Answer[i].Trim().GetHashCode() == tst.Check_Answers[i])
-                {
-                    s += (i + 1) + ") is correct";
-                }
-                else s += (i + 1) + ") fuck you : user answer :" + tst.Answer[i];
-            return s;
-        }
+        /*
         [HttpPost]
         public string  CheckAnswerForMissingTest(string answers)
         {
@@ -116,7 +109,7 @@ namespace Exam_Helper.Controllers
             return JsonSerializer.Serialize(Is_Right);
             
         }
-
+        */
 
         // GET: Tests/Details/5
         public ActionResult Details(int id)
