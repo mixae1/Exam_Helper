@@ -205,6 +205,32 @@ namespace Exam_Helper.Controllers
             return View(obj.pack);
         }
 
+        [HttpPost]
+       public async Task AddQuestionToMyLib(int Ques_id)
+       {    
+            if (Ques_id == 0)
+                throw new Exception("fuck");
+
+            var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
+            var obj = await _context.Question.AsNoTracking().FirstAsync(x => x.Id == Ques_id);
+
+            Question new_ques = new Question()
+            {
+                Title = obj.Title,
+                TagIds = obj.TagIds,
+                Proof = obj.Proof,
+                Definition = obj.Definition,
+                CreationDate = obj.CreationDate,
+                UpdateDate = obj.UpdateDate,
+                Author = obj.Author,
+                IsPrivate = true
+            };
+            qa.QuestionSet = string.IsNullOrEmpty(qa.QuestionSet) ? obj.Id + ";" : qa.QuestionSet + obj.Id + ";";
+            _context.Update(qa);
+
+            await _context.SaveChangesAsync();
+       }
+
 
         // GET: PublicLibraryController/Edit/5
         public IActionResult Edit(int id)
