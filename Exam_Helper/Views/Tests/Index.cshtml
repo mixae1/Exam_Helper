@@ -15,7 +15,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <button data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
+                        <button type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
                             <input asp-for="@Model.SelectedId" value="@Model.TestsMethodsIds[i]" type="radio" />
                             <label asp-for="@Model.TestsMethodsIds">@Model.TestMethodsNames[i]</label>
                             <input asp-for="@Model.TestsMethodsIds" type="hidden" />
@@ -26,8 +26,10 @@
                 </div>
                 <div id="collapse_@Model.TestMethodsNames[i]" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        <p>Quantity of missed words:</p>
-                        <input type="range" min="1" max="100" value="50" id="quantity">
+                        <p>
+                            Quantity of missed words:
+                            <input type="range" min="1" max="100" value="50" id="quantity">
+                        </p>
                     </div>
                 </div>
             </div>
