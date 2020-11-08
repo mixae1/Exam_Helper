@@ -4,6 +4,10 @@
     Choose Test Method:
 </h1>
 
+<head>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+</head>
+
 <form asp-action="Index" method="post">
     @for (int i = 0; i < Model.TestMethodsNames.Length; i++)
     {
@@ -12,9 +16,10 @@
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <button data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
-                            <span><input asp-for="@Model.SelectedId" value="@Model.TestsMethodsIds[i]" type="radio" /></span>
-                            <span><label asp-for="@Model.TestsMethodsIds">@Model.TestMethodsNames[i]</label></span>
+                            <input asp-for="@Model.SelectedId" value="@Model.TestsMethodsIds[i]" type="radio" />
+                            <label asp-for="@Model.TestsMethodsIds">@Model.TestMethodsNames[i]</label>
                             <input asp-for="@Model.TestsMethodsIds" type="hidden" />
+                            <input asp-for="@Model.ServiceInfo" type="hidden" id="ServiceInfo" />
                             <span asp-validation-for="@Model.SelectedId"></span>
                         </button>
                     </h4>
@@ -23,12 +28,6 @@
                     <div class="panel-body">
                         <p>Quantity of missed words:</p>
                         <input type="range" min="1" max="100" value="50" id="quantity">
-                    </div>
-                    <div class="panel-body">
-                        <p>The second option:</p>
-                    </div>
-                    <div class="panel-body">
-                        <p>The third option:</p>
                     </div>
                 </div>
             </div>
@@ -48,7 +47,9 @@
 </a>
 
 <script>
-
+    $("input#sumbit").click(function () {
+        $("input#ServiceInfo").val($("input#quantity").val().toString());
+    });
 </script>
 
 

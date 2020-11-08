@@ -15,6 +15,8 @@ namespace Exam_Helper.TestMethods
         private int missedwords;
         private bool isPossible;
 
+        private const float PERCENT = 33f;
+
         private SortedDictionary<int, string> answers;
 
         //свойство лучше их юзать а не автосвойства 
@@ -54,16 +56,19 @@ namespace Exam_Helper.TestMethods
             return Words.Select((x, i) => answers.ContainsKey(i) ? " " + Words[i] : Words[i]).ToArray();
         }
 
-        public TestMissedWords(string Thereom, float percent = 0.33f)
+        public TestMissedWords(string Thereom, string Instruction = "33")
         {
+            float percent;
+            if (!float.TryParse(Instruction, out percent)) percent = PERCENT;
+
             if (string.IsNullOrEmpty(Thereom))
                 throw new Exception("incorrect string");
-            if (percent < 0 || percent > 1) 
+            if (percent < 1 || percent > 100) 
                 throw new Exception("incorrect percent");
             
             words = Thereom.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             
-            missedwords = (int)(words.Length * percent / 2);
+            missedwords = (int)(words.Length * percent / 200);
             if (missedwords == 0) missedwords++;
 
             CreateTest();
