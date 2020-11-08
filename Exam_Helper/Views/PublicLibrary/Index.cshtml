@@ -37,7 +37,7 @@
                                 <span>@item.Title </span>
                                 <span><a asp-action="QRedirectToTest" asp-route-id="@item.Id">Tests</a></span>
                             </button>
-                            <button class="btn btn-link" type="button"  onclick="AddQuestion(@item.Id.ToString())" id="@item.Id.ToString()">Add Question</button>
+                            <button class="btn btn-link" type="button" id="@item.Id.ToString()" onclick="AddQuestion(this.id)">Add Question</button>
                         </h5>
                     </div>
                     <div id="collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
@@ -64,7 +64,7 @@
                                 </button>
                             </h5>
                         </div>
-
+                        <button class="btn btn-link" type="button" id="@item.Id.ToString()" onclick="AddPack(this.id)">Add Pack</button>
                         <div id="collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                             <div class="card-body">
                                 @foreach (var quesId in item.QuestionSet.Split(";"))
@@ -88,23 +88,49 @@
     function AddQuestion(id) {
         var a = document.getElementById(id);
 
-        if (a.innerHTML == "Добавлено!") {
+        if (a.innerHTML != "Add Question") {
             return false; alert("didnt stop");
         }
-        a.innerHTML = "пожалуйста, подождите. идет процесс добавления";
-       
+         a.innerHTML = "пожалуйста, подождите. идет процесс добавления";
         $.ajax(
             {
-                type: "Post",
+                  type: "Post",
                 data: { Ques_id: id },
-                url: '@Url.Action("AddQuestionToMyLib","UserLibrary")',
+                url: '@Url.Action("AddQuestionToMyLib", "UserLibrary")',
                 success: function (msg) {
-                    a.innerHTML = "Добавлено!";
-                },
-            })
-       
+                          a.innerHTML = "Добавлено!";
+                      },
+                error: function (msg) {
+                          alert('sory we fucked everithing up');
+                      }
+                  })
+
         return false;
     };
+
+     function AddPack(id) {
+        var a = document.getElementById(id);
+
+         if (a.innerHTML != "Add Pack") {
+            return false; alert("didnt stop");
+        }
+         a.innerHTML = "пожалуйста, подождите. идет процесс добавления";
+        $.ajax(
+            {
+                  type: "Post",
+                data: { pack_id: id },
+                url: '@Url.Action("AddPackToMyLib", "UserLibrary")',
+                success: function (msg) {
+                          a.innerHTML = "Добавлено!";
+                      },
+                error: function (msg) {
+                          alert('sory we fucked everithing up');
+                      }
+                  })
+
+        return false;
+    };
+
 
 
 
