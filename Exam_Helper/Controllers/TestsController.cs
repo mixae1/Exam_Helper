@@ -74,6 +74,7 @@ namespace Exam_Helper.Controllers
                 switch(temp.SelectedId)
                 {
                     case 1: return RedirectToAction(nameof(MissingWordsTest), new { Instruction = temp.ServiceInfo });
+                    case 2: return RedirectToAction(nameof(PuzzleTest), new { Instruction = temp.ServiceInfo });
                     default: return RedirectToAction(nameof(Index));
                 }
             }
@@ -95,6 +96,24 @@ namespace Exam_Helper.Controllers
                 Teorem = testMissed.GetWordsWithInputs(),
                 Answers = testMissed.Answers,
                 IsSuccessed = testMissed.IsSuccessed
+            };
+
+            return View(ts);
+        }
+
+        [HttpGet]
+        public IActionResult PuzzleTest(string Instruction)
+        {
+
+            Question question = TempData.Peek<Question>("question");
+            if (question == null) throw new Exception("question==null");
+
+            TestPuzzle testPuzzle = new TestPuzzle(question.Definition, Instruction);
+            TestInfoPuzzle ts = new TestInfoPuzzle()
+            {
+                TestStrings = testPuzzle.TestStrings,
+                RightIndexes = testPuzzle.RightIndexes,
+                IsSuccessed = testPuzzle.IsSuccessed
             };
 
             return View(ts);

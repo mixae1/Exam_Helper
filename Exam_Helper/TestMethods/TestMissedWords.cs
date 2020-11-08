@@ -69,8 +69,8 @@ namespace Exam_Helper.TestMethods
             percent /= 100;
 
             words = Thereom.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            
-            CreateTest();
+
+            isPossible = CreateTest();
         }       
         
         //вспомогательный метод проверки на прилагательное
@@ -95,7 +95,7 @@ namespace Exam_Helper.TestMethods
             answers = new SortedDictionary<int, string>();
 
             if (temp.Count() == 0)
-                return isPossible = false;
+                return false;
 
             Random r = new Random((int)DateTime.Now.Ticks);
 
@@ -109,7 +109,7 @@ namespace Exam_Helper.TestMethods
                     answers.Add(temp[t].Item1, temp[t].Item2);
                 }
             }
-            return isPossible = true;
+            return true;
         }
 
     }
