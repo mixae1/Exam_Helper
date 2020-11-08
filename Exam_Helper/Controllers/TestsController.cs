@@ -51,7 +51,7 @@ namespace Exam_Helper.Controllers
         {   
            var ind=TempData["question_id"] as int?;
             if (!ind.HasValue)
-                return View();
+                return RedirectToAction("Index","PublicLibrary");
 
             var temp = await _dbContext.Question.FindAsync(ind.Value);
 
@@ -71,7 +71,7 @@ namespace Exam_Helper.Controllers
         {   
             if (ModelState.IsValid)
             {
-                switch(temp.SelectedId)
+                switch (temp.SelectedId)
                 {
                     case 1: return RedirectToAction(nameof(MissingWordsTest), new { Instruction = temp.ServiceInfo });
                     case 2: return RedirectToAction(nameof(PuzzleTest), new { Instruction = temp.ServiceInfo });
