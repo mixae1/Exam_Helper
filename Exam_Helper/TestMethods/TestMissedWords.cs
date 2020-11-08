@@ -13,7 +13,10 @@ namespace Exam_Helper.TestMethods
         private string[] words;
         //настройка кол-ва слов которые вытаскивать будем
         private int missedwords;
+        private float percent;
         private bool isPossible;
+
+        private const float PERCENT = 33f;
 
         private SortedDictionary<int, string> answers;
 
@@ -26,7 +29,6 @@ namespace Exam_Helper.TestMethods
             }
             
         }
-
         public bool IsSuccessed
         {
             get
@@ -34,7 +36,6 @@ namespace Exam_Helper.TestMethods
                 return isPossible;
             }
         }
-
         public string[] Words
         {
             get
@@ -42,36 +43,33 @@ namespace Exam_Helper.TestMethods
                 return words;
             }
         }
-
         public string[] Answers
         {
             get
             {
                 return answers.Select(x => x.Value).ToArray();
+
             }
         }
 
         public string[] GetWordsWithInputs()
         {
-            if (answers.Count != 0)
-            {
-                return Words.Select((x, i) => answers.ContainsKey(i) ? " " + Words[i] : Words[i]).ToArray();
-            }
-            else return Words;
+            return Words.Select((x, i) => answers.ContainsKey(i) ? " " + Words[i] : Words[i]).ToArray();
         }
 
-        public TestMissedWords(string Thereom, float percent = 0.15f)
+        public TestMissedWords(string Thereom, string Instruction = "33")
         {
+            if (!float.TryParse(Instruction, out percent)) percent = PERCENT;
+
             if (string.IsNullOrEmpty(Thereom))
                 throw new Exception("incorrect string");
-            if (percent < 0 || percent > 0.5) 
+            if (percent < 1 || percent > 100) 
                 throw new Exception("incorrect percent");
-            
+
+            percent /= 100;
+
             words = Thereom.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             
-            missedwords = (int)(words.Length * percent);
-            if (missedwords == 0) missedwords++;
-
             CreateTest();
         }       
         
@@ -94,13 +92,15 @@ namespace Exam_Helper.TestMethods
                 if (isPril(words[i])) temp.Add((i, words[i]));
             }
 
-            if (temp.Count() < missedwords)
+            answers = new SortedDictionary<int, string>();
+
+            if (temp.Count() == 0)
                 return isPossible = false;
 
             Random r = new Random((int)DateTime.Now.Ticks);
 
-            answers = new SortedDictionary<int, string>();
-
+            missedwords = (int)(temp.Count() * percent);
+            if (missedwords == 0) missedwords++;
             while (answers.Count != missedwords)
             {
                 int t = r.Next() % temp.Count;

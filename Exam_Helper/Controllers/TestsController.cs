@@ -67,11 +67,15 @@ namespace Exam_Helper.Controllers
         }
 
         [HttpPost]
-        public RedirectToActionResult Index([Bind("SelectedId")]TestChoiceViewModel temp)
+        public RedirectToActionResult Index([Bind("SelectedId, ServiceInfo")]TestChoiceViewModel temp)
         {   
             if (ModelState.IsValid)
             {
-                return RedirectToAction(nameof(MissingWordsTest));
+                switch(temp.SelectedId)
+                {
+                    case 1: return RedirectToAction(nameof(MissingWordsTest), new { Instruction = temp.ServiceInfo });
+                    default: return RedirectToAction(nameof(Index));
+                }
             }
             Console.WriteLine(ModelState.Values);
             return RedirectToAction(nameof(Index));
@@ -79,13 +83,13 @@ namespace Exam_Helper.Controllers
 
         // для подключения к библиотеки question нужно сюда в параметры передать question
         [HttpGet]
-        public IActionResult MissingWordsTest()
+        public IActionResult MissingWordsTest(string Instruction)
         {
              
             Question question = TempData.Peek<Question>("question");
             if (question==null) throw new Exception("question==null");
             
-            TestMissedWords testMissed = new TestMissedWords(question.Definition);
+            TestMissedWords testMissed = new TestMissedWords(question.Definition, Instruction);
             TestInfoMissedWords ts = new TestInfoMissedWords()
             {
                 Teorem = testMissed.GetWordsWithInputs(),

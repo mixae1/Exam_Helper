@@ -14,7 +14,9 @@ namespace Exam_Helper.ViewsModel
 
         public string [] TestMethodsNames { get; set; }
         public int[] TestsMethodsIds { get; set; }
-        
+
+        public string ServiceInfo { get; set; }
+
         [Range(1,100000,ErrorMessage ="choose smth blyat")]
         public int SelectedId { get; set; }
     }
