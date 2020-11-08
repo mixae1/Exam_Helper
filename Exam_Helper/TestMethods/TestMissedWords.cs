@@ -26,7 +26,6 @@ namespace Exam_Helper.TestMethods
             }
             
         }
-
         public bool IsSuccessed
         {
             get
@@ -34,7 +33,6 @@ namespace Exam_Helper.TestMethods
                 return isPossible;
             }
         }
-
         public string[] Words
         {
             get
@@ -42,34 +40,30 @@ namespace Exam_Helper.TestMethods
                 return words;
             }
         }
-
         public string[] Answers
         {
             get
             {
                 return answers.Select(x => x.Value).ToArray();
+
             }
         }
 
         public string[] GetWordsWithInputs()
         {
-            if (answers.Count != 0)
-            {
-                return Words.Select((x, i) => answers.ContainsKey(i) ? " " + Words[i] : Words[i]).ToArray();
-            }
-            else return Words;
+            return Words.Select((x, i) => answers.ContainsKey(i) ? " " + Words[i] : Words[i]).ToArray();
         }
 
-        public TestMissedWords(string Thereom, float percent = 0.15f)
+        public TestMissedWords(string Thereom, float percent = 0.33f)
         {
             if (string.IsNullOrEmpty(Thereom))
                 throw new Exception("incorrect string");
-            if (percent < 0 || percent > 0.5) 
+            if (percent < 0 || percent > 1) 
                 throw new Exception("incorrect percent");
             
             words = Thereom.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             
-            missedwords = (int)(words.Length * percent);
+            missedwords = (int)(words.Length * percent / 2);
             if (missedwords == 0) missedwords++;
 
             CreateTest();
@@ -94,12 +88,12 @@ namespace Exam_Helper.TestMethods
                 if (isPril(words[i])) temp.Add((i, words[i]));
             }
 
+            answers = new SortedDictionary<int, string>();
+
             if (temp.Count() < missedwords)
                 return isPossible = false;
 
             Random r = new Random((int)DateTime.Now.Ticks);
-
-            answers = new SortedDictionary<int, string>();
 
             while (answers.Count != missedwords)
             {
