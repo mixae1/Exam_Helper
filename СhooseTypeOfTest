@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <title>My Library</title>
+    <link href="StyleSheetLibrary.css" rel="stylesheet" type="text/css">
+
+    <style>
+        .container{
+            font-size:25px;
+        }
+        .navbar{
+            width:100%;
+        }
+        @media screen and (max-width:1100px) {
+            .container {
+                width: 1000px;
+                height: 600px;
+            }
+            .navbar{
+                height:100px;
+            }
+        }
+        @media screen and (max-width:960px){
+            .container{
+                width:900px;
+                height:600px;
+            }
+            .navbar {
+                height: 100px;
+            }
+        }
+        @media screen and (max-width:800px) {
+            .container {
+                width: 750px;
+                height: 600px;
+                font-size:15px;
+            }
+            .navbar {
+                
+                height: 100px;
+            }
+            
+            
+        }
+        @media screen and (max-width:500px) {
+            .container {
+                width: 450px;
+                height: 400px;
+                font-size:10px;
+            }
+            .navbar {
+                
+                height: 100px;
+            }
+        }
+
+        @media screen and (max-width:400px) {
+            .container {
+                width: 370px;
+                height: 300px;
+                font-size:9px;
+            }
+            .navbar {
+               
+                height: 50px;
+            }
+        }
+        @media screen and (max-width:330px) {
+            .container {
+                width: 320px;
+                height: 250px;
+                font-size: 8px;
+            }
+
+            .navbar {
+               
+                height: 50px;
+            }
+        }
+    </style>
+
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand"> ExamHelper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="nav nav-tabs mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">*******</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">*******</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">*******</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " href="#">*******</a>
+                    </li>
+                    <li class="tags">
+                        <select id="select" onchange="window.location.href=this.options[this.selectedIndex].value" style="height:6vh;width:10vh; border-radius:10%;">
+                            <option value="#">Теги</option>
+                            <option value="#">Библиотека вопросов</option>
+                            <option value="#">Личный кабинет</option>
+                            <option value="#">Types of tests</option>
+                        </select>
+                    </li>
+                </ul>
+                <form class="form-inline mr-3">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+                <span class="mr-2"> Какое-то Имя</span>
+                <img style="height: 4vh; border-radius: 15%;" src="https://shwanoff.ru/wp-content/uploads/2017/12/bootstrap-social.png" alt="">
+            </div>
+        </nav>
+    </header>
+    <main class="container" style="height: 90vh; padding-top: 3vh;">
+
+        <hr color="brown" />
+
+        <div class="instruction">
+            <span>Выберите тестирование,которое Вы бы хотели пройти :</span>
+        </div>
+        <form action="#">
+            <div class="d-flex justify-content-between pt-3 pb-2">
+                <div class="input-group">
+                    <div class="input-group-prepend mr-3">
+                        <div class="input-group-text">
+                            <input type="radio" aria-label="Radio button for following text input" name="type_of_test" value="InsertRightWordsInTheorema">
+                        </div>
+                    </div>
+                    Вставка пропущенных слов в теорему
+                </div>
+            </div>
+            <div class="d-flex justify-content-between pb-2">
+                <div class="input-group">
+                    <div class="input-group-prepend mr-3">
+                        <div class="input-group-text">
+                            <input type="radio" aria-label="Radio button for following text input" name="type_of_test" value="BiektivTeoremaAndItsName">
+                        </div>
+                    </div>
+                    Соотнесение формулировки теоремы с ее названием
+                </div>
+            </div>
+            <div class="d-flex justify-content-between pb-2">
+                <div class="input-group">
+                    <div class="input-group-prepend mr-3">
+                        <div class="input-group-text">
+                            <input type="radio" aria-label="Radio button for following text input" name="type_of_test" value="BiektivTeoremaAndItsProof">
+                        </div>
+                    </div>
+                    Соотнесение формулировки теоремы с ее доказательством
+                </div>
+            </div>
+            <div class="d-flex justify-content-between pb-2">
+                <div class="input-group">
+                    <div class="input-group-prepend mr-3">
+                        <div class="input-group-text">
+                            <input type="radio" aria-label="Radio button for following text input" name="type_of_test" value="NotNamedTest1">
+                        </div>
+                    </div>
+                    Ещё какое-то тестирование
+                </div>
+            </div>
+            <div class="d-flex justify-content-between pb-2">
+                <div class="input-group">
+                    <div class="input-group-prepend mr-3">
+                        <div class="input-group-text">
+                            <input type="radio" aria-label="Radio button for following text input" name="type_of_test" value="NotNamedTest2">
+                        </div>
+                    </div>
+                    Ещё какое-то тестирование
+                </div>
+            </div>
+            <p>
+                <input type="submit" value="Выбрать">
+            </p>
+        </form>
+    </main>
+    <footer class="border-top footer text-muted" style="margin-top: 3vh;">
+        <div class="container-fluid">
+            <div>&copy; 2020 - sss - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> </div>
+        </div>
+    </footer>
+
+</body>
+</html>
