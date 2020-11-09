@@ -61,7 +61,7 @@ namespace Exam_Helper.TestMethods
             if (percent < 1 || percent > 100)
                 throw new Exception("incorrect percent");
 
-            percent /= 100;
+            percent = (101 - percent) / 100;
 
             words_in_block = percent * MAX_WORDS_IN_BLOCK < MIN_WORDS_IN_BLOCK ? MIN_WORDS_IN_BLOCK : (int)(percent * MAX_WORDS_IN_BLOCK);
 

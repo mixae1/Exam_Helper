@@ -16,7 +16,7 @@
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <button type="button" class="btn-group-toggle" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
-                            <input asp-for="@Model.SelectedId" value="@Model.TestsMethodsIds[i]" type="radio" id="Method" />
+                            <input asp-for="@Model.SelectedId" value="@Model.TestsMethodsIds[i]" type="radio" id="method" method-type="@Model.TestMethodsNames[i]" />
                             <label asp-for="@Model.TestsMethodsIds">@Model.TestMethodsNames[i]</label>
                             <input asp-for="@Model.TestsMethodsIds" type="hidden" />
                             <input asp-for="@Model.ServiceInfo" type="hidden" id="ServiceInfo" />
@@ -59,10 +59,17 @@
 
 <script>
     $("input#sumbit").click(function () {
-        let curr_method = "";
+        var curr_method;
         $("input#method").each(function () {
-            $(this).is("selected")
+            if ($(this).is(":checked"))
+            {
+                console.log($(this).is(":checked"), " :: ", $(this).attr("method-type"));
+                curr_method = $(this).attr("method-type");
+            }
         });
+
+        console.log("curr method is ", curr_method);
+        
         switch (curr_method) {
             case "missed_words":
                 $("input#ServiceInfo").val($("input#mw_quantity").val().toString());
