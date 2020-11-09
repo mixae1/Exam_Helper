@@ -205,6 +205,73 @@ namespace Exam_Helper.Controllers
             return View(obj.pack);
         }
 
+       public async Task AddQuestionToMyLib(int Ques_id)
+       {
+            var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
+            var obj = await _context.Question.AsNoTracking().FirstAsync(x => x.Id == Ques_id);
+
+            Question new_ques = new Question()
+            {
+                Title = obj.Title,
+                TagIds = obj.TagIds,
+                Proof = obj.Proof,
+                Definition = obj.Definition,
+                CreationDate = obj.CreationDate,
+                UpdateDate = obj.UpdateDate,
+                Author = obj.Author,
+                IsPrivate = true
+            };
+
+            _context.Question.Add(new_ques);
+            await _context.SaveChangesAsync();
+
+            if (new_ques.Id == 0)
+                throw new Exception("fuck");
+
+            qa.QuestionSet = string.IsNullOrEmpty(qa.QuestionSet) ? new_ques.Id + ";" : qa.QuestionSet + new_ques.Id + ";";
+
+            _context.Update(qa);
+            await _context.SaveChangesAsync();
+
+        }
+
+        public async Task AddPackToMyLib(int pack_id)
+        {
+           
+
+            if (pack_id == 0)
+                throw new Exception("fuck");
+
+            var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
+            var obj = await _context.Pack.AsNoTracking().FirstAsync(x => x.Id == pack_id);
+
+            Pack pck = new Pack()
+            {
+                IsPrivate = true,
+                Author = qa.UserName,
+                QuestionSet = obj.QuestionSet,
+                CreationDate = obj.CreationDate,
+                UpdateDate = obj.UpdateDate,
+                TagsId = obj.TagsId,
+                Name = obj.Name
+            };
+
+            _context.Pack.Add(pck);
+            await _context.SaveChangesAsync();
+
+            if (pck.Id == 0)
+                throw new Exception("fuck");
+
+            qa.PackSet = string.IsNullOrEmpty(qa.PackSet) ? pck.Id + ";" : qa.PackSet + pck.Id + ";";
+
+            _context.Update(qa);
+            await _context.SaveChangesAsync();
+        }
+
+
+
+
+
 
         // GET: PublicLibraryController/Edit/5
         public IActionResult Edit(int id)

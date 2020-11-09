@@ -29,25 +29,26 @@
         <div class="collapse" id="collapseAllQuestion">
             @foreach (var item in Model.questions)
             {
-                <div class="accordion" id="accordionExample">
-                    <div class="card">
-                        <div class="card-header" id="headingOne">
-                            <h5 class="mb-0">
-                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="collapse_@item.Id.ToString()">
-                                    <span>@item.Title </span>
-                                    <span><a asp-action="QRedirectToTest" asp-route-id="@item.Id">Tests</a></span>
-                                </button>
-                            </h5>
-                        </div>
-
-                        <div id="collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                            <div class="card-body">
-                                <span>@Html.DisplayFor(modelItem => item.Definition) </span>
-                                <span>@Html.DisplayFor(modelItem => item.TagIds) </span>
-                            </div>
+            <div class="accordion" id="accordionExample">
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <h5 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="collapse_@item.Id.ToString()">
+                                <span>@item.Title </span>
+                                <span><a asp-action="QRedirectToTest" asp-route-id="@item.Id">Tests</a></span>
+                            </button>
+                            <button class="btn btn-link" type="button" id="@item.Id.ToString()" onclick="AddQuestion(this.id)">Add Question</button>
+                        </h5>
+                    </div>
+                    <div id="collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                        <div class="card-body">
+                            <span>@Html.DisplayFor(modelItem => item.Definition) </span>
+                            <span>@Html.DisplayFor(modelItem => item.TagIds) </span>
                         </div>
                     </div>
                 </div>
+                
+            </div>
 
             }
         </div>
@@ -63,7 +64,7 @@
                                 </button>
                             </h5>
                         </div>
-
+                        <button class="btn btn-link" type="button" id="@item.Id.ToString()" onclick="AddPack(this.id)">Add Pack</button>
                         <div id="collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                             <div class="card-body">
                                 @foreach (var quesId in item.QuestionSet.Split(";"))
@@ -82,3 +83,55 @@
     </div>
 
 </main>
+<script>
+
+    function AddQuestion(id) {
+        var a = document.getElementById(id);
+
+        if (a.innerHTML != "Add Question") {
+            return false; alert("didnt stop");
+        }
+         a.innerHTML = "пожалуйста, подождите. идет процесс добавления";
+        $.ajax(
+            {
+                  type: "Post",
+                data: { Ques_id: id },
+                url: '@Url.Action("AddQuestionToMyLib", "UserLibrary")',
+                success: function (msg) {
+                          a.innerHTML = "Добавлено!";
+                      },
+                error: function (msg) {
+                          alert('sory we fucked everithing up');
+                      }
+                  })
+
+        return false;
+    };
+
+     function AddPack(id) {
+        var a = document.getElementById(id);
+
+         if (a.innerHTML != "Add Pack") {
+            return false; alert("didnt stop");
+        }
+         a.innerHTML = "пожалуйста, подождите. идет процесс добавления";
+        $.ajax(
+            {
+                  type: "Post",
+                data: { pack_id: id },
+                url: '@Url.Action("AddPackToMyLib", "UserLibrary")',
+                success: function (msg) {
+                          a.innerHTML = "Добавлено!";
+                      },
+                error: function (msg) {
+                          alert('sory we fucked everithing up');
+                      }
+                  })
+
+        return false;
+    };
+
+
+
+
+</script>

@@ -1,0 +1,69 @@
+﻿@model Exam_Helper.ViewsModel.TestInfoPuzzle
+@{
+    ViewData["Title"] = "View";
+}
+
+<head>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+</head>
+
+<div>
+    @if (Model.IsSuccessed)
+    {
+
+        @foreach (var block in Model.TestStrings)
+        {
+            <p>@block</p>
+        }
+        <div class="form-group">
+            <input type="submit" value="Check answers" class="btn btn-primary" id="CheckAnswers" />
+        </div>
+    }
+    else
+    {
+        <p>Мы не можем создать данный тест для этого вопроса.</p>
+    }
+    <a asp-controller="PublicLibrary" asp-action="Index">
+        <input type="button" value="Back to the library" class="btn btn-primary" />
+    </a>
+</div>
+
+<script>
+
+       $("#CheckAnswers").click(function CheckAnswers() {
+        var ans = [];
+        //for(int i = 0; i< Model.Answers.Length; i++)
+        //{
+        //    :ans.push("(new Microsoft.AspNetCore.Html.HtmlString(Model.Answers[i]))");
+        //}
+        $("input.test").each(function (index) {
+            console.log($(this).val(), " ", ans[index]);
+            if ($(this).val() === ans[index]) {
+                $(this).removeClass("wrong");
+                $(this).addClass("right");
+            }
+            else {
+                $(this).removeClass("right");
+                $(this).addClass("wrong");
+            }
+        });
+       });
+
+</script>
+
+<style>
+
+    .right {
+        background-color: green;
+    }
+
+    .wrong {
+        background-color: red;
+    }
+</style>
+
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
