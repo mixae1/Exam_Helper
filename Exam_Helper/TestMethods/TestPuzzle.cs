@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace Exam_Helper.TestMethods
@@ -9,7 +10,7 @@ namespace Exam_Helper.TestMethods
     {
         public string Thereom { get; set; }
         private string[] words;
-        private int words_in_block = 3;
+        private int words_in_block;
         private int blocks_amount;
         private int[] right_index_order;
         string[] test_strings;
@@ -17,6 +18,8 @@ namespace Exam_Helper.TestMethods
         private bool isPossible;
 
         private const float PERCENT = 33f;
+        private const int MAX_WORDS_IN_BLOCK = 10;
+        private const int MIN_WORDS_IN_BLOCK = 2;
 
         private string[] blocks;
 
@@ -59,6 +62,8 @@ namespace Exam_Helper.TestMethods
                 throw new Exception("incorrect percent");
 
             percent /= 100;
+
+            words_in_block = percent * MAX_WORDS_IN_BLOCK < MIN_WORDS_IN_BLOCK ? MIN_WORDS_IN_BLOCK : (int)(percent * MAX_WORDS_IN_BLOCK);
 
             words = Thereom.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             blocks_amount = words.Length / words_in_block + (words.Length % words_in_block == 0 ? 0 : 1);

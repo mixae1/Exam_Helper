@@ -15,8 +15,8 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <button type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
-                            <input asp-for="@Model.SelectedId" value="@Model.TestsMethodsIds[i]" type="radio" />
+                        <button type="button" class="btn-group-toggle" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
+                            <input asp-for="@Model.SelectedId" value="@Model.TestsMethodsIds[i]" type="radio" id="Method" />
                             <label asp-for="@Model.TestsMethodsIds">@Model.TestMethodsNames[i]</label>
                             <input asp-for="@Model.TestsMethodsIds" type="hidden" />
                             <input asp-for="@Model.ServiceInfo" type="hidden" id="ServiceInfo" />
@@ -26,10 +26,22 @@
                 </div>
                 <div id="collapse_@Model.TestMethodsNames[i]" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        <p>
-                            Quantity of missed words:
-                            <input type="range" min="1" max="100" value="50" id="quantity">
-                        </p>
+                        @switch (@Model.TestMethodsNames[i])
+                            {
+                                case "missed_words":
+                                <p>
+                                    Quantity of missed words:
+                                    <input type="range" min="1" max="100" value="50" id="mw_quantity">
+                                </p>
+                                    break;
+                                case "puzzle":
+                                <p>
+                                    Quantity of blocks:
+                                    <input type="range" min="1" max="100" value="50" id="p_quantity">
+                                </p>
+                                        break;
+                                    default: break;
+                                }
                     </div>
                 </div>
             </div>
@@ -47,7 +59,18 @@
 
 <script>
     $("input#sumbit").click(function () {
-        $("input#ServiceInfo").val($("input#quantity").val().toString());
+        let curr_method = "";
+        $("input#method").each(function () {
+            $(this).is("selected")
+        });
+        switch (curr_method) {
+            case "missed_words":
+                $("input#ServiceInfo").val($("input#mw_quantity").val().toString());
+                break;
+            case "puzzle":
+                $("input#ServiceInfo").val($("input#p_quantity").val().toString());
+                break;
+        }
     });
 </script>
 
