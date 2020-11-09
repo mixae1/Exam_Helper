@@ -19,6 +19,7 @@ namespace Exam_Helper.TestMethods
         private const float PERCENT = 33f;
 
         private SortedDictionary<int, string> answers;
+        private List<Func<string, bool>> funcs;
 
         //свойство лучше их юзать а не автосвойства 
         public int AmountOfMissed
@@ -70,9 +71,19 @@ namespace Exam_Helper.TestMethods
 
             words = Thereom.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
+            funcs = new List<Func<string, bool>>();
+            funcs.Add(isPril);
+            //...
+
             isPossible = CreateTest();
-        }       
-        
+        }
+
+        //staff for 
+        static bool InvokeMethod(Delegate method, params object[] args)
+        {
+            return (bool)method.DynamicInvoke(args);
+        }
+
         //вспомогательный метод проверки на прилагательное
         //также может захватывать глаголы
         bool isPril(string x)
@@ -87,9 +98,16 @@ namespace Exam_Helper.TestMethods
         private bool CreateTest()
         {
             List<(int, string)> temp = new List<(int, string)>();
+
             for(int i = 0; i<words.Length; i++)
             {
-                if (isPril(words[i])) temp.Add((i, words[i]));
+                foreach(var func in funcs)
+                {
+                    if (!InvokeMethod(func, words[i])) goto label1;
+                }
+                temp.Add((i, words[i]));
+            label1:
+                ;
             }
 
             answers = new SortedDictionary<int, string>();
