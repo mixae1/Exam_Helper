@@ -62,9 +62,9 @@
                                 <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="collapse_@item.Id.ToString()">
                                     <span> @Html.DisplayFor(modelItem => item.Name) </span>
                                 </button>
+                                <button class="btn btn-link" type="button" id="@item.Id.ToString()" onclick="AddPack(this.id)">Add Pack</button>
                             </h5>
                         </div>
-                        <button class="btn btn-link" type="button" id="@item.Id.ToString()" onclick="AddPack(this.id)">Add Pack</button>
                         <div id="collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                             <div class="card-body">
                                 @foreach (var quesId in item.QuestionSet.Split(";"))
