@@ -43,9 +43,7 @@ namespace Exam_Helper.Controllers
                 }
 
                 else
-                {
-
-                   
+                {  
                     foreach (var error in res.Errors)
                     {
                         ModelState.AddModelError(string.Empty, error.Description);
