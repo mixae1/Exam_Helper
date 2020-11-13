@@ -9,19 +9,22 @@ namespace Exam_Helper.TestMethods
     public class TestPuzzle
     {
         public string Thereom { get; set; }
+
         private string[] words;
-        private int words_in_block;
-        private int blocks_amount;
         private int[] right_index_order;
         string[] test_strings;
+        private string[] blocks;
+
+        private int words_in_block;
+        private int blocks_amount;
         private float percent;
         private bool isPossible;
 
         private const float PERCENT = 33f;
         private const int MAX_WORDS_IN_BLOCK = 10;
         private const int MIN_WORDS_IN_BLOCK = 2;
+        private const int MIN_BLOCKS = 3;
 
-        private string[] blocks;
 
         public bool IsSuccessed
         {
@@ -43,14 +46,14 @@ namespace Exam_Helper.TestMethods
             {
                 return right_index_order;
             }
-        }
+        } //
         public string[] TestStrings
         {
             get
             {
                 return test_strings;
             }
-        }
+        } //
 
         public TestPuzzle(string Thereom, string Instruction = "33")
         {
@@ -61,19 +64,34 @@ namespace Exam_Helper.TestMethods
             if (percent < 1 || percent > 100)
                 throw new Exception("incorrect percent");
 
+            this.Thereom = Thereom;
             percent = (101 - percent) / 100;
 
-            words_in_block = percent * MAX_WORDS_IN_BLOCK < MIN_WORDS_IN_BLOCK ? MIN_WORDS_IN_BLOCK : (int)(percent * MAX_WORDS_IN_BLOCK);
+            //quantity of blocks
+            words_in_block = 
+                percent * MAX_WORDS_IN_BLOCK < MIN_WORDS_IN_BLOCK ?
+                MIN_WORDS_IN_BLOCK :
+                (int)(percent * MAX_WORDS_IN_BLOCK);
 
             words = Thereom.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            blocks_amount = words.Length / words_in_block + (words.Length % words_in_block == 0 ? 0 : 1);
+            blocks_amount = 
+                words.Length / words_in_block + 
+                (words.Length % words_in_block == 0 ? 0 : 1);
+
+            if (blocks_amount < MIN_BLOCKS) blocks_amount = MIN_BLOCKS;
+
+            right_index_order = new int[blocks_amount];
+            test_strings = new string[blocks_amount];
 
             isPossible = CreateTest();
         }
 
         private bool CreateTest()
         {
-            string[] blocks = new string[blocks_amount];
+            blocks = new string[blocks_amount];
+
+            if (words.Length < 6) return false;
+            
             int i = 0;
 
             int curr_words_amount = 0;
@@ -87,11 +105,9 @@ namespace Exam_Helper.TestMethods
                 blocks[i] = blocks[i] + word + " ";
                 ++curr_words_amount;
             }
-            Thereom = Thereom + " ";
 
             Random rnd = new Random();
-            right_index_order = new int[blocks_amount];
-            test_strings = new string[blocks_amount];
+            
             for (int j = 0; j < blocks_amount; ++j)
             {
                 right_index_order[j] = -1;
