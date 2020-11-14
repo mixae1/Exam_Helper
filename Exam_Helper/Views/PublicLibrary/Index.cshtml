@@ -12,12 +12,18 @@
 
         <hr color="brown" />
 
-        <div class="container d-flex bd-highlight pt-3">
-            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseAllQuestion" aria-expanded="true" aria-controls="collapseAllQuestion">
+        <div class="container d-flex bd-highlight pt-3" id="accordion">
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseAllQuestion" aria-expanded="true" aria-controls="collapseAllQuestion" data-parent="#accordionCommon">
                 Вопросы
             </button>
-            <button class="btn btn-primary ml-1" type="button" data-toggle="collapse" data-target="#collapseAllPacks" aria-expanded="true" aria-controls="collapseAllPacks">
+            <button class="btn btn-primary ml-1" type="button" data-toggle="collapse" data-target="#collapseAllPacks" aria-expanded="true" aria-controls="collapseAllPacks" data-parent="#accordionCommon">
                 Паки
+            </button>
+            <button class="btn btn-primary ml-1" type="button" data-toggle="collapse" data-target="#collapseAllQuestion" aria-expanded="true" aria-controls="collapseAllQuestion" data-parent="#accordionCommon">
+                Добавить вопросы
+            </button>
+            <button class="btn btn-primary ml-1" type="button" data-toggle="collapse" data-target="#collapseAllPacks" aria-expanded="true" aria-controls="collapseAllPacks" data-parent="#accordionCommon">
+                Добавить паки
             </button>
         </div>
         <div class="form-group pb-3 bd-highlight ml-auto p-2">
@@ -26,59 +32,61 @@
                 <input type="text" name="SearchString" class="form-control">
             </form>
         </div>
-        <div class="collapse" id="collapseAllQuestion">
-            @foreach (var item in Model.questions)
-            {
-            <div class="accordion" id="accordionExample">
-                <div class="card">
-                    <div class="card-header" id="headingOne">
-                        <h5 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="collapse_@item.Id.ToString()">
-                                <span>@item.Title </span>
-                                <span><a asp-action="QRedirectToTest" asp-route-id="@item.Id">Tests</a></span>
-                            </button>
-                            <button class="btn btn-link" type="button" id="@item.Id.ToString()" onclick="AddQuestion(this.id)">Add Question</button>
-                        </h5>
-                    </div>
-                    <div id="collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                        <div class="card-body">
-                            <span>@Html.DisplayFor(modelItem => item.Definition) </span>
-                            <span>@Html.DisplayFor(modelItem => item.TagIds) </span>
+        <div id="accordionCommon">
+            <div class="collapse" id="collapseAllQuestion">
+                @foreach (var item in Model.questions)
+                {
+                    <div class="accordion" id="accordionExample">
+                        <div class="card">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="collapse_@item.Id.ToString()">
+                                        <span>@item.Title </span>
+                                        <span><a asp-action="QRedirectToTest" asp-route-id="@item.Id">Tests</a></span>
+                                    </button>
+                                    <button class="btn btn-link" type="button" id="@item.Id.ToString()" onclick="AddQuestion(this.id)">Add Question</button>
+                                </h5>
+                            </div>
+                            <div id="collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    <span>@Html.DisplayFor(modelItem => item.Definition) </span>
+                                    <span>@Html.DisplayFor(modelItem => item.TagIds) </span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                
-            </div>
 
-            }
-        </div>
-        <div class="collapse" id="collapseAllPacks">
-            @foreach (var item in Model.packs)
-            {
-                <div class="accordion" id="accordionExample">
-                    <div class="card">
-                        <div class="card-header" id="headingOne">
-                            <h5 class="mb-0">
-                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="collapse_@item.Id.ToString()">
-                                    <span> @Html.DisplayFor(modelItem => item.Name) </span>
-                                </button>
-                                <button class="btn btn-link" type="button" id="@item.Id.ToString()" onclick="AddPack(this.id)">Add Pack</button>
-                            </h5>
-                        </div>
-                        <div id="collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                            <div class="card-body">
-                                @foreach (var quesId in item.QuestionSet.Split(";"))
-                                {
-                                    <div class="d-flex justify-content-between pt-3 pb-3">
-                                        @Html.DisplayFor(model => model.questions.Find(x => x.Id.ToString() == quesId).Title)
-                                    </div>
-                                }
+                    </div>
+
+                }
+            </div>
+            <div class="collapse" id="collapseAllPacks">
+                @foreach (var item in Model.packs)
+                {
+                    <div class="accordion" id="accordionExample">
+                        <div class="card">
+                            <div class="card-header" id="headingOne">
+                                <h5 class="mb-0">
+                                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="collapse_@item.Id.ToString()">
+                                        <span> @Html.DisplayFor(modelItem => item.Name) </span>
+                                    </button>
+                                    <button class="btn btn-link" type="button" id="@item.Id.ToString()" onclick="AddPack(this.id)">Add Pack</button>
+                                </h5>
+                            </div>
+                            <div id="collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                <div class="card-body">
+                                    @foreach (var quesId in item.QuestionSet.Split(";"))
+                                    {
+                                        <div class="d-flex justify-content-between pt-3 pb-3">
+                                            @Html.DisplayFor(model => model.questions.Find(x => x.Id.ToString() == quesId).Title)
+                                        </div>
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-            }
+                }
+            </div>
         </div>
     </div>
 
@@ -91,12 +99,12 @@
         if (a.innerHTML != "Add Question") {
             return false; alert("didnt stop");
         }
-         a.innerHTML = "пожалуйста, подождите. идет процесс добавления";
+         a.innerHTML = "Пожалуйста, подождите, идёт процесс добавления...";
         $.ajax(
             {
                   type: "Post",
-                data: { Ques_id: id },
-                url: '@Url.Action("AddQuestionToMyLib", "UserLibrary")',
+                data: { ques_id: id },
+                url: '@Url.Action("AddQuestionToMyLib", "PublicLibrary")',
                 success: function (msg) {
                           a.innerHTML = "Добавлено!";
                       },
@@ -114,12 +122,12 @@
          if (a.innerHTML != "Add Pack") {
             return false; alert("didnt stop");
         }
-         a.innerHTML = "пожалуйста, подождите. идет процесс добавления";
+         a.innerHTML = "Пожалуйста, подождите, идёт процесс добавления...";
         $.ajax(
             {
                   type: "Post",
                 data: { pack_id: id },
-                url: '@Url.Action("AddPackToMyLib", "UserLibrary")',
+                url: '@Url.Action("AddPackToMyLib", "PublicLibrary")',
                 success: function (msg) {
                           a.innerHTML = "Добавлено!";
                       },

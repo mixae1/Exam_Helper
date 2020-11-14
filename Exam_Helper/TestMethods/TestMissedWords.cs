@@ -105,7 +105,7 @@ namespace Exam_Helper.TestMethods
                 {
                     if (!InvokeMethod(func, words[i])) goto label1;
                 }
-                temp.Add((i, words[i]));
+                temp.Add((i, words[i].Trim()));
             label1:
                 ;
             }

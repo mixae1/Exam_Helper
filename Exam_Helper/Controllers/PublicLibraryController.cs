@@ -91,7 +91,6 @@ namespace Exam_Helper.Controllers
             return View(pack);
         }
 
- 
         public RedirectToActionResult QRedirectToTest(int id)
         {
             TempData["question_id"] = id;
@@ -106,6 +105,32 @@ namespace Exam_Helper.Controllers
         private bool PackExists(int id)
         {
             return _context.Pack.Any(e => e.Id == id);
+        }
+
+        public async Task<bool> AddQuestionToMyLib(string ques_id)
+        {
+            var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
+            if (qa.QuestionSet.Contains(ques_id)) return false;
+            else
+            {
+                qa.QuestionSet = string.IsNullOrEmpty(qa.QuestionSet) ? ques_id + ";" : qa.QuestionSet + ques_id + ";";
+                _context.Update(qa);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+        }
+
+        public async Task<bool> AddPackToMyLib(string pack_id)
+        {
+            var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
+            if (qa.PackSet.Contains(pack_id)) return false;
+            else
+            {
+                qa.PackSet = string.IsNullOrEmpty(qa.PackSet) ? pack_id + ";" : qa.PackSet + pack_id + ";";
+                _context.Update(qa);
+                await _context.SaveChangesAsync();
+                return true;
+            }
         }
     }
 }

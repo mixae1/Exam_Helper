@@ -9,53 +9,53 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Exam_Helper.Controllers
-{    
+{
     [Authorize]
     public class UserLibraryController : Controller
     {
-        private readonly CommonDbContext _context; 
-        
+        private readonly CommonDbContext _context;
+
         public UserLibraryController(CommonDbContext context)
         {
             _context = context;
         }
-      
+
         // GET: PublicLibraryController
         public async Task<IActionResult> Index(string SearchString)
         {
             //  ОСТАВИТЬ ЗДЕСЬ  А ТО МАЛО ЛИ ПОТОМ ЭТУ ХУЙНЮ ЕЩЕ ИСКАТЬ
             //  if (!User.Identity.IsAuthenticated)
             //    return RedirectToAction("Login","UserAccount");
-            var qa = await _context.User.FirstAsync(x=>x.UserName==User.Identity.Name);
-           
+            var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
+
             var temp_qa = qa.QuestionSet;
-            
-                var qs = string.IsNullOrEmpty(temp_qa) ? new HashSet<int>()
-                : new HashSet<int>(temp_qa.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)));
 
-                var _ques = from _que in _context.Question
-                            where (qs.Contains(_que.Id))
-                            select _que;
+            var qs = string.IsNullOrEmpty(temp_qa) ? new HashSet<int>()
+            : new HashSet<int>(temp_qa.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)));
 
-                if (!string.IsNullOrEmpty(SearchString))
-                    _ques = _ques.Where(
-                         x => x.Title.Contains(SearchString) ||
-                         x.Proof.Contains(SearchString) ||
-                         x.TagIds.Contains(SearchString) ||
-                         x.Definition.Contains(SearchString));
+            var _ques = from _que in _context.Question
+                        where (qs.Contains(_que.Id))
+                        select _que;
+
+            if (!string.IsNullOrEmpty(SearchString))
+                _ques = _ques.Where(
+                     x => x.Title.Contains(SearchString) ||
+                     x.Proof.Contains(SearchString) ||
+                     x.TagIds.Contains(SearchString) ||
+                     x.Definition.Contains(SearchString));
 
             var temp_pa = qa.PackSet;
             var ps = string.IsNullOrEmpty(temp_pa) ? new HashSet<int>()
             : new HashSet<int>(temp_pa.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)));
             var _packs = from _pack in _context.Pack
-                             where (ps.Contains(_pack.Id))
-                             select _pack;
+                         where (ps.Contains(_pack.Id))
+                         select _pack;
 
-                if (!string.IsNullOrEmpty(SearchString))
-                    _packs = _packs.Where(
-                        x => x.Author.Contains(SearchString) ||
-                        x.Name.Contains(SearchString));
-            
+            if (!string.IsNullOrEmpty(SearchString))
+                _packs = _packs.Where(
+                    x => x.Author.Contains(SearchString) ||
+                    x.Name.Contains(SearchString));
+
             return View(new ClassForPublicLibrary
             {
                 packs = await _packs.ToListAsync(),
@@ -129,7 +129,7 @@ namespace Exam_Helper.Controllers
                 _context.Add(obj.question);
                 await _context.SaveChangesAsync();
 
-                
+
                 qa.QuestionSet = string.IsNullOrEmpty(qa.QuestionSet) ? obj.question.Id + ";" : qa.QuestionSet + obj.question.Id + ";";
                 _context.Update(qa);
 
@@ -149,17 +149,18 @@ namespace Exam_Helper.Controllers
             if (string.IsNullOrEmpty(qs))
             {
                 ques = null;
-            } else
+            }
+            else
             {
 
                 var temp = new HashSet<int>(qs.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)));
 
-                ques=await _context.Question.Where(x=>temp.Contains(x.Id))
+                ques = await _context.Question.Where(x => temp.Contains(x.Id))
                 .Select(x => new QuestionForPackCreatingModel()
                 { Id = x.Id, Name = x.Title, IsSelected = false }).ToListAsync();
             }
-                 var tags = await _context.Tags.Select(x => new TagForPackCreatingModel()
-                { Id = x.Id, Name = x.Title, IsSelected = false }).ToListAsync();
+            var tags = await _context.Tags.Select(x => new TagForPackCreatingModel()
+            { Id = x.Id, Name = x.Title, IsSelected = false }).ToListAsync();
             return View(new ClassForPackCreatingModel() { questions = ques, pack = new Pack(), tags = tags });
         }
 
@@ -196,7 +197,7 @@ namespace Exam_Helper.Controllers
                 qa.PackSet = string.IsNullOrEmpty(qa.PackSet) ? pack.Id + ";" : qa.PackSet + pack.Id + ";";
                 _context.Update(qa);
 
-               
+
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
@@ -205,73 +206,6 @@ namespace Exam_Helper.Controllers
             return View(obj.pack);
         }
 
-       public async Task AddQuestionToMyLib(int Ques_id)
-       {
-            var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
-            var obj = await _context.Question.AsNoTracking().FirstAsync(x => x.Id == Ques_id);
-
-            Question new_ques = new Question()
-            {
-                Title = obj.Title,
-                TagIds = obj.TagIds,
-                Proof = obj.Proof,
-                Definition = obj.Definition,
-                CreationDate = obj.CreationDate,
-                UpdateDate = obj.UpdateDate,
-                Author = obj.Author,
-                IsPrivate = true
-            };
-
-            _context.Question.Add(new_ques);
-            await _context.SaveChangesAsync();
-
-            if (new_ques.Id == 0)
-                throw new Exception("fuck");
-
-            qa.QuestionSet = string.IsNullOrEmpty(qa.QuestionSet) ? new_ques.Id + ";" : qa.QuestionSet + new_ques.Id + ";";
-
-            _context.Update(qa);
-            await _context.SaveChangesAsync();
-
-        }
-
-        public async Task AddPackToMyLib(int pack_id)
-        {
-           
-
-            if (pack_id == 0)
-                throw new Exception("fuck");
-
-            var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
-            var obj = await _context.Pack.AsNoTracking().FirstAsync(x => x.Id == pack_id);
-
-            Pack pck = new Pack()
-            {
-                IsPrivate = true,
-                Author = qa.UserName,
-                QuestionSet = obj.QuestionSet,
-                CreationDate = obj.CreationDate,
-                UpdateDate = obj.UpdateDate,
-                TagsId = obj.TagsId,
-                Name = obj.Name
-            };
-
-            _context.Pack.Add(pck);
-            await _context.SaveChangesAsync();
-
-            if (pck.Id == 0)
-                throw new Exception("fuck");
-
-            qa.PackSet = string.IsNullOrEmpty(qa.PackSet) ? pck.Id + ";" : qa.PackSet + pck.Id + ";";
-
-            _context.Update(qa);
-            await _context.SaveChangesAsync();
-        }
-
-
-
-
-
 
         // GET: PublicLibraryController/Edit/5
         public IActionResult Edit(int id)
@@ -279,7 +213,6 @@ namespace Exam_Helper.Controllers
             return View();
         }
 
-       
         // GET: QuestionsLib/Edit/5
         public async Task<IActionResult> QEdit(int? id)
         {
@@ -477,6 +410,111 @@ namespace Exam_Helper.Controllers
         private bool PackExists(int id)
         {
             return _context.Pack.Any(e => e.Id == id);
+        }
+
+        public async Task AddQuestionToMyLib(int Ques_id)
+        {
+            var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
+            var obj = await _context.Question.AsNoTracking().FirstAsync(x => x.Id == Ques_id);
+
+            Question new_ques = new Question()
+            {
+                Title = obj.Title,
+                TagIds = obj.TagIds,
+                Proof = obj.Proof,
+                Definition = obj.Definition,
+                CreationDate = obj.CreationDate,
+                UpdateDate = obj.UpdateDate,
+                Author = obj.Author,
+                IsPrivate = true
+            };
+
+            _context.Question.Add(new_ques);
+            await _context.SaveChangesAsync();
+
+            if (new_ques.Id == 0)
+                throw new Exception("fuck");
+
+            qa.QuestionSet = string.IsNullOrEmpty(qa.QuestionSet) ? new_ques.Id + ";" : qa.QuestionSet + new_ques.Id + ";";
+
+            _context.Update(qa);
+            await _context.SaveChangesAsync();
+
+        }
+
+        public async Task AddPackToMyLib(int pack_id)
+        {
+
+
+            if (pack_id == 0)
+                throw new Exception("fuck");
+
+            var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
+            var obj = await _context.Pack.AsNoTracking().FirstAsync(x => x.Id == pack_id);
+
+            Pack pck = new Pack()
+            {
+                IsPrivate = true,
+                Author = qa.UserName,
+                QuestionSet = obj.QuestionSet,
+                CreationDate = obj.CreationDate,
+                UpdateDate = obj.UpdateDate,
+                TagsId = obj.TagsId,
+                Name = obj.Name
+            };
+
+            _context.Pack.Add(pck);
+            await _context.SaveChangesAsync();
+
+            if (pck.Id == 0)
+                throw new Exception("fuck");
+
+            qa.PackSet = string.IsNullOrEmpty(qa.PackSet) ? pck.Id + ";" : qa.PackSet + pck.Id + ";";
+
+            _context.Update(qa);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> ChangeQuestionPrivate(string ques_id)
+        {
+            var qa = await _context.User.AsNoTracking().FirstAsync(x => x.UserName == User.Identity.Name);
+
+            ques_id = ques_id.Substring(1);
+
+            if (!qa.QuestionSet.Contains(ques_id)) return false;
+            else
+            {
+                var temp = await _context.Question.FindAsync(int.Parse(ques_id));
+                
+                //temp.IsPrivate = !temp.IsPrivate;
+                if (temp.IsPrivate) temp.IsPrivate = false;
+                else temp.IsPrivate = true;
+                
+                _context.Update(temp);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+        }
+
+        public async Task<bool> ChangePackPrivate(string pack_id)
+        {
+            var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
+
+            pack_id = pack_id.Substring(1);
+
+            if (!qa.PackSet.Contains(pack_id)) return false;
+            else
+            {
+                var temp = await _context.Pack.FindAsync(int.Parse(pack_id));
+
+                //temp.IsPrivate = !temp.IsPrivate;
+                if (temp.IsPrivate) temp.IsPrivate = false;
+                else temp.IsPrivate = true;
+
+                _context.Update(temp);
+                await _context.SaveChangesAsync();
+                return true;
+            }
         }
     }
 }
