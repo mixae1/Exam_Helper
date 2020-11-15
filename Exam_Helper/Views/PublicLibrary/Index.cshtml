@@ -44,7 +44,7 @@
                                         <span>@item.Title </span>
                                         <span><a asp-action="QRedirectToTest" asp-route-id="@item.Id">Tests</a></span>
                                     </button>
-                                    <button class="btn btn-link" type="button" id="@item.Id.ToString()" onclick="AddQuestion(this.id)">Add Question</button>
+                                    <button class="btn btn-link" type="button" id="@("q"+item.Id.ToString())" onclick="AddQuestion(this.id)">Добавить</button>
                                 </h5>
                             </div>
                             <div id="collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
@@ -69,7 +69,7 @@
                                     <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="collapse_@item.Id.ToString()">
                                         <span> @Html.DisplayFor(modelItem => item.Name) </span>
                                     </button>
-                                    <button class="btn btn-link" type="button" id="@item.Id.ToString()" onclick="AddPack(this.id)">Add Pack</button>
+                                    <button class="btn btn-link" type="button" id="@item.Id.ToString()" onclick="AddPack(this.id)">Добавить</button>
                                 </h5>
                             </div>
                             <div id="collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
@@ -96,7 +96,7 @@
     function AddQuestion(id) {
         var a = document.getElementById(id);
 
-        if (a.innerHTML != "Add Question") {
+        if (a.innerHTML != "Добавить") {
             return false; alert("didnt stop");
         }
          a.innerHTML = "Пожалуйста, подождите, идёт процесс добавления...";
@@ -119,7 +119,7 @@
      function AddPack(id) {
         var a = document.getElementById(id);
 
-         if (a.innerHTML != "Add Pack") {
+         if (a.innerHTML != "Добавить") {
             return false; alert("didnt stop");
         }
          a.innerHTML = "Пожалуйста, подождите, идёт процесс добавления...";

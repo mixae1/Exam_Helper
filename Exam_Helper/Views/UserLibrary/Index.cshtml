@@ -149,8 +149,8 @@
         var a = document.getElementById(id);
 
         var lastText;
-        if (a.innerHTML === "Опубликовать") lastText = "Опубликован";
-        if (a.innerHTML === "Заприватить") lastText = "Запривачен";
+        if (a.innerHTML === "Опубликовать" || a.innerHTML === "Запривачен") lastText = "Опубликован";
+        if (a.innerHTML === "Заприватить" || a.innerHTML === "Опубликован") lastText = "Запривачен";
 
         a.innerHTML = "Пожалуйста, подождите...";
 
@@ -174,8 +174,8 @@
         var a = document.getElementById(id);
 
         var lastText;
-        if (a.innerHTML === "Опубликовать") lastText = "Опубликован";
-        if (a.innerHTML === "Заприватить") lastText = "Запривачен";
+        if (a.innerHTML === "Опубликовать" || a.innerHTML === "Запривачен") lastText = "Опубликован";
+        if (a.innerHTML === "Заприватить" || a.innerHTML === "Опубликован") lastText = "Запривачен";
 
         a.innerHTML = "Пожалуйста, подождите...";
 
