@@ -112,6 +112,8 @@ namespace Exam_Helper.Controllers
             var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
 
             ques_id = ques_id.Substring(1);
+            if (string.IsNullOrEmpty(qa.QuestionSet))
+                qa.QuestionSet = "";
 
             if (qa.QuestionSet.Contains(ques_id)) return false;
             else
@@ -128,6 +130,9 @@ namespace Exam_Helper.Controllers
             var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
 
             pack_id = pack_id.Substring(1);
+
+            if (string.IsNullOrEmpty(qa.PackSet))
+                qa.PackSet = "";
 
             if (qa.PackSet.Contains(pack_id)) return false;
             else

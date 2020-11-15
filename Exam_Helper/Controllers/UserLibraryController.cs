@@ -106,7 +106,7 @@ namespace Exam_Helper.Controllers
             var tags = await _context.Tags.AsNoTracking().Select(x => new TagForQuestionCreatingModel()
             { Id = x.Id, Name = x.Title, IsSelected = false }).ToListAsync();
 
-            return View(new ClassForQuestionCreatingModel() { question = new Question(), tags = tags });
+            return View(new ClassForQuestionCreatingModel() { tags = tags });
         }
 
         // POST: QuestionsLib/Create
@@ -114,29 +114,33 @@ namespace Exam_Helper.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> QCreate(ClassForQuestionCreatingModel obj)
+        public async Task<IActionResult> QCreate(ClassForQuestionCreatingModel ob)
         {
             if (ModelState.IsValid)
             {
-                var StringTags = string.Join(";", obj.tags.Where(x => x.IsSelected).Select(x => x.Id));
+                Question obj = new Question();
+                var StringTags = string.Join(";", ob.tags.Where(x => x.IsSelected).Select(x => x.Id));
                 var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
-                obj.question.CreationDate = DateTime.Now;
-                obj.question.UpdateDate = DateTime.Now;
-                obj.question.Author = User.Identity.Name;
-                obj.question.TagIds = StringTags;
-                obj.question.IsPrivate = true;
+                obj.CreationDate = DateTime.Now;
+                obj.UpdateDate = DateTime.Now;
+                obj.Author = User.Identity.Name;
+                obj.TagIds = StringTags;
+                obj.IsPrivate = true;
+                obj.Definition = ob.Definition;
+                obj.Proof = ob.Proof;
+                obj.Title = ob.Title;
 
-                _context.Add(obj.question);
+                _context.Add(obj);
                 await _context.SaveChangesAsync();
 
 
-                qa.QuestionSet = string.IsNullOrEmpty(qa.QuestionSet) ? obj.question.Id + ";" : qa.QuestionSet + obj.question.Id + ";";
+                qa.QuestionSet = string.IsNullOrEmpty(qa.QuestionSet) ? obj.Id + ";" : qa.QuestionSet + obj.Id + ";";
                 _context.Update(qa);
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(obj.question);
+            return View(ob);
         }
 
         // GET: PacksLib/Create
@@ -189,7 +193,7 @@ namespace Exam_Helper.Controllers
                 var tags = obj.tags.Where(x => x.IsSelected).Select(x => x.Id);
                 var TagsIds = string.Join(';', tags);
 
-                pack.Name = obj.pack.Name;
+                pack.Name = obj.pack_name;
                 pack.UpdateDate = DateTime.Now;
                 pack.CreationDate = DateTime.Now;
                 pack.Author = User.Identity.Name;

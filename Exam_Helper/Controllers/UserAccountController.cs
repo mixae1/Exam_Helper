@@ -39,8 +39,9 @@ namespace Exam_Helper.Controllers
                 if (res.Succeeded)
                 {
                     await _signInManager.SignInAsync(new_user, false);
-                    if(Url.IsLocalUrl(returnUrl))
-                    return RedirectToAction(returnUrl);
+                    if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                        return Redirect(returnUrl);
+                 
                 }
 
                 else
