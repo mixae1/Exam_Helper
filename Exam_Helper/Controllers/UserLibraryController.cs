@@ -103,7 +103,7 @@ namespace Exam_Helper.Controllers
         [HttpGet]
         public async Task<IActionResult> QCreate()
         {
-            var tags = await _context.Tags.Select(x => new TagForQuestionCreatingModel()
+            var tags = await _context.Tags.AsNoTracking().Select(x => new TagForQuestionCreatingModel()
             { Id = x.Id, Name = x.Title, IsSelected = false }).ToListAsync();
 
             return View(new ClassForQuestionCreatingModel() { question = new Question(), tags = tags });
@@ -155,12 +155,13 @@ namespace Exam_Helper.Controllers
 
                 var temp = new HashSet<int>(qs.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)));
 
-                ques = await _context.Question.Where(x => temp.Contains(x.Id))
+                ques=await _context.Question.AsNoTracking().Where(x=>temp.Contains(x.Id))
                 .Select(x => new QuestionForPackCreatingModel()
                 { Id = x.Id, Name = x.Title, IsSelected = false }).ToListAsync();
             }
-            var tags = await _context.Tags.Select(x => new TagForPackCreatingModel()
-            { Id = x.Id, Name = x.Title, IsSelected = false }).ToListAsync();
+                 var tags = await _context.Tags.AsNoTracking().Select(x => new TagForPackCreatingModel()
+                { Id = x.Id, Name = x.Title, IsSelected = false }).ToListAsync();
+                
             return View(new ClassForPackCreatingModel() { questions = ques, pack = new Pack(), tags = tags });
         }
 
@@ -172,11 +173,17 @@ namespace Exam_Helper.Controllers
         public async Task<IActionResult> PCreate(ClassForPackCreatingModel obj)
         {
             Pack pack = new Pack();
+
             if (ModelState.IsValid)
-            {
+            {  
+                var ques = obj.questions.Where(x => x.IsSelected).Select(x => x.Id);
+                if (ques.Count() == 0)
+                {
+                    ModelState.AddModelError(string.Empty, "вы должны выбрать как минимум 1 вопрос");
+                    return View(obj);
+                }
                 var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
 
-                var ques = obj.questions.Where(x => x.IsSelected).Select(x => x.Id);
                 var StringIds = string.Join(';', ques);
 
                 var tags = obj.tags.Where(x => x.IsSelected).Select(x => x.Id);
@@ -203,9 +210,8 @@ namespace Exam_Helper.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(obj.pack);
+            return View(obj);
         }
-
 
         // GET: PublicLibraryController/Edit/5
         public IActionResult Edit(int id)

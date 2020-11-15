@@ -25,7 +25,7 @@ namespace Exam_Helper.Controllers
         }
 
         [HttpPost]
-        public  async Task<IActionResult> Registration(UserRegistration user)
+        public  async Task<IActionResult> Registration(UserRegistration user,string returnUrl="")
         {
             if (ModelState.IsValid)
             {
@@ -39,13 +39,12 @@ namespace Exam_Helper.Controllers
                 if (res.Succeeded)
                 {
                     await _signInManager.SignInAsync(new_user, false);
-                    return RedirectToAction("Index", "UserLibrary");
+                    if(Url.IsLocalUrl(returnUrl))
+                    return RedirectToAction(returnUrl);
                 }
 
                 else
-                {
-
-                   
+                {  
                     foreach (var error in res.Errors)
                     {
                         ModelState.AddModelError(string.Empty, error.Description);
@@ -57,13 +56,14 @@ namespace Exam_Helper.Controllers
 
 
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string returnURL = "")
         {
+            ViewData["ReturnURL"] = returnURL;
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(UserLogin user)
+        public async Task<IActionResult> Login(UserLogin user,string returnURL="")
         {
             if (ModelState.IsValid)
             {
@@ -74,6 +74,8 @@ namespace Exam_Helper.Controllers
                     
                     if (res.Succeeded)
                     {
+                        if (!string.IsNullOrEmpty(returnURL) && Url.IsLocalUrl(returnURL))
+                            return Redirect(returnURL);
                         return RedirectToAction("Index", "PublicLibrary");
                     }
                     else

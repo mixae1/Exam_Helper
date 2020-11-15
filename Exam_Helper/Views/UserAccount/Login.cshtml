@@ -2,11 +2,12 @@
 
 @{
     ViewData["Title"] = "Log in";
-    ViewData["ReturnURL"] = "UserAccount/Login";
+    
+
 }
 
 <main style="height: 85vh;" class="container d-flex align-items-center justify-content-center">
-    <form id="account" method="post">
+    <form id="account" method="post" asp-route-returnurl="@ViewData["ReturnURL"]">
         <h1>@ViewData["Title"]</h1>
         <h4>Use a local account to log in.</h4>
         <hr />
