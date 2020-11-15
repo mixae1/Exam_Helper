@@ -165,7 +165,7 @@
                 error: function (msg) {
                           alert('sory we fucked everithing up');
                       }
-                  })
+            })
 
         return false;
     };
@@ -174,13 +174,12 @@
         var a = document.getElementById(id);
 
         var lastText;
-        if()
         if (a.innerHTML === "Опубликовать") lastText = "Опубликован";
         if (a.innerHTML === "Заприватить") lastText = "Запривачен";
 
         a.innerHTML = "Пожалуйста, подождите...";
 
-    $.ajax(
+        $.ajax(
             {
                 type: "Post",
                 data: { pack_id: id },
@@ -191,7 +190,7 @@
                 error: function (msg) {
                           alert('sory we fucked everithing up');
                       }
-                  })
+            })
 
         return false;
     };
