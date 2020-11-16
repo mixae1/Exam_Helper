@@ -1,8 +1,9 @@
 ﻿@model Exam_Helper.ViewsModel.ClassForPublicLibrary
+@using Microsoft.AspNetCore.Identity
 @{
     ViewData["Title"] = "Library Page";
 }
-
+@inject UserManager<User> UserManager
 <head>
     <!--
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -57,7 +58,10 @@
                                             <span> @Html.DisplayFor(modelItem => item.Title) </span>
                                             <span><a asp-controller="PublicLibrary" asp-action="QRedirectToTest" asp-route-id="@item.Id">Tests</a></span>
                                         </button>
-                                        <button class="btn btn-link" type="button" id="@("q"+item.Id.ToString())" onclick="ChangeQuestionPrivate(this.id)">@(item.IsPrivate?"Опубликовать":"Заприватить")</button>
+                                        @if (UserManager.GetUserName(User) == item.Author)
+                                        {
+                                            <button class="btn btn-link" type="button" id="@("q"+item.Id.ToString())" onclick="ChangeQuestionPrivate(this.id)">@(item.IsPrivate?"Опубликовать":"Скрыть")</button>
+                                        }
                                     </h5>
                                 </div>
 
@@ -84,7 +88,10 @@
                                         <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="collapse_@item.Id.ToString()">
                                             <span> @Html.DisplayFor(modelItem => item.Name) </span>
                                         </button>
-                                        <button class="btn btn-link" type="button" id="@("p"+item.Id.ToString())" onclick="ChangePackPrivate(this.id)">@(item.IsPrivate?"Опубликовать":"Заприватить")</button>
+                                        @if (UserManager.GetUserName(User) == item.Author)
+                                        {
+                                            <button class="btn btn-link" type="button" id="@("p" + item.Id.ToString())" onclick="ChangePackPrivate(this.id)">@(item.IsPrivate ? "Опубликовать" : "Скрыть")</button>
+                                        }
                                     </h5>
                                 </div>
 
@@ -149,8 +156,8 @@
         var a = document.getElementById(id);
 
         var lastText;
-        if (a.innerHTML === "Опубликовать" || a.innerHTML === "Запривачен") lastText = "Опубликован";
-        if (a.innerHTML === "Заприватить" || a.innerHTML === "Опубликован") lastText = "Запривачен";
+        if (a.innerHTML === "Опубликовать" || a.innerHTML === "Скрыто") lastText = "Опубликован";
+        if (a.innerHTML === "Скрыть" || a.innerHTML === "Опубликован") lastText = "Скрыто";
 
         a.innerHTML = "Пожалуйста, подождите...";
 
@@ -174,8 +181,8 @@
         var a = document.getElementById(id);
 
         var lastText;
-        if (a.innerHTML === "Опубликовать" || a.innerHTML === "Запривачен") lastText = "Опубликован";
-        if (a.innerHTML === "Заприватить" || a.innerHTML === "Опубликован") lastText = "Запривачен";
+        if (a.innerHTML === "Опубликовать" || a.innerHTML === "Скрыто") lastText = "Опубликован";
+        if (a.innerHTML === "Скрыть" || a.innerHTML === "Опубликован") lastText = "Скрыто";
 
         a.innerHTML = "Пожалуйста, подождите...";
 
@@ -188,7 +195,8 @@
                     a.innerHTML = lastText;
                       },
                 error: function (msg) {
-                          alert('sory we fucked everithing up');
+                    a.innerHTML = "Ошибка.";
+                          alert('Something went wrong');
                       }
             })
 
