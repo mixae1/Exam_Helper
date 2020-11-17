@@ -18,6 +18,9 @@ namespace Exam_Helper.TestMethods
         private int words_in_block;
         private int blocks_amount;
         private float percent;
+        public bool isDiffLenghtOfBlocks;
+        public bool isSetBlocksByDefault;
+        public int separatingIndex;
         private bool isPossible;
 
         private const float PERCENT = 33f;
@@ -55,7 +58,7 @@ namespace Exam_Helper.TestMethods
             }
         } //
 
-        public TestPuzzle(string Thereom, string Instruction = "33")
+        public TestPuzzle(string Thereom, string Instruction = "33;false;false;0;")
         {
             /*
              Instruction:
@@ -66,12 +69,15 @@ namespace Exam_Helper.TestMethods
                     0 - sepIndulge, 1 - sepByParts, 2 - sepBySentances
              */
 
-            if (!float.TryParse(Instruction, out percent)) percent = PERCENT;
+            PuzzleInstruction puzzleInstruction = new PuzzleInstruction(Instruction);
+
+            percent = puzzleInstruction.percent;
+            isDiffLenghtOfBlocks = puzzleInstruction.isDiffLenghtOfBlocks;
+            isSetBlocksByDefault = puzzleInstruction.isDiffLenghtOfBlocks;
+            separatingIndex = puzzleInstruction.separatingIndex;
 
             if (string.IsNullOrEmpty(Thereom))
                 throw new Exception("incorrect string");
-            if (percent < 1 || percent > 100)
-                throw new Exception("incorrect percent");
 
             this.Thereom = Thereom;
             percent = (101 - percent) / 100;
@@ -87,16 +93,15 @@ namespace Exam_Helper.TestMethods
                 words.Length / words_in_block + 
                 (words.Length % words_in_block == 0 ? 0 : 1);
 
-            if (blocks_amount < MIN_BLOCKS) blocks_amount = MIN_BLOCKS;
-
-            right_index_order = new int[blocks_amount];
-            test_strings = new string[blocks_amount];
-
             isPossible = CreateTest();
         }
 
         private bool CreateTest()
         {
+            if (blocks_amount < MIN_BLOCKS) blocks_amount = MIN_BLOCKS;
+
+            right_index_order = new int[blocks_amount];
+            test_strings = new string[blocks_amount];
             blocks = new string[blocks_amount];
 
             if (words.Length < 6) return false;
@@ -131,6 +136,47 @@ namespace Exam_Helper.TestMethods
             }
 
             return true;
+        }
+    }
+
+    class PuzzleInstruction
+    {
+        /*
+             Instruction:
+            [0] - percent                       [1; 100]            by default 33
+            [1] - Different lenght of blocks    [true,false]        by default false
+            [2] - Set blocks by default         [true,false]        by default false
+            [3] - Separating                    [0; 2]              by default 0
+                    0 - sepIndulge, 1 - sepByParts, 2 - sepBySentances
+             */
+
+        public float percent;
+        public bool isDiffLenghtOfBlocks;
+        public bool isSetBlocksByDefault;
+        public int separatingIndex;
+
+        private const float PERCENT = 33f;
+        private const bool IS_DIFF_LENGHT_OF_BLOCKS = false;
+        private const bool IS_SET_BLOCKS_BY_DEFAULT = false;
+        private const int SEPARATING_INDEX = 0;
+
+        public PuzzleInstruction(string instruction)
+        {
+            string[] instructions = instruction.Split(";");
+
+            if (!float.TryParse(instructions[0], out percent)) percent = PERCENT;
+
+            if (!bool.TryParse(instructions[1], out isDiffLenghtOfBlocks)) isDiffLenghtOfBlocks = IS_DIFF_LENGHT_OF_BLOCKS;
+
+            if (!bool.TryParse(instructions[2], out isSetBlocksByDefault)) isSetBlocksByDefault = IS_SET_BLOCKS_BY_DEFAULT;
+
+            if (!int.TryParse(instructions[3], out separatingIndexs)) separatingIndexs = SEPARATING_INDEX;
+
+            if (percent < 1 || percent > 100)
+                throw new Exception("incorrect percent");
+
+            if (separatingIndexs < 0 || separatingIndexs > 2)
+                throw new Exception("Out of range: separatingIndexs");
         }
     }
 }
