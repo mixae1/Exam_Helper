@@ -61,20 +61,25 @@
                                         <input type="range" min="1" max="100" value="50" id="p_quantity">
                                     </p>
                                     <p>
-                                        Different lenght of blocks:
-                                        <input type="checkbox" id="p_diffLenghtOfBlock" disabled>
+                                        <span>
+                                            Different lenght of blocks:
+                                            <input type="checkbox" id="p_diffLenghtOfBlock" disabled>
+                                        </span>
+                                        <br />
+                                        <span>
+                                            Set blocks by default:
+                                            <input type = "checkbox" id = "p_defaultBlocks" disabled>
+                                        </span>
                                     </p>
+
                                     <p>
-                                        <label>
+
+                                        <span>
                                             Separating:
-                                            <input type="range" min="0" max="2" step="1" value="0" id="p_sep" onchange="UpdateSepName()" disabled/>
-                                            <label id="sepLog">sepIndulge</label>
-                                        </label>
-                                        <!--
-                                        sepIndulge
-                                        sepByParts
-                                        sepBySentances
-                                    -->
+                                            <input type="range" min="0" max="2" step="1" value="0" id="p_sep" onchange="UpdateSepName()" disabled />
+                                            <span id="sepLog">sepIndulge</span>
+                                        </span>
+
                                     </p>
                                     break;
                                 default: break;
@@ -128,7 +133,7 @@
     };
 
     const sepSlider = puzzle.find("input#p_sep");
-    const sepLog = puzzle.find("label#sepLog");
+    const sepLog = puzzle.find("span#sepLog");
 
     function UpdateSepName() {
         var buf = "";
