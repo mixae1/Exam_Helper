@@ -73,7 +73,7 @@ namespace Exam_Helper.TestMethods
 
             percent = puzzleInstruction.percent;
             isDiffLenghtOfBlocks = puzzleInstruction.isDiffLenghtOfBlocks;
-            isSetBlocksByDefault = puzzleInstruction.isDiffLenghtOfBlocks;
+            isSetBlocksByDefault = puzzleInstruction.isSetBlocksByDefault;
             separatingIndex = puzzleInstruction.separatingIndex;
 
             if (string.IsNullOrEmpty(Thereom))
@@ -82,45 +82,99 @@ namespace Exam_Helper.TestMethods
             this.Thereom = Thereom;
             percent = (101 - percent) / 100;
 
-            //quantity of blocks
-            words_in_block = 
-                percent * MAX_WORDS_IN_BLOCK < MIN_WORDS_IN_BLOCK ?
-                MIN_WORDS_IN_BLOCK :
-                (int)(percent * MAX_WORDS_IN_BLOCK);
 
             words = Thereom.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            blocks_amount = 
-                words.Length / words_in_block + 
-                (words.Length % words_in_block == 0 ? 0 : 1);
 
             isPossible = CreateTest();
         }
 
         private bool CreateTest()
         {
+            //Counting words in a block for [isDiffLenghtOfBlocks=false]
+            words_in_block = 
+                percent * MAX_WORDS_IN_BLOCK < MIN_WORDS_IN_BLOCK ?
+                MIN_WORDS_IN_BLOCK :
+                (int)(percent * MAX_WORDS_IN_BLOCK);
+            //Counting blocks for [separatingIndex=0]
+            blocks_amount = 
+                words.Length / words_in_block + 
+                (words.Length % words_in_block == 0 ? 0 : 1);
+
+            //Checking an ambit for [block_amount]
             if (blocks_amount < MIN_BLOCKS) blocks_amount = MIN_BLOCKS;
 
+            //Creating arrays
             right_index_order = new int[blocks_amount];
             test_strings = new string[blocks_amount];
             blocks = new string[blocks_amount];
 
+            //One more ambit                        -editable
             if (words.Length < 6) return false;
             
-            int i = 0;
-
-            int curr_words_amount = 0;
-            foreach (var word in words)
-            {
-                if (curr_words_amount == words_in_block)
-                {
-                    ++i;
-                    curr_words_amount = 0;
-                }
-                blocks[i] = blocks[i] + word + " ";
-                ++curr_words_amount;
-            }
-
             Random rnd = new Random();
+
+            //Setting blocks_amount for [isDiffLenghtOfBlocks]
+            if (isDiffLenghtOfBlocks)
+            {
+                //Amout words in every block
+                int[] temp = new int[blocks_amount];
+                int amount_used_words = 0;
+                for(int i = 0; i< blocks_amount; i++)
+                {
+                    //[+1; -1]
+                    temp[i] = rnd.Next(words_in_block - 1, words_in_block + 2);
+                    amount_used_words += temp[i];
+                }
+                var diff = words.Length - amount_used_words;
+
+                while (diff > 0)
+                {
+                    temp[rnd.Next() % blocks_amount]++;
+                    diff--; 
+                }
+
+                while (diff < 0)
+                {
+                    var buf = rnd.Next() % blocks_amount;
+                    if (temp[buf] > MIN_WORDS_IN_BLOCK)
+                    {
+                        temp[buf]--;
+                        diff++;
+                    }
+                }
+
+                //Filling blocks
+                int curr_word = 0;
+                int curr_block = 0;
+                foreach(var amount in temp)
+                {
+                    blocks[curr_block] = "";
+                    for (int i = 0; i < amount; i++)
+                    {
+                        blocks[curr_block] += words[curr_word++] + " ";
+                    }
+                    curr_block++;
+                }
+
+            }
+            else
+            {
+                int i = 0;
+                int curr_words_amount = 0;
+                foreach (var word in words)
+                {
+                    if (curr_words_amount == words_in_block)
+                    {
+                        i++;
+                        blocks[i] = "";
+                        curr_words_amount = 0;
+                    }
+                    blocks[i] += word + " ";
+                    curr_words_amount++;
+                }
+            }
+            
+            
             
             for (int j = 0; j < blocks_amount; ++j)
             {

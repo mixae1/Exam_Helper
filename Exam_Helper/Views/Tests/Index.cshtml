@@ -63,7 +63,7 @@
                                     <p>
                                         <span>
                                             Different lenght of blocks:
-                                            <input type="checkbox" id="p_diffLenghtOfBlock" disabled>
+                                            <input type="checkbox" id="p_diffLenghtOfBlock">
                                         </span>
                                         <br />
                                         <span>
@@ -125,7 +125,10 @@
                 break;
             case "puzzle":
                 instruction =
-                    puzzle.find("input#p_quantity").val().toString();
+                    puzzle.find("input#p_quantity").val().toString() + ";" +
+                    puzzle.find("input#p_diffLenghtOfBlock").is(":checked").toString() + ";" +
+                    puzzle.find("input#p_defaultBlocks").is(":checked").toString() + ";" +
+                    puzzle.find("input#p_sep").val().toString() + ";";
                 break;
         }
 
