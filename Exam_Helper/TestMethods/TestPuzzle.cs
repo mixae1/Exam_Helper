@@ -10,18 +10,20 @@ namespace Exam_Helper.TestMethods
     {
         public string Thereom { get; set; }
 
-        private string[] words;
-        private int[] right_index_order;
-        string[] test_strings;
-        private string[] blocks;
+        private string[] words;             //for [separatingIndex=0]
+        private string[] parts;             //for [separatingIndex=1]
+        private string[] sentantes;         //for [separatingIndex=2]
+        private int[] right_index_order;    //negative indexes for [isSetBlocksByDefault=true], positive ones for dragable blocks
+        string[] test_strings;              //done strings for a test with random order
+        private string[] blocks;            //done strings for a test without random order
 
-        private int words_in_block;
-        private int blocks_amount;
-        private float percent;
-        public bool isDiffLenghtOfBlocks;
-        public bool isSetBlocksByDefault;
-        public int separatingIndex;
-        private bool isPossible;
+        private int words_in_block;         //amount words in a block for [isDiffLenghtOfBlocks=false]
+        private int blocks_amount;          //amount blocks
+        private float percent;              //percent of quantity words in a block
+        private bool isDiffLenghtOfBlocks;
+        private bool isSetBlocksByDefault;
+        private int separatingIndex;
+        private bool isPossible;            //boolean for checking test readiness
 
         private const float PERCENT = 33f;
         private const int MAX_WORDS_IN_BLOCK = 10;
@@ -116,7 +118,7 @@ namespace Exam_Helper.TestMethods
             //Setting blocks_amount for [isDiffLenghtOfBlocks]
             if (isDiffLenghtOfBlocks)
             {
-                //Amout words in every block
+                //Amount words in every block
                 int[] temp = new int[blocks_amount];
                 int amount_used_words = 0;
                 for(int i = 0; i< blocks_amount; i++)
