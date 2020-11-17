@@ -170,12 +170,12 @@ namespace Exam_Helper.TestMethods
 
             if (!bool.TryParse(instructions[2], out isSetBlocksByDefault)) isSetBlocksByDefault = IS_SET_BLOCKS_BY_DEFAULT;
 
-            if (!int.TryParse(instructions[3], out separatingIndexs)) separatingIndexs = SEPARATING_INDEX;
+            if (!int.TryParse(instructions[3], out separatingIndex)) separatingIndex = SEPARATING_INDEX;
 
             if (percent < 1 || percent > 100)
                 throw new Exception("incorrect percent");
 
-            if (separatingIndexs < 0 || separatingIndexs > 2)
+            if (separatingIndex < 0 || separatingIndex > 2)
                 throw new Exception("Out of range: separatingIndexs");
         }
     }
