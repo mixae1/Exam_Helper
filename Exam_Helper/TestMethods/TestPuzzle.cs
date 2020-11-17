@@ -57,6 +57,15 @@ namespace Exam_Helper.TestMethods
 
         public TestPuzzle(string Thereom, string Instruction = "33")
         {
+            /*
+             Instruction:
+            [0] - percent                       [1; 100]            by default 33
+            [1] - Different lenght of blocks    [true,false]        by default false
+            [2] - Set blocks by default         [true,false]        by default false
+            [3] - Separating                    [0; 2]              by default 0
+                    0 - sepIndulge, 1 - sepByParts, 2 - sepBySentances
+             */
+
             if (!float.TryParse(Instruction, out percent)) percent = PERCENT;
 
             if (string.IsNullOrEmpty(Thereom))
