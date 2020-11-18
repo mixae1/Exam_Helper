@@ -72,7 +72,7 @@ namespace Exam_Helper.TestMethods
 
             
             string rep = "$1";
-            Thereom = Regex.Replace(Thereom, @"(,|\.|:|\?|\&|!|\(|\)|\{|\}|\-|=)"," "+rep+" ");
+            Thereom = Regex.Replace(Thereom, @"(,|\.|:|\?|\&|!|\(|\)|\{|\}|\-|=|<|>)"," "+rep+" ").Trim();
             words = Thereom.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             funcs = new List<Func<string, bool>>();
@@ -145,6 +145,9 @@ namespace Exam_Helper.TestMethods
 
             missedwords = (int)(temp.Count() * percent);
             if (missedwords == 0) missedwords++;
+
+            if (missedwords == temp.Count)
+                throw new Exception("!");
             
 
             while (answers.Count != missedwords)

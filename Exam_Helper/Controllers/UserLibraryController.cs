@@ -407,7 +407,7 @@ namespace Exam_Helper.Controllers
         }
 
         public RedirectToActionResult QRedirectToTest(int id)
-        { 
+        {
 
             //TempData["question_id"] = id;
             HttpContext.Session.SetInt32("question_id", id);
