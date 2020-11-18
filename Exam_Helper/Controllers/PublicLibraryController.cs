@@ -23,10 +23,10 @@ namespace Exam_Helper.Controllers
         // GET: PublicLibraryController
         public async Task<IActionResult> Index(string SearchString)
         {
-            //  ОСТАВИТЬ ЗДЕСЬ  А ТО МАЛО ЛИ ПОТОМ ЭТУ ХУЙНЮ ЕЩЕ ИСКАТЬ
+            
             //  if (!User.Identity.IsAuthenticated)
             //    return RedirectToAction("Login","UserAccount");
-           
+   
 
             var _ques = from _que in _context.Question
                         where _que.IsPrivate==false
@@ -93,7 +93,8 @@ namespace Exam_Helper.Controllers
 
         public RedirectToActionResult QRedirectToTest(int id)
         {
-            TempData["question_id"] = id;
+            //TempData["question_id"] = id;
+            HttpContext.Session.SetInt32("question_id", id);
             return RedirectToAction(nameof(Index), nameof(Tests));
         }
 

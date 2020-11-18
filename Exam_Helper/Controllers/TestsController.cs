@@ -13,26 +13,22 @@ using System.Text.Json;
 
 namespace Exam_Helper.Controllers
 {
-    
-    public static class TempDataExtensions
+    public static class SessionHelper
     {
-        public static void Put<T>(this ITempDataDictionary tempData, string key, T value) where T : class
+        public static void SetObjectAsJson(this ISession session, string key, object value)
         {
-            tempData[key] = JsonSerializer.Serialize(value);
+            session.SetString(key, JsonSerializer.Serialize(value));
         }
 
-        public static T Get<T>(this ITempDataDictionary tempData, string key) where T : class
+        public static T GetObjectFromJson<T>(this ISession session, string key)
         {
-            tempData.TryGetValue(key, out object o);
-            return o == null ? null : JsonSerializer.Deserialize<T>((string)o);
-        }
-
-        public static T Peek<T>(this ITempDataDictionary tempData, string key) where T : class
-        {
-            object o = tempData.Peek(key);
-            return o == null ? null : JsonSerializer.Deserialize<T>((string)o);
+            var value = session.GetString(key);
+            return value == null ? default(T) : JsonSerializer.Deserialize<T>(value);
         }
     }
+
+
+
 
     public class TestsController : Controller
     {
@@ -48,14 +44,21 @@ namespace Exam_Helper.Controllers
         // GET: Tests 
         [HttpGet]
         public async Task<IActionResult> Index()
-        {   
-           var ind=TempData["question_id"] as int?;
-            if (!ind.HasValue)
-                return RedirectToAction("Index","PublicLibrary");
+        {
+            //  var ind=TempData["question_id"] as int?;
+            Question temp = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session, "question");
+            int? ind = 0;
+            if (temp == null)
+            {
+                ind = HttpContext.Session.GetInt32("question_id");
 
-            var temp = await _dbContext.Question.FindAsync(ind.Value);
-
-            TempData.Put("question", temp);
+                if (!ind.HasValue)
+                    return RedirectToAction("Index", "PublicLibrary");
+                temp = await _dbContext.Question.FindAsync(ind.Value);
+                //TempData.Put("question", temp);
+               SessionHelper.SetObjectAsJson(HttpContext.Session, "question", temp);
+            } 
+             
 
             var tests = await _dbContext.Tests.ToListAsync();
             var models = new TestChoiceViewModel()
@@ -87,7 +90,7 @@ namespace Exam_Helper.Controllers
         public IActionResult MissingWordsTest(string Instruction)
         {
              
-            Question question = TempData.Peek<Question>("question");
+            Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session,"question");
             if (question==null) throw new Exception("question==null");
             
             TestMissedWords testMissed = new TestMissedWords(question.Definition, Instruction);
@@ -105,7 +108,7 @@ namespace Exam_Helper.Controllers
         public IActionResult PuzzleTest(string Instruction)
         {
 
-            Question question = TempData.Peek<Question>("question");
+            Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session, "question");
             if (question == null) throw new Exception("question==null");
 
             TestPuzzle testPuzzle = new TestPuzzle(question.Definition, Instruction);
