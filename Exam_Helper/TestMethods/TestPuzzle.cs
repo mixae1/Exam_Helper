@@ -10,14 +10,15 @@ namespace Exam_Helper.TestMethods
     {
         public string Thereom { get; set; }
 
-        private string[] words;             //for [separatingIndex=0]
-        private string[] parts;             //for [separatingIndex=1]
-        private string[] sentantes;         //for [separatingIndex=2]
+        private List<string> words;             //for [separatingIndex=0]
+        private List<string> parts;             //for [separatingIndex=1]
+        private List<string> sentantes;         //for [separatingIndex=2]
+        private List<string> objs;
         private int[] right_index_order;    //negative indexes for [isSetBlocksByDefault=true], positive ones for dragable blocks
         string[] test_strings;              //done strings for a test with random order
         private string[] blocks;            //done strings for a test without random order
 
-        private int words_in_block;         //amount words in a block for [isDiffLenghtOfBlocks=false]
+        private int obj_in_block;         //amount words in a block for [isDiffLenghtOfBlocks=false]
         private int blocks_amount;          //amount blocks
         private float percent;              //percent of quantity words in a block
         private bool isDiffLenghtOfBlocks;
@@ -28,9 +29,16 @@ namespace Exam_Helper.TestMethods
         private const float PERCENT = 33f;
         private const int MAX_WORDS_IN_BLOCK = 10;
         private const int MIN_WORDS_IN_BLOCK = 2;
+        private const int MAX_PARTS_IN_BLOCK = 4;
+        private const int MIN_PARTS_IN_BLOCK = 1;
+        private const int MAX_SENTS_IN_BLOCK = 2;
+        private const int MIN_SENTS_IN_BLOCK = 1;
         private const int MIN_BLOCKS = 3;
         private const int PARAM_SET_BLOCKS = 3;
         private const int MAX_SEQ_BLOCKS = 2;
+
+        private int MAX_OBJ_IN_BLOCK;
+        private int MIN_OBJ_IN_BLOCK;
 
         public bool IsSuccessed
         {
@@ -43,7 +51,7 @@ namespace Exam_Helper.TestMethods
         {
             get
             {
-                return words;
+                return words.ToArray();
             }
         }
         public int[] RightIndexes
@@ -86,17 +94,56 @@ namespace Exam_Helper.TestMethods
             percent = (101 - percent) / 100;
 
 
-            words = Thereom.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            words = Thereom.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            if (!(words[words.Count - 1].Last() == '.' || words[words.Count - 1].Last() == '!' || words[words.Count - 1].Last() == '?' || words[words.Count - 1].Last() == ';')) words[words.Count - 1] += '.';
+            objs = words;
+            MAX_OBJ_IN_BLOCK = MAX_WORDS_IN_BLOCK;
+            MIN_OBJ_IN_BLOCK = MIN_WORDS_IN_BLOCK;
 
-            if(separatingIndex > 0)
+            if (separatingIndex > 0)
             {
-                parts = new string[words.Length];
-                
+                parts = new List<string>(words.Count);
+                parts.Add("");
+                int curr_part = 0; //parts.Count;
+                foreach(var word in words)
+                {
+                    //the last symbol
+                    int ls = word.Length - 1;
+                    if(word[ls] == ',' || word[ls] == '.' || word[ls] == '!' || word[ls] == ':' || word[ls] == '?' || word[ls] == ';')
+                    {
+                        parts[curr_part] += word;
+                        curr_part++;
+                        parts.Add("");
+                    }
+                    else parts[curr_part] += word + " ";
+                }
+                parts.RemoveAt(curr_part);
+                objs = parts;
+                MAX_OBJ_IN_BLOCK = MAX_PARTS_IN_BLOCK;
+                MIN_OBJ_IN_BLOCK = MIN_PARTS_IN_BLOCK;
             }
 
             if (separatingIndex > 1)
             {
-                sentantes = new string[parts.Length];
+                sentantes = new List<string>(parts.Count);
+                sentantes.Add("");
+                int curr_sent = 0;
+                foreach (var part in parts)
+                {
+                    //the last symbol
+                    int ls = part.Length - 1;
+                    if (part[ls] == '.' || part[ls] == '!' || part[ls] == '?' || part[ls] == ';')
+                    {
+                        sentantes[curr_sent] += part;
+                        curr_sent++;
+                        sentantes.Add("");
+                    }
+                    else sentantes[curr_sent] += part + " ";
+                }
+                sentantes.RemoveAt(curr_sent);
+                objs = sentantes;
+                MAX_OBJ_IN_BLOCK = MAX_SENTS_IN_BLOCK;
+                MIN_OBJ_IN_BLOCK = MIN_SENTS_IN_BLOCK;
             }
 
             isPossible = CreateTest();
@@ -104,15 +151,15 @@ namespace Exam_Helper.TestMethods
 
         private bool CreateTest()
         {
-            //Counting words in a block for [isDiffLenghtOfBlocks=false]
-            words_in_block = 
-                percent * MAX_WORDS_IN_BLOCK < MIN_WORDS_IN_BLOCK ?
-                MIN_WORDS_IN_BLOCK :
-                (int)(percent * MAX_WORDS_IN_BLOCK);
+            //Counting obj in a block for [isDiffLenghtOfBlocks=false]
+            obj_in_block = 
+                percent * MAX_OBJ_IN_BLOCK < MIN_OBJ_IN_BLOCK ?
+                MIN_OBJ_IN_BLOCK :
+                (int)(percent * MAX_OBJ_IN_BLOCK);
             //Counting blocks for [separatingIndex=0]
             blocks_amount = 
-                words.Length / words_in_block + 
-                (words.Length % words_in_block == 0 ? 0 : 1);
+                objs.Count / obj_in_block + 
+                (objs.Count % obj_in_block == 0 ? 0 : 1);
 
             //Checking an ambit for [block_amount]
             if (blocks_amount < MIN_BLOCKS) blocks_amount = MIN_BLOCKS;
@@ -123,23 +170,23 @@ namespace Exam_Helper.TestMethods
             blocks = new string[blocks_amount];
 
             //One more ambit                        -editable
-            if (words.Length < 6) return false;
+            if (objs.Count < MIN_BLOCKS * MIN_OBJ_IN_BLOCK) return false;
             
             Random rnd = new Random();
 
             //Setting blocks_amount for [isDiffLenghtOfBlocks]
             if (isDiffLenghtOfBlocks)
             {
-                //Amount words in every block
+                //Amount obj in every block
                 int[] temp = new int[blocks_amount];
-                int amount_used_words = 0;
+                int amount_used_obj = 0;
                 for(int i = 0; i< blocks_amount; i++)
                 {
                     //[+1; -1]
-                    temp[i] = rnd.Next(words_in_block - 1, words_in_block + 2);
-                    amount_used_words += temp[i];
+                    temp[i] = rnd.Next(Math.Max(obj_in_block - 1, MIN_OBJ_IN_BLOCK), Math.Min(obj_in_block + 2, MAX_OBJ_IN_BLOCK));
+                    amount_used_obj += temp[i];
                 }
-                var diff = words.Length - amount_used_words;
+                var diff = objs.Count - amount_used_obj;
 
                 while (diff > 0)
                 {
@@ -150,7 +197,7 @@ namespace Exam_Helper.TestMethods
                 while (diff < 0)
                 {
                     var buf = rnd.Next() % blocks_amount;
-                    if (temp[buf] > MIN_WORDS_IN_BLOCK)
+                    if (temp[buf] > MIN_OBJ_IN_BLOCK)
                     {
                         temp[buf]--;
                         diff++;
@@ -158,14 +205,14 @@ namespace Exam_Helper.TestMethods
                 }
 
                 //Filling blocks
-                int curr_word = 0;
+                int curr_obj = 0;
                 int curr_block = 0;
                 foreach(var amount in temp)
                 {
                     blocks[curr_block] = "";
                     for (int i = 0; i < amount; i++)
                     {
-                        blocks[curr_block] += words[curr_word++] + " ";
+                        blocks[curr_block] += objs[curr_obj++] + " ";
                     }
                     curr_block++;
                 }
@@ -173,18 +220,23 @@ namespace Exam_Helper.TestMethods
             }
             else
             {
-                int i = 0;
-                int curr_words_amount = 0;
-                foreach (var word in words)
+                while(!(obj_in_block * blocks_amount - (obj_in_block - 1) <= objs.Count || obj_in_block * blocks_amount == objs.Count))
                 {
-                    if (curr_words_amount == words_in_block)
+                    if (--obj_in_block < MIN_OBJ_IN_BLOCK) return false;
+                }
+
+                int i = 0;
+                int curr_obj_amount = 0;
+                foreach (var obj in objs)
+                {
+                    if (curr_obj_amount == obj_in_block)
                     {
                         i++;
                         blocks[i] = "";
-                        curr_words_amount = 0;
+                        curr_obj_amount = 0;
                     }
-                    blocks[i] += word + " ";
-                    curr_words_amount++;
+                    blocks[i] += obj + " ";
+                    curr_obj_amount++;
                 }
             }
             
