@@ -18,7 +18,8 @@ namespace Exam_Helper.TestMethods
 
         private SortedDictionary<int, string> answers;
         private List<Func<string, bool>> funcs;
-
+        const string alphabet= "ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσΤτΥυΦφΧχΨψΩω";
+        const string rus = "аи";
         //свойство лучше их юзать а не автосвойства 
         public int AmountOfMissed
         {
@@ -69,9 +70,13 @@ namespace Exam_Helper.TestMethods
 
             percent /= 200; // 2 - так как мы же не хотим все слова делать полями
 
+            
+            string rep = "$1";
+            Thereom = Regex.Replace(Thereom, @"(,|\.|:|\?|\&|!|\(|\)|\{|\}|\-|=)"," "+rep+" ");
             words = Thereom.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             funcs = new List<Func<string, bool>>();
+           
             if(instructions.isPrill) funcs.Add(isPril);
             //...
 
@@ -94,6 +99,26 @@ namespace Exam_Helper.TestMethods
             return false;
         }
 
+        bool isPunct(string x)
+        {
+            return char.IsPunctuation(x, x.Length - 1) && x!="=";
+        }
+
+        int GreekChars(string x)
+        {
+            return x.Count(x => alphabet.Contains(x));
+        }
+
+        bool ValidSingleChar(string x)
+        {
+            return x.Length==1 && !(x.Count(x => rus.Contains(x)) == 1 || GreekChars(x) == 1);
+        }
+
+        bool NotValid(string x)
+        {
+            return isPunct(x) || GreekChars(x)>1  || ValidSingleChar(x);
+        }
+
         //получаем строку из которой выкидываем слова 
         private bool CreateTest()
         {
@@ -101,6 +126,7 @@ namespace Exam_Helper.TestMethods
 
             for(int i = 0; i<words.Length; i++)
             {
+                if (NotValid(words[i])) continue;
                 foreach(var func in funcs)
                 {
                     if (!InvokeMethod(func, words[i])) goto label1;
@@ -119,10 +145,12 @@ namespace Exam_Helper.TestMethods
 
             missedwords = (int)(temp.Count() * percent);
             if (missedwords == 0) missedwords++;
+            
+
             while (answers.Count != missedwords)
             {
                 int t = r.Next() % temp.Count;
-                if (!answers.ContainsKey(temp[t].Item1))
+                if (!answers.ContainsKey(temp[t].Item1) && !answers.ContainsKey(temp[t].Item1-1) && !answers.ContainsKey(temp[t].Item1+1))
                 {
                     answers.Add(temp[t].Item1, temp[t].Item2);
                 }
