@@ -29,7 +29,8 @@ namespace Exam_Helper.TestMethods
         private const int MAX_WORDS_IN_BLOCK = 10;
         private const int MIN_WORDS_IN_BLOCK = 2;
         private const int MIN_BLOCKS = 3;
-
+        private const int PARAM_SET_BLOCKS = 3;
+        private const int MAX_SEQ_BLOCKS = 2;
 
         public bool IsSuccessed
         {
@@ -86,6 +87,17 @@ namespace Exam_Helper.TestMethods
 
 
             words = Thereom.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if(separatingIndex > 0)
+            {
+                parts = new string[words.Length];
+                
+            }
+
+            if (separatingIndex > 1)
+            {
+                sentantes = new string[parts.Length];
+            }
 
             isPossible = CreateTest();
         }
@@ -177,7 +189,7 @@ namespace Exam_Helper.TestMethods
             }
             
             
-            
+            //Randomizing
             for (int j = 0; j < blocks_amount; ++j)
             {
                 right_index_order[j] = -1;
@@ -189,6 +201,41 @@ namespace Exam_Helper.TestMethods
                 while (test_strings[rm] != null) rm = rnd.Next() % blocks_amount;
                 right_index_order[j] = rm;
                 test_strings[rm] = blocks[j];
+            }
+
+            //Randomizing neg indexes for [isSetBlocksByDefault=true]
+            if(isSetBlocksByDefault == true)
+            {
+                int curr_seq = 0;
+                bool[] setByDefault = new bool[blocks_amount];
+                for(int i = 0; i < blocks_amount; i++)
+                {
+                    int buf = rnd.Next() % PARAM_SET_BLOCKS;
+                    if (buf == 0 && curr_seq < MAX_SEQ_BLOCKS)
+                    {
+                        setByDefault[i] = true;
+                        curr_seq++;
+                    }
+                    else
+                    {
+                        if(curr_seq <= -MAX_SEQ_BLOCKS)
+                        {
+                            setByDefault[i] = true;
+                            curr_seq = 0;
+                        }
+                        else
+                        {
+                            if (curr_seq > 0) curr_seq = -1;
+                            else curr_seq -= 1;
+                        }
+                    }
+                
+                }
+                //for example, arr: [2, 3, -4, 0, -1], the first and 4th blocks ll be set by default;
+                for(int i = 0; i<blocks_amount; i++)
+                {
+                    if (setByDefault[right_index_order[i]]) right_index_order[i] *= -1;
+                }
             }
 
             return true;
