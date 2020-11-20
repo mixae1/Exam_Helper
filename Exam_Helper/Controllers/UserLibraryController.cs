@@ -217,27 +217,34 @@ namespace Exam_Helper.Controllers
             return View(obj);
         }
 
-        // GET: PublicLibraryController/Edit/5
-        public IActionResult Edit(int id)
-        {
-            return View();
-        }
+
+        // 1) вопрос чужой : get: отдаем вопрос на редактирование   post: создаем копию вопроса у себя ,старый индекс меняем на новый 
+        // 2) вопрос свой :  аналогично п.1 
 
         // GET: QuestionsLib/Edit/5
         public async Task<IActionResult> QEdit(int? id)
         {
-            if (id == null)
+            if (id == null)                
             {
                 return NotFound();
             }
 
-            var question = await _context.Question.FindAsync(id);
+            var question = await _context.Question.AsNoTracking().FirstAsync(x => x.Id == id);
             if (question == null)
             {
                 return NotFound();
             }
+            // делаем выборку тегов и отмечаем те ,которые уже стоят на вопросе
+            
+            var tags = await _context.Tags.AsNoTracking().Select(x => new TagForQuestionCreatingModel()
+            { Id = x.Id, Name = x.Title, IsSelected = question.TagIds.Contains(x.Id.ToString())}).ToListAsync();
 
-            return View(question);
+            if (tags == null)
+                tags = new List<TagForQuestionCreatingModel>();
+
+            return View(new ClassForQuestionCreatingModel() { Id=question.Id,Definition=question.Definition,Proof=question.Proof,
+                                                              Title=question.Title, tags = tags });
+
         }
 
         // POST: QuestionsLib/Edit/5
@@ -245,27 +252,55 @@ namespace Exam_Helper.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> QEdit(int id, [Bind("Id,Definition,Title,Proof,Author,TagIds")] Question question)
+        public async Task<IActionResult> QEdit(int Id,[Bind("Definition,Title,Proof,tags")] ClassForQuestionCreatingModel ques)
         {
-            if (id != question.Id)
-            {
-                return NotFound();
-            }
+            if (Id == 0)
+                throw new Exception("incorrect data in post QEdit");
+
+            var obj = await _context.Question.AsNoTracking().FirstAsync(x => x.Id == Id);
+
 
             if (ModelState.IsValid)
             {
+                var tags_check = ques.tags.Where(x => x.IsSelected).Select(x => x.Id);
+
+                /* хз нужно ли 
+                if (tags_check.Count() == 0)
+                    ModelState.AddModelError(string.Empty, "вы должны указать как минимум один тег");
+                */
+
                 try
                 {
+                    var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
 
-                    var old = await _context.Question.AsNoTracking().FirstAsync(x => x.Id == id);
-                    question.CreationDate = old.CreationDate;
-                    question.UpdateDate = DateTime.Now;
-                    _context.Update(question);
+                    Question question = new Question()
+                    {
+                        Title = ques.Title,
+                        TagIds = string.Join(";",tags_check),
+                        Proof =ques.Proof,
+                        Definition = ques.Definition,
+                        CreationDate = DateTime.Now,
+                        UpdateDate = DateTime.Now,
+                        Author = User.Identity.Name,
+                        IsPrivate = true
+                    };
+
+                    _context.Question.Add(question);
                     await _context.SaveChangesAsync();
+
+                    if (question.Id == 0)
+                        throw new Exception("smth went wrong with adding to BD");
+
+                    qa.QuestionSet = qa.QuestionSet.Replace(Id.ToString(), "");
+                    qa.QuestionSet = string.IsNullOrEmpty(qa.QuestionSet) ? question.Id + ";" : qa.QuestionSet + question.Id + ";";
+
+                    _context.Update(qa);
+                    await _context.SaveChangesAsync();
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!QuestionExists(question.Id))
+                    if (!QuestionExists(ques.Id))
                     {
                         return NotFound();
                     }
@@ -276,7 +311,7 @@ namespace Exam_Helper.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(question);
+            return View(ques);
         }
 
         // GET: PacksLib/Edit/5

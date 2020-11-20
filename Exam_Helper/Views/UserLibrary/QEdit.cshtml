@@ -1,62 +1,68 @@
-﻿@model Exam_Helper.Question
+﻿@model Exam_Helper.ViewsModel.ClassForQuestionCreatingModel;
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
+<h1>Create</h1>
 <h4>Question</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="QEdit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Definition" class="control-label"></label>
-                <input asp-for="Definition" class="form-control" />
-                <span asp-validation-for="Definition" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Proof" class="control-label"></label>
-                <input asp-for="Proof" class="form-control" />
-                <span asp-validation-for="Proof" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Author" class="control-label"></label>
-                <input asp-for="Author" class="form-control" />
-                <span asp-validation-for="Author" class="text-danger"></span>
-            </div>
-            <!--hidden="true"-->
-            <!--
-                    <div class="form-group" >
-                        <label asp-for="CreationDate" class="control-label"></label>
-                        <input asp-for="CreationDate" class="form-control" />
-                        <span asp-validation-for="CreationDate" class="text-danger"></span>
-                    </div>
-            <div class="form-group">
-                <label asp-for="UpdateDate" class="control-label"></label>
-                <input asp-for="UpdateDate" class="form-control" />
-                <span asp-validation-for="UpdateDate" class="text-danger"></span>
-            </div>
-                -->
-            <div class="form-group">
-                <label asp-for="TagIds" class="control-label"></label>
-                <input asp-for="TagIds" class="form-control" />
-                <span asp-validation-for="TagIds" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+
+
+<hr color="brown" />
+
+<div class="instruction">
+    <span>Поля,помеченные (<span class="colortext" style="color:red">*</span>) ,обязательны для заполнения :</span>
 </div>
+<form asp-action="QEdit">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="d-flex justify-content-between pt-3 pb-3">
+        <span>
+            <b>Наименование вопроса<span class="colortext" style="color:red">*</span>:</b>
+            <input asp-for="Title" type="text" class="form-control w-100">
+        </span>
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="d-flex justify-content-between pt-3 pb-3">
+        <span>
+            <b>Формулировка вопроса<span class="colortext" style="color:red">*</span>:</b>
+            <br />
+            <textarea asp-for="Definition" id="textarea" style="width:70vh;margin-top:2vh;" rows="3"></textarea>
+            <span asp-validation-for="Definition" class="text-danger"></span>
+        </span>
+    </div>
+    <div class="d-flex justify-content-between pt-3 pb-3">
+        <span>
+            <b>Доказательство:</b>
+            <br />
+            <textarea asp-for="Proof" id="textarea" style="width:120vh;margin-top:2vh;" rows="10"></textarea>
+            <span asp-validation-for="Proof" class="text-danger"></span>
+
+        </span>
+    </div>
+    <div class="form-group">
+        <div class="form-group">
+            <label asp-for="tags" class="control-label"></label>
+            <ul>
+                @for (int i = 0; i < Model.tags.Count; i++)
+                {
+                    <li>
+                        <input type="checkbox" asp-for="@Model.tags[i].IsSelected" />
+                        <label asp-for="@Model.tags[i].IsSelected"> @Model.tags[i].Name</label>
+                        <input type="hidden" asp-for="@Model.tags[i].Id" />
+                        <input type="hidden" asp-for="@Model.tags[i].Name" />
+                    </li>
+                }
+            </ul>
+            <span asp-validation-for="tags" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+</form>
 
 <button type="button" class="btn btn-light">
     <a asp-action="Index">Back to List</a>
