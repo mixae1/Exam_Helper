@@ -21,7 +21,6 @@ namespace Exam_Helper
         public DateTime CreationDate { get; set; }
         public DateTime UpdateDate { get; set; }
         public string TagIds { get; set; }
-
         public bool IsPrivate { get; set; }
         public virtual ICollection<ATest> ATest { get; set; }
     }

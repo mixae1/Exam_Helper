@@ -10,5 +10,6 @@ namespace Exam_Helper.ViewsModel
     {
         public List<Question> questions { get; set; }
         public List<Pack> packs { get; set; }
+        public List<Tags> tags { get; set; }
     }
 }

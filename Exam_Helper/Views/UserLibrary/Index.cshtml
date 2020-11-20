@@ -61,7 +61,7 @@
                                         </button>
                                         @if (UserManager.GetUserName(User) == item.Author)
                                         {
-                                            <button class="btn btn-link" type="button" id="@("q"+item.Id.ToString())" onclick="ChangeQuestionPrivate(this.id)">@(item.IsPrivate?"Опубликовать":"Скрыть")</button>
+                                            <button class="btn btn-link" type="button" id="@("q" + item.Id.ToString())" onclick="ChangeQuestionPrivate(this.id)">@(item.IsPrivate ? "Опубликовать" : "Скрыть")</button>
                                         }
                                     </h5>
                                 </div>
@@ -69,7 +69,10 @@
                                 <div id="collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <span>@Html.DisplayFor(modelItem => item.Definition) </span>
-                                        <span>@Html.DisplayFor(modelItem => item.TagIds) </span>
+                                        @foreach(var t in item.TagIds.Split(';')) { 
+                                        <span>@Html.DisplayFor(modelItem => modelItem.tags.Find(x=>x.Id==int.Parse(t)).Title) </span>
+
+                                         }
                                     </div>
                                 </div>
                             </div>
