@@ -23,7 +23,7 @@ namespace Exam_Helper.Controllers
         // GET: PublicLibraryController
         public async Task<IActionResult> Index(string SearchString)
         {
-            //  ОСТАВИТЬ ЗДЕСЬ  А ТО МАЛО ЛИ ПОТОМ ЭТУ ХУЙНЮ ЕЩЕ ИСКАТЬ
+           
             //  if (!User.Identity.IsAuthenticated)
             //    return RedirectToAction("Login","UserAccount");
             var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
@@ -121,8 +121,14 @@ namespace Exam_Helper.Controllers
         {
             if (ModelState.IsValid)
             {
+                var tags = ob.tags.Where(x => x.IsSelected).Select(x => x.Id);
+
+                if (tags.Count() == 0)
+                    ModelState.AddModelError(string.Empty, "вы должны указать как минимум один тег");
+
+
                 Question obj = new Question();
-                var StringTags = string.Join(";", ob.tags.Where(x => x.IsSelected).Select(x => x.Id));
+                var StringTags = string.Join(";",tags);
                 var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
                 obj.CreationDate = DateTime.Now;
                 obj.UpdateDate = DateTime.Now;
@@ -183,7 +189,14 @@ namespace Exam_Helper.Controllers
 
             if (ModelState.IsValid)
             {  
+
                 var ques = obj.questions.Where(x => x.IsSelected).Select(x => x.Id);
+                var tags = obj.tags.Where(x => x.IsSelected).Select(x => x.Id);
+
+
+                if (tags.Count() == 0)
+                    ModelState.AddModelError(string.Empty, "вы должны указать как минимум один тег");
+
                 if (ques.Count() == 0)
                 {
                     ModelState.AddModelError(string.Empty, "вы должны выбрать как минимум 1 вопрос");
@@ -193,7 +206,7 @@ namespace Exam_Helper.Controllers
 
                 var StringIds = string.Join(';', ques);
 
-                var tags = obj.tags.Where(x => x.IsSelected).Select(x => x.Id);
+               
                 var TagsIds = string.Join(';', tags);
 
                 pack.Name = obj.pack_name;
@@ -267,9 +280,12 @@ namespace Exam_Helper.Controllers
             {
                 var tags_check = ques.tags.Where(x => x.IsSelected).Select(x => x.Id);
 
-                 
+
                 if (tags_check.Count() == 0)
+                {
                     ModelState.AddModelError(string.Empty, "вы должны указать как минимум один тег");
+                    return View(ques);
+                }
                 
 
                 try

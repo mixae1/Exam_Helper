@@ -16,7 +16,6 @@ namespace Exam_Helper.ViewsModel
         public string Definition { get; set; }
 
         [Required]
-        [StringLength(40, MinimumLength = 10)]
         public string Title { get; set; }
 
         public int Id { get;set; }

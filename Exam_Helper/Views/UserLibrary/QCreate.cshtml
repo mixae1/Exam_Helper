@@ -18,6 +18,7 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="d-flex justify-content-between pt-3 pb-3">
         <span><b>Наименование вопроса<span class="colortext" style="color:red">*</span>:</b><input asp-for="@Model.Title" type="text" class="form-control w-100"></span>
+        <span asp-validation-for="@Model.Title" class="text-danger"></span>
     </div>
 
     <div class="d-flex justify-content-between pt-3 pb-3">
@@ -25,6 +26,7 @@
             <b>Формулировка вопроса<span class="colortext" style="color:red">*</span>:</b>
             <br />
             <textarea asp-for="@Model.Definition" id="textarea" style="width:70vh;margin-top:2vh;" rows="3"></textarea>
+            <span asp-validation-for="@Model.Definition" class="text-danger"></span>
         </span>
     </div>
 
@@ -33,6 +35,7 @@
             <b>Доказательство:</b>
             <br />
             <textarea asp-for="@Model.Proof" id="textarea" style="width:120vh;margin-top:2vh;" rows="10"></textarea>
+            <span asp-validation-for="@Model.Proof" class="text-danger"></span>
         </span>
     </div>
 
