@@ -51,8 +51,10 @@
                                 <div class="alert alert-info w-25 text-center">
                                     @foreach (var t in item.TagIds.Split(';'))
                                     {
+                                        if (!string.IsNullOrEmpty(t))
+                                        {
                                         <span>@Html.DisplayFor(modelItem => modelItem.tags.Find(x => x.Id == int.Parse(t)).Title) </span>
-
+                                        }
                                     }
                                 </div>
                                 <span class="h5 mt-2">@Html.DisplayFor(modelItem => item.Definition) </span>
@@ -89,7 +91,10 @@
                                 <div class="alert alert-info w-25 text-center">
                                     @foreach (var t in item.TagsId.Split(';'))
                                     {
+                                        if (!string.IsNullOrEmpty(t))
+                                        {
                                         <span>@Html.DisplayFor(modelItem => modelItem.tags.Find(x => x.Id == int.Parse(t)).Title) </span>
+                                        }
                                     }
                                 </div>
                                 @foreach (var quesId in item.QuestionSet.Split(";"))
