@@ -267,10 +267,10 @@ namespace Exam_Helper.Controllers
             {
                 var tags_check = ques.tags.Where(x => x.IsSelected).Select(x => x.Id);
 
-                /* хз нужно ли 
+                 
                 if (tags_check.Count() == 0)
                     ModelState.AddModelError(string.Empty, "вы должны указать как минимум один тег");
-                */
+                
 
                 try
                 {
