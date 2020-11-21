@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using System;
 
 namespace Exam_Helper
 {
@@ -31,9 +32,10 @@ namespace Exam_Helper
                 opt=>opt.User.RequireUniqueEmail=true
                 ).AddEntityFrameworkStores<CommonDbContext>().AddDefaultTokenProviders();
 
-            services.ConfigureApplicationCookie(opt => opt.LoginPath = "/UserAccount/Login");
+            services.ConfigureApplicationCookie(opt => 
+            opt.LoginPath = "/UserAccount/Login");
 
-            services.AddSession();
+            services.AddSession(opt=>opt.IdleTimeout= TimeSpan.FromSeconds(1800));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
