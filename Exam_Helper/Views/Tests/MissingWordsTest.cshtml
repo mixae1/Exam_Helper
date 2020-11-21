@@ -13,6 +13,7 @@
     <div>
         @if (Model.IsSuccessed)
         {
+            <span>Α α Β β Γ γ Δ δ Ε ε Ζ ζ Η η Θ θ Ι ι Κ κ Λ λ Μ μ Ν ν Ξ ξ Ο ο Π π Ρ ρ Σ σ Τ τ Υ υ Φ φ Χ χ Ψ ψ Ω ω</span>
             <div class="pt-3">
                 @foreach (var word in Model.Teorem)
                 {
@@ -32,7 +33,7 @@
         }
         else
         {
-            <p>Мы не можем создать данный тест для этого вопроса.</p>
+        <p>Мы не можем создать данный тест для этого вопроса.</p>
         }
         <a asp-controller="PublicLibrary" asp-action="Index">
             <input type="button" value="Back to the library" class="btn btn-primary" />

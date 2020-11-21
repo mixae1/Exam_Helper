@@ -45,19 +45,19 @@ namespace Exam_Helper.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            //  var ind=TempData["question_id"] as int?;
-            Question temp = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session, "question");
-            int? ind = 0;
-            if (temp == null)
-            {
-                ind = HttpContext.Session.GetInt32("question_id");
+            int? ind = HttpContext.Session.GetInt32("question_id");
 
-                if (!ind.HasValue)
-                    return RedirectToAction("Index", "PublicLibrary");
+            if (ind.HasValue)
+            {
+                Question temp = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session, "question");                   
+
+                if(temp==null)
                 temp = await _dbContext.Question.FindAsync(ind.Value);
-                //TempData.Put("question", temp);
+              
                SessionHelper.SetObjectAsJson(HttpContext.Session, "question", temp);
             } 
+            else
+            return RedirectToAction("Index", "PublicLibrary");
              
 
             var tests = await _dbContext.Tests.ToListAsync();

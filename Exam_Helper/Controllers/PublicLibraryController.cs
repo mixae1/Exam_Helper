@@ -48,10 +48,12 @@ namespace Exam_Helper.Controllers
                     x => x.Author.Contains(SearchString) ||
                     x.Name.Contains(SearchString));
 
+            var tags = await _context.Tags.AsNoTracking().ToListAsync();
             return View(new ClassForPublicLibrary
             {
                 packs = await _packs.ToListAsync(),
-                questions = await _ques.ToListAsync()
+                questions = await _ques.ToListAsync(),
+                tags=tags
             });
         }
 
@@ -94,6 +96,8 @@ namespace Exam_Helper.Controllers
         public RedirectToActionResult QRedirectToTest(int id)
         {
             //TempData["question_id"] = id;
+            HttpContext.Session.Remove("question_id");
+            HttpContext.Session.Remove("question");
             HttpContext.Session.SetInt32("question_id", id);
             return RedirectToAction(nameof(Index), nameof(Tests));
         }
