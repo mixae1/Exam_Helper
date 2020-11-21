@@ -69,9 +69,9 @@
                                 <div id="collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                                     <div class="card-body">
                                         <span>@Html.DisplayFor(modelItem => item.Definition) </span>
-                                        @foreach(var t in item.TagIds.Split(';')) { 
-                                        <span>@Html.DisplayFor(modelItem => modelItem.tags.Find(x=>x.Id==int.Parse(t)).Title) </span>
-
+                                        @foreach(var t in item.TagIds.Split(';', StringSplitOptions.RemoveEmptyEntries)) 
+                                        { 
+                                            <span>@Model.tags.Find(x=>x.Id==int.Parse(t)).Title</span>
                                          }
                                     </div>
                                 </div>
