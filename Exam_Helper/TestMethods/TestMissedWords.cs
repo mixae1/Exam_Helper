@@ -65,8 +65,6 @@ namespace Exam_Helper.TestMethods
 
             if (string.IsNullOrEmpty(Thereom))
                 throw new Exception("incorrect string");
-            if (percent < 1 || percent > 100) 
-                throw new Exception("incorrect percent");
 
             percent /= 200; // 2 - так как мы же не хотим все слова делать полями
 
@@ -179,6 +177,8 @@ namespace Exam_Helper.TestMethods
 
             if (!bool.TryParse(instructions[1], out isPrill)) isPrill = ISPRILL;
 
+            if (percent < 1 || percent > 100)
+                throw new Exception("incorrect percent");
         }
     }
 
