@@ -1,4 +1,5 @@
 ﻿@model Exam_Helper.ViewsModel.ClassForPublicLibrary
+@inject SignInManager<User> _signInManager;
 @{
     ViewData["Title"] = "Library Page";
 }
@@ -41,7 +42,13 @@
                                 </button>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" asp-action="QRedirectToTest" asp-route-id="@item.Id">Tests</a>
-                                    <a class="dropdown-item" id="@("q"+item.Id.ToString())" onclick="AddQuestion(this.id)">Добавить</a>
+
+                                    @{
+                                        if (_signInManager.IsSignedIn(User))
+                                        {
+                                            <a class="dropdown-item" id="@("p" + item.Id.ToString())" onclick="AddQuestion(this.id)">Добавить</a>
+                                        }
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -82,7 +89,12 @@
                                     <!--
                                         <a class="dropdown-item" asp-action="PRedirectToTest" asp-route-id="@item.Id">Tests</a>
                                     -->
-                                    <a class="dropdown-item" id="@("p"+item.Id.ToString())" onclick="AddQuestion(this.id)">Добавить</a>
+                                    @{ 
+                                        if (_signInManager.IsSignedIn(User))
+                                        {
+                                    <a class="dropdown-item" id="@("p" + item.Id.ToString())" onclick="AddPack(this.id)">Добавить</a>
+                                            }
+                                        }
                                 </div>
                             </div>
                         </div>
@@ -132,35 +144,39 @@
                           a.innerHTML = "Добавлено!";
                       },
                 error: function (msg) {
-                          alert('sory we fucked everithing up');
+                    alert('sory something went wrong');
                       }
                   })
 
         return false;
     };
 
-     function AddPack(id) {
+    function AddPack(id) {
+
         var a = document.getElementById(id);
 
          if (a.innerHTML != "Добавить") {
-            return false; alert("didnt stop");
-        }
-         a.innerHTML = "Пожалуйста, подождите, идёт процесс добавления...";
-        $.ajax(
-            {
-                  type: "Post",
-                data: { pack_id: id },
-                url: '@Url.Action("AddPackToMyLib", "PublicLibrary")',
-                success: function (msg) {
-                          a.innerHTML = "Добавлено!";
-                      },
-                error: function (msg) {
-                          alert('sory we fucked everithing up');
-                      }
-                  })
+            return false;
+         }
+      
+             a.innerHTML = "Пожалуйста, подождите, идёт процесс добавления...";
+             $.ajax(
+                 {
+                     type: "Post",
+                     data: { pack_id: id },
+                     url: '@Url.Action("AddPackToMyLib", "PublicLibrary")',
+                     success: function (msg) {
+                         a.innerHTML = "Добавлено!";
+                     },
+                     error: function (msg) {
+                         alert('sory something went wrong');
+                     }
+                 })
 
-        return false;
-    };
+         
+         
+             return false;
+         };
 
 
 

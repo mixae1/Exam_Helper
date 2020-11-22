@@ -38,11 +38,14 @@ namespace Exam_Helper.Controllers
                         select _que;
 
             if (!string.IsNullOrEmpty(SearchString))
+                SearchString = SearchString.ToLower();
+
+            if (!string.IsNullOrEmpty(SearchString))
                 _ques = _ques.Where(
-                     x => x.Title.Contains(SearchString) ||
-                     x.Proof.Contains(SearchString) ||
-                     x.TagIds.Contains(SearchString) ||
-                     x.Definition.Contains(SearchString));
+                     x => x.Title.ToLower().Trim().Contains(SearchString) ||
+                     x.Proof.ToLower().Trim().Contains(SearchString) ||
+                     x.TagIds.ToLower().Trim().Contains(SearchString) ||
+                     x.Definition.ToLower().Trim().Contains(SearchString));
 
             var temp_pa = qa.PackSet;
             var ps = string.IsNullOrEmpty(temp_pa) ? new HashSet<int>()
@@ -53,8 +56,8 @@ namespace Exam_Helper.Controllers
 
             if (!string.IsNullOrEmpty(SearchString))
                 _packs = _packs.Where(
-                    x => x.Author.Contains(SearchString) ||
-                    x.Name.Contains(SearchString));
+                    x => x.Author.ToLower().Trim().Contains(SearchString) ||
+                    x.Name.ToLower().Trim().Contains(SearchString));
 
             var tags =await _context.Tags.AsNoTracking().ToListAsync();
 

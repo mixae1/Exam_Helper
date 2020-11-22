@@ -21,6 +21,7 @@ namespace Exam_Helper.Controllers
         }
 
         // GET: PublicLibraryController
+        [AllowAnonymous]
         public async Task<IActionResult> Index(string SearchString)
         {
             
@@ -31,13 +32,15 @@ namespace Exam_Helper.Controllers
             var _ques = from _que in _context.Question
                         where _que.IsPrivate==false
                         select _que;
+            if(!string.IsNullOrEmpty(SearchString))
+            SearchString = SearchString.ToLower();
 
             if (!string.IsNullOrEmpty(SearchString))
                 _ques = _ques.Where(
-                     x => x.Title.Contains(SearchString) ||
-                     x.Proof.Contains(SearchString) ||
-                     x.TagIds.Contains(SearchString) ||
-                     x.Definition.Contains(SearchString));
+                     x => x.Title.ToLower().Trim().Contains(SearchString) ||
+                     x.Proof.ToLower().Trim().Contains(SearchString) ||
+                     x.TagIds.ToLower().Trim().Contains(SearchString) ||
+                     x.Definition.ToLower().Trim().Contains(SearchString));
 
             var _packs = from _pack in _context.Pack
                          where _pack.IsPrivate == false
@@ -45,8 +48,8 @@ namespace Exam_Helper.Controllers
 
             if (!string.IsNullOrEmpty(SearchString))
                 _packs = _packs.Where(
-                    x => x.Author.Contains(SearchString) ||
-                    x.Name.Contains(SearchString));
+                    x => x.Author.ToLower().Trim().Contains(SearchString) ||
+                    x.Name.ToLower().Trim().Contains(SearchString));
 
             var tags = await _context.Tags.AsNoTracking().ToListAsync();
             return View(new ClassForPublicLibrary
@@ -93,6 +96,7 @@ namespace Exam_Helper.Controllers
             return View(pack);
         }
 
+        [Authorize]
         public RedirectToActionResult QRedirectToTest(int id)
         {
             //TempData["question_id"] = id;
@@ -112,6 +116,7 @@ namespace Exam_Helper.Controllers
             return _context.Pack.Any(e => e.Id == id);
         }
 
+        
         public async Task<bool> AddQuestionToMyLib(string ques_id)
         {
             var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
@@ -129,7 +134,7 @@ namespace Exam_Helper.Controllers
                 return true;
             }
         }
-
+        
         public async Task<bool> AddPackToMyLib(string pack_id)
         {
             var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
