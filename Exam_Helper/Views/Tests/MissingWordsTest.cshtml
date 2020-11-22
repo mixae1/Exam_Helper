@@ -14,17 +14,10 @@
         @if (Model.IsSuccessed)
         {
             <span>Α α Β β Γ γ Δ δ Ε ε Ζ ζ Η η Θ θ Ι ι Κ κ Λ λ Μ μ Ν ν Ξ ξ Ο ο Π π Ρ ρ Σ σ Τ τ Υ υ Φ φ Χ χ Ψ ψ Ω ω</span>
-            <div class="pt-3">
+            <div class="pt-3" style="white-space:pre-wrap">
                 @foreach (var word in Model.Teorem)
                 {
-                    if (word[0] == ' ')
-                    {
-                        <input size="5" class="test" />
-                    }
-                    else
-                    {
-                        <span class="h5">@word</span>
-                    }
+                    @Html.Raw(word);
                 }
             </div>
             <div class="form-group mt-3">
