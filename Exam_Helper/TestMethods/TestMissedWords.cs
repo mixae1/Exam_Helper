@@ -54,7 +54,36 @@ namespace Exam_Helper.TestMethods
 
         public string[] GetWordsWithInputs()
         {
-            return Words.Select((x, i) => answers.ContainsKey(i) ? " " + Words[i] : Words[i]).ToArray();
+            List<string> stringUnioner = new List<string>();
+            stringUnioner.Add("");
+            int curr_word = 0;
+            while(curr_word < words.Length)
+            {
+                if (!answers.ContainsKey(curr_word))
+                {
+                    stringUnioner[stringUnioner.Count - 1] += words[curr_word] + " ";
+                }
+                else
+                {
+                    if (stringUnioner[stringUnioner.Count - 1] != "")
+                    {
+                        stringUnioner[stringUnioner.Count - 1] = "<span class=\"h5\">" + stringUnioner[stringUnioner.Count - 1] + "</span>";
+                        stringUnioner.Add("<input size=\"5\" class=\"test\" />");
+                    }
+                    else
+                    {
+                        stringUnioner[stringUnioner.Count - 1] = "<input size=\"5\" class=\"test\" />";
+                    }
+                    if (curr_word != words.Length - 1) stringUnioner.Add("");
+                    else return stringUnioner.ToArray();
+                }
+                curr_word++;
+            }
+            stringUnioner[stringUnioner.Count - 1] = "<span class=\"h5\">" + stringUnioner[stringUnioner.Count - 1] + "</span>";
+            return stringUnioner.ToArray();
+            //return Words.Select((x, i) => answers.ContainsKey(i) ?
+            //"<input size=\"5\" class=\"test\" />" :
+            //"<span class=\"h5\">" + words[i] + "</span>").ToArray();
         }
 
         public TestMissedWords(string Thereom, string Instruction = "33;true")
@@ -70,11 +99,11 @@ namespace Exam_Helper.TestMethods
 
             
             string rep = "$1";
-            Thereom = Regex.Replace(Thereom, @"(,|\.|:|\?|\&|!|\(|\)|\{|\}|\-|=|<|>)"," "+rep+" ").Trim();
+            Thereom = Regex.Replace(Thereom, @"(,|\.|:|\?|\&|!|\(|\)|\{|\}|\-|=|<|>|\r\n)", " "+rep+" ").Trim();
             words = Thereom.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
             funcs = new List<Func<string, bool>>();
-           
+
             if(instructions.isPrill) funcs.Add(isPril);
             //...
 
@@ -112,9 +141,14 @@ namespace Exam_Helper.TestMethods
             return x.Length==1 && !(x.Count(x => rus.Contains(x)) == 1 || GreekChars(x) == 1);
         }
 
+        bool BR(string x)
+        {
+            return x == "\r\n";
+        }
+
         bool NotValid(string x)
         {
-            return isPunct(x) || GreekChars(x)>1  || ValidSingleChar(x);
+            return isPunct(x) || GreekChars(x)>1  || ValidSingleChar(x) || BR(x);
         }
 
         //получаем строку из которой выкидываем слова 
