@@ -1,0 +1,64 @@
+﻿@model Exam_Helper.Question
+
+@{
+    ViewData["Title"] = "Детали";
+}
+
+<h1>Детали</h1>
+
+<div>
+    <h4>Вопрос</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Definition)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Definition)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Proof)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Proof)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Author)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Author)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.CreationDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CreationDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.UpdateDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UpdateDate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TagIds)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TagIds)
+        </dd>
+    </dl>
+</div>
+<div>
+    <button type="button" class="btn btn-light">
+        <a asp-action="QEdit" asp-route-id="@Model.Id">Редактировать</a>
+    </button>
+    <button type="button" class="btn btn-light">
+        <a asp-action="Index">Обратно к спискуt</a>
+    </button>
+</div>

@@ -1,0 +1,39 @@
+﻿@model Exam_Helper.ViewsModel.Account.UserRegistration
+@{
+    ViewData["Title"] = "Регистрация";
+}
+
+
+<main style="height: 85vh;" class="container d-flex align-items-center justify-content-center">
+    <form method="post" class="w-50" asp-controller="UserAccount" asp-action="Registration">
+        <h1>@ViewData["Title"]</h1>
+        <h4>Создать новую учётную запись.</h4>
+        <hr />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="@Model.Login"></label>
+            <input asp-for="@Model.Login" class="form-control" />
+            <span asp-validation-for="@Model.Login" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.UserName"></label>
+            <input asp-for="@Model.UserName" class="form-control" />
+            <span asp-validation-for="@Model.UserName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Password"></label>
+            <input asp-for="@Model.Password" class="form-control" />
+            <span asp-validation-for="@Model.Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.PasswordConfirm"></label>
+            <input asp-for="@Model.PasswordConfirm" class="form-control" />
+            <span asp-validation-for="@Model.PasswordConfirm" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+    </form>
+</main>
+
+    @section Scripts {
+        <partial name="_ValidationScriptsPartial" />
+    }
