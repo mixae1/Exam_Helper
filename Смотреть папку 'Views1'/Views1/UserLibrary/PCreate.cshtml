@@ -1,0 +1,70 @@
+﻿@model Exam_Helper.ViewsModel.ClassForPackCreatingModel
+
+@{
+    ViewData["Title"] = "Создание";
+}
+<main class="container d-flex flex-column align-items-center">
+    <h1>Создание</h1>
+
+    <h4>Пак</h4>
+    <hr />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <form asp-action="PCreate">
+
+        <div class="form-group">
+            <label asp-for="@Model.pack_name" class="control-label"></label>
+            <input asp-for="@Model.pack_name" class="form-control" />
+            <span asp-validation-for="@Model.pack_name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.questions" class="control-label"></label>
+            <ul class="list-group">
+                @if(Model.questions == null || Model.questions.Count==0)
+                {
+                    <span>У вас нет вопросов.</span>
+                }
+                else
+                {
+
+                    @for (int i = 0; i < Model.questions.Count; i++)
+                    {
+                        <li class="list-group-item">
+                            <input type="checkbox" asp-for="@Model.questions[i].IsSelected" />
+                            <label asp-for="@Model.questions[i].IsSelected"> @Model.questions[i].Name</label>
+                            <input type="hidden" asp-for="@Model.questions[i].Id" />
+                            <input type="hidden" asp-for="@Model.questions[i].Name" />
+                        </li>
+                    }
+                }
+            </ul>
+            <span asp-validation-for="@Model.questions" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="@Model.pack.TagsId" class="control-label"></label>
+            <ul class="list-group">
+                @for (int i = 0; i < Model.tags.Count; i++)
+                {
+                    <li class="list-group-item">
+                        <input type="checkbox" asp-for="@Model.tags[i].IsSelected" />
+                        <label asp-for="@Model.tags[i].IsSelected"> @Model.tags[i].Name</label>
+                        <input type="hidden" asp-for="@Model.tags[i].Id" />
+                        <input type="hidden" asp-for="@Model.tags[i].Name" />
+                    </li>
+}
+            </ul>
+            <span asp-validation-for="@Model.pack.TagsId" class="text-danger"></span>
+        </div>
+        <input type="submit" value="Создать" class="btn btn-primary mt-3" />
+    </form>
+
+
+    <a asp-action="Index">
+        <button type="button" class="btn btn-danger mt-3">Обратно к списку</button>
+    </a>
+</main>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
