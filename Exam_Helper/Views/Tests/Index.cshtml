@@ -34,40 +34,40 @@
                             @switch (@Model.TestMethodsNames[i])
                             {
                                 case "missed_words":
-                                    <p>
-                                        Quantity of missed words:
-                                        <input type="range" min="1" max="100" value="50" id="mw_quantity">
-                                    </p>
+                            <p>
+                                Количество пропущенных слов:
+                                <input type="range" min="1" max="100" value="50" id="mw_quantity">
+                            </p>
                                     <p>
                                         <span>
-                                            isPrill:
+                                            убираем из текста прилагательные?
                                             <input type="checkbox" id="mw_isPrill">
                                         </span>
                                         <br />
                                         <span>
-                                            isLetter:
+                                            убираем из текста прил?
                                             <input type="checkbox" id="mw_isLetter" disabled>
                                         </span>
                                         <br />
                                         <span>
-                                            isSign:
+                                            убираем из текста буквы специальные символы?
                                             <input type="checkbox" id="mw_isSign" disabled>
                                         </span>
                                     </p>
                                     break;
                                 case "puzzle":
-                                    <p>
-                                        Quantity of blocks:
-                                        <input type="range" min="1" max="100" value="50" id="p_quantity">
-                                    </p>
+                        <p>
+                            Количество блоков:
+                            <input type="range" min="1" max="100" value="50" id="p_quantity">
+                        </p>
                                     <p>
                                         <span>
-                                            Different lenght of blocks:
+                                            различная длина блоков
                                             <input type="checkbox" id="p_diffLenghtOfBlock">
                                         </span>
                                         <br />
                                         <span>
-                                            Set blocks by default:
+                                           установить блоки по умолчанию:
                                             <input type = "checkbox" id = "p_defaultBlocks">
                                         </span>
                                     </p>
@@ -75,7 +75,7 @@
                                     <p>
 
                                         <span>
-                                            Separating:
+                                            разделяем слова:
                                             <input type="range" min="0" max="2" step="1" value="0" id="p_sep" onchange="UpdateSepName()"/>
                                             <span id="sepLog">sepIndulge</span>
                                         </span>
@@ -91,10 +91,10 @@
             </div>
         }
         <div class="form-group">
-            <input type="submit" value="Make a Choice" class="btn btn-primary" id="sumbit" onclick="MakeInstruction()" />
+            <input type="submit" value="Сделать выбор" class="btn btn-primary" id="sumbit" onclick="MakeInstruction()" />
         </div>
         <a asp-controller="PublicLibrary" asp-action="Index">
-            <input type="button" value="Back to the library" class="btn btn-primary" />
+            <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
         </a>
     </form>
 

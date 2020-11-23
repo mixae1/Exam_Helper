@@ -5,8 +5,8 @@
 }
 
 
-<h1>Create</h1>
-<h4>Question</h4>
+<h1>Создание</h1>
+<h4>Вопрос</h4>
 
 
 <hr color="brown" />
@@ -18,7 +18,6 @@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="d-flex justify-content-between pt-3 pb-3">
         <span><b>Наименование вопроса<span class="colortext" style="color:red">*</span>:</b><input asp-for="@Model.Title" type="text" class="form-control w-100"></span>
-        <span asp-validation-for="@Model.Title" class="text-danger"></span>
     </div>
 
     <div class="d-flex justify-content-between pt-3 pb-3">
@@ -26,7 +25,6 @@
             <b>Формулировка вопроса<span class="colortext" style="color:red">*</span>:</b>
             <br />
             <textarea asp-for="@Model.Definition" id="textarea" style="width:70vh;margin-top:2vh;" rows="3"></textarea>
-            <span asp-validation-for="@Model.Definition" class="text-danger"></span>
         </span>
     </div>
 
@@ -35,7 +33,6 @@
             <b>Доказательство:</b>
             <br />
             <textarea asp-for="@Model.Proof" id="textarea" style="width:120vh;margin-top:2vh;" rows="10"></textarea>
-            <span asp-validation-for="@Model.Proof" class="text-danger"></span>
         </span>
     </div>
 
@@ -56,11 +53,11 @@
     </div>
 
     <div class="form-group">
-        <input type="submit" value="Create" class="btn btn-primary" />
+        <input type="submit" value="Создать" class="btn btn-primary" />
     </div>
 
     <button type="button" class="btn btn-light">
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index">Обратно к списку</a>
     </button>
 
 </form>

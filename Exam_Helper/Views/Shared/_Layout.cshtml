@@ -1,5 +1,4 @@
-﻿
-@using Microsoft.AspNetCore.Identity;
+﻿@using Microsoft.AspNetCore.Identity;
 
 @inject UserManager<User> _userManager
 @inject SignInManager<User> _signInManager
@@ -12,6 +11,7 @@
     <title>@ViewData["Title"] - Exam Helper</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 </head>
 <body>
     <header>
@@ -23,31 +23,28 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="nav nav-tabs mr-auto">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Домашняя страница</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="UserLibrary" asp-action="Index">Моя библиотека</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="UserLibrary" asp-action="Index">My Library</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="PublicLibrary" asp-action="Index">Library</a>
+                        <a class="nav-link text-dark" asp-area="" asp-controller="PublicLibrary" asp-action="Index">Библиотека</a>
                     </li>
 
                 </ul>
                 @{
                     if (!_signInManager.IsSignedIn(User))
                     {
-                        <a class="mr-2" id="registration" asp-controller="UserAccount" asp-action="Registration" method="get">Registration</a>
-                        <a class="mr-2" id="login" asp-controller="UserAccount" asp-action="Login" method="get">Login</a>
+                                <a class="mr-2" id="registration" asp-controller="UserAccount" asp-action="Registration" method="get">Регистрация</a>
+                                <a class="mr-2" id="login" asp-controller="UserAccount" asp-action="Login" method="get">Вход</a>
                         <img style="height: 4vh; border-radius: 15%;" src="https://shwanoff.ru/wp-content/uploads/2017/12/bootstrap-social.png" alt="">
                     }
                     else
                     {
 
                         <span class="mr-2"> @_userManager.GetUserName(User) </span>
-                        <a class="mr-2" id="logout" asp-controller="UserAccount" asp-action="Logout">Log out</a>
+                        <a class="mr-2" id="logout" asp-controller="UserAccount" asp-action="Logout">Выйти из аккаунта</a>
                         <img style="height: 4vh; border-radius: 15%;" src="https://shwanoff.ru/wp-content/uploads/2017/12/bootstrap-social.png" alt="">
 
                     }
@@ -56,11 +53,13 @@
             </div>
 
         </nav>
-
+        
     </header>
-
-    @RenderBody()
-
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

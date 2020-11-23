@@ -22,10 +22,10 @@
         <hr color="brown" />
 
         <div class="container d-flex bd-highlight pt-3">
-            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseAllQuestion" data-parent="#accordionCommon">
+            <button class="btn btn-primary" type="button" id="button_Que" data-toggle="collapse" data-target="#collapseAllQuestion" aria-expanded="true" aria-controls="collapseAllQuestion">
                 Вопросы
             </button>
-            <button class="btn btn-primary ml-1" type="button" data-toggle="collapse" data-target="#collapseAllPacks" data-parent="#accordionCommon">
+            <button class="btn btn-primary ml-1" type="button" id="button_Pack" data-toggle="collapse" data-target="#collapseAllPacks" aria-expanded="true" aria-controls="collapseAllPacks">
                 Паки
             </button>
             <a asp-action="QCreate">
@@ -46,122 +46,150 @@
             </form>
         </div>
         <div class="panel-group" id="accordionCommon">
-            <div class="panel">
-                <div class="collapse" id="collapseAllQuestion">
-                    @foreach (var item in Model.questions)
-                    {
-                        <div class="accordion" id="accordionExample">
-                            <div class="card">
-                                <div class="card-header" id="headingOne">
-                                    <h5 class="mb-0">
-                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="collapse_@item.Id.ToString()">
-                                            <span> @Html.DisplayFor(modelItem => item.Title) </span>
-                                            <span><a asp-controller="PublicLibrary" asp-action="QRedirectToTest" asp-route-id="@item.Id">Tests</a></span>
-                                            <span><a asp-action="QEdit" asp-route-id="@item.Id">Edit</a></span>
-                                        </button>
+            <div class="collapse show" id="collapseAllQuestion">
+                @foreach (var item in Model.questions)
+                {
+                    <div class="accordion" id="accordionExample">
+                        <div class="card border border-info mt-2 shadow mb-5 bg-white rounded">
+                            <div class="card-header bg-white d-flex justify-content-between" id="headingOne">
+                                <button class="btn" type="button" data-toggle="collapse" data-target="#q_collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="q_collapse_@item.Id.ToString()">
+                                    <span class="h4">@item.Title </span>
+                                </button>
+                                <div class="btn-group  w-25">
+                                    <button type="button" class="btn collapse btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="q_collapse_@item.Id.ToString()" data-parent="#accordionExample">
+                                        Action
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" asp-action="QRedirectToTest" asp-route-id="@item.Id">Тест</a>
+                                        <a class="dropdown-item" asp-action="QEdit" asp-route-id="@item.Id">Edit</a>
                                         @if (UserManager.GetUserName(User) == item.Author)
                                         {
                                             <button class="btn btn-link" type="button" id="@("q" + item.Id.ToString())" onclick="ChangeQuestionPrivate(this.id)">@(item.IsPrivate ? "Опубликовать" : "Скрыть")</button>
                                         }
-                                    </h5>
+                                    </div>
                                 </div>
+                            </div>
 
-                                <div id="collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                    <div class="card-body">
-                                        <span  style="white-space: pre-wrap">@Html.DisplayFor(modelItem => item.Definition) </span>
-
+                            <div id="q_collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                <div class="card-body  d-flex flex-column">
+                                    <div class="alert alert-info w-25 text-center">
                                         @foreach (var t in item.TagIds.Split(';'))
                                         {
                                             if (!string.IsNullOrEmpty(t))
                                             {
-                                              <span>@Html.DisplayFor(modelItem => modelItem.tags.Find(x => x.Id == int.Parse(t)).Title)</span>
+                                                <span>@Html.DisplayFor(modelItem => modelItem.tags.Find(x => x.Id == int.Parse(t)).Title) </span>
                                             }
                                         }
-
-
                                     </div>
+                                    <span class="h5 mt-2" style="white-space: pre-wrap">@item.Definition</span>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                    }
-                </div>
+                }
             </div>
-            <div class="panel">
-                <div class="collapse" id="collapseAllPacks">
-                    @foreach (var item in Model.packs)
-                    {
-                        <div class="accordion" id="accordionExample">
-                            <div class="card">
-                                <div class="card-header" id="headingOne">
-                                    <h5 class="mb-0">
-                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="collapse_@item.Id.ToString()">
-                                            <span> @Html.DisplayFor(modelItem => item.Name) </span>
-                                        </button>
+
+            <div class="collapse" id="collapseAllPacks">
+                @foreach (var item in Model.packs)
+                {
+                    <div class="accordion" id="accordionExample">
+                        <div class="card border border-info mt-2 shadow mb-5 bg-white rounded">
+                            <div class="card-header bg-white d-flex justify-content-between" id="headingOne">
+                                <button class="btn" type="button" data-toggle="collapse" data-target="#p_collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="p_collapse_@item.Id.ToString()">
+                                    <span class="h4"> @Html.DisplayFor(modelItem => item.Name) </span>
+                                </button>
+                                <div class="btn-group  w-25">
+                                    <button type="button" class="btn collapse btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="p_collapse_@item.Id.ToString()" data-parent="#accordionExample">
+                                        Action
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <!--
+        <a class="dropdown-item" asp-action="PRedirectToTest" asp-route-id="@item.Id">Tests</a>
+    -->
                                         @if (UserManager.GetUserName(User) == item.Author)
                                         {
                                             <button class="btn btn-link" type="button" id="@("p" + item.Id.ToString())" onclick="ChangePackPrivate(this.id)">@(item.IsPrivate ? "Опубликовать" : "Скрыть")</button>
                                         }
-                                    </h5>
-                                </div>
-
-                                <div id="collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                                    <div class="card-body">
-                                        @foreach (var quesId in item.QuestionSet.Split(";"))
-                                        {
-                                            <div class="d-flex justify-content-between pt-3 pb-3">
-                                                @Html.DisplayFor(model => model.questions.Find(x => x.Id.ToString() == quesId).Title)
-                                            </div>
-                                        }
                                     </div>
                                 </div>
                             </div>
+                            <div id="p_collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                <div class="card-body  d-flex flex-column">
+                                    <div class="alert alert-info w-25 text-center">
+                                        @foreach (var t in item.TagsId.Split(';'))
+                                        {
+                                            if (!string.IsNullOrEmpty(t))
+                                            {
+                                                <span>@Html.DisplayFor(modelItem => modelItem.tags.Find(x => x.Id == int.Parse(t)).Title) </span>
+                                            }
+                                        }
+                                    </div>
+                                    @foreach (var quesId in item.QuestionSet.Split(";"))
+                                    {
+                                        <div class="d-flex justify-content-between pt-3 pb-3">
+                                            @Html.DisplayFor(model => model.questions.Find(x => x.Id.ToString() == quesId).Title)
+                                        </div>
+                                    }
+                                </div>
+                            </div>
                         </div>
+                    </div>
 
-                    }
-                </div>
+                }
             </div>
+
+
+
+          
         </div>
-    </div>
-    <!--
-    <button data-toggle="collapse" data-parent="#accordion2" data-target="#collapse1">
-        Collapsible Group 1
-    </button>
-
-    <button data-toggle="collapse" data-parent="#accordion2" data-target="#collapse2">
-        Collapsible Group 2
-    </button>
-
-    <button data-toggle="collapse" data-parent="#accordion2" data-target="#collapse3">
-        Collapsible Group 3
-    </button>
-
-    <div class="panel-group" id="accordion2">
-
-        <div class="panel">
-            <div id="collapse1" class="collapse">
-                1111111111111111111111111111111111
-            </div>
         </div>
-
-        <div class="panel">
-            <div id="collapse2" class="collapse">
-                222222222222222222222222222222222222222222222222
-            </div>
-        </div>
-
-        <div class="panel">
-            <div id="collapse3" class="collapse">
-                333333333333333333333333333333333333333333333333
-            </div>
-        </div>
-
-    </div>
-    -->
-
+    
 </main>
 
+            <!--
+            <button data-toggle="collapse" data-parent="#accordion2" data-target="#collapse1">
+                Collapsible Group 1
+            </button>
+
+            <button data-toggle="collapse" data-parent="#accordion2" data-target="#collapse2">
+                Collapsible Group 2
+            </button>
+
+            <button data-toggle="collapse" data-parent="#accordion2" data-target="#collapse3">
+                Collapsible Group 3
+            </button>
+
+            <div class="panel-group" id="accordion2">
+
+                <div class="panel">
+                    <div id="collapse1" class="collapse">
+                        1111111111111111111111111111111111
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div id="collapse2" class="collapse">
+                        222222222222222222222222222222222222222222222222
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div id="collapse3" class="collapse">
+                        333333333333333333333333333333333333333333333333
+                    </div>
+                </div>
+
+            </div>
+            -->
+
 <script>
+    $("#button_Que").click(function () {
+        $('#collapseAllPacks').removeClass('show')
+    });
+    $("#button_Pack").click(function () {
+        $('#collapseAllQuestion').removeClass('show')
+    });
     function ChangeQuestionPrivate(id) {
         var a = document.getElementById(id);
 
@@ -212,4 +240,4 @@
 
         return false;
     };
-</script>
+            </script>
