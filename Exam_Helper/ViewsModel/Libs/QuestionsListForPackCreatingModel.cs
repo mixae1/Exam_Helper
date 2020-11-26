@@ -12,8 +12,10 @@ namespace Exam_Helper.ViewsModel
         public List<QuestionForPackCreatingModel> questions { get; set; }
         public Pack pack { get; set; }
         public List<TagForPackCreatingModel> tags { get; set; }
+        
+        public int Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="пожалуйста,укажите название пака")]
         [Display(Name ="название пака")]
         public string pack_name { get; set; }
     }

@@ -1,43 +1,69 @@
-﻿@model Exam_Helper.Pack
+﻿@model Exam_Helper.ViewsModel.ClassForPackCreatingModel
 
 @{
     ViewData["Title"] = "Edit";
 }
+<main class="container d-flex flex-column align-items-center">
+    <h1>редактирование</h1>
+    <h4>Пак</h4>
+    <hr />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <form asp-action="PEdit">
 
-<h1>Редактирование</h1>
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label asp-for="@Model.pack_name" class="control-label"></label>
+            <input asp-for="@Model.pack_name" class="form-control" />
+            <span asp-validation-for="@Model.pack_name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.questions" class="control-label"></label>
+            <ul class="list-group">
+                @if (Model.questions == null || Model.questions.Count == 0)
+                {
+                    <span>У вас нет вопросов.</span>
+                }
+                else
+                {
 
-<h4>Пак</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="PEdit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="QuestionSet" class="control-label"></label>
-                <input asp-for="QuestionSet" class="form-control" />
-                <span asp-validation-for="QuestionSet" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Author" class="control-label"></label>
-                <input asp-for="Author" class="form-control" />
-                <span asp-validation-for="Author" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TagsId" class="control-label"></label>
-                <input asp-for="TagsId" class="form-control" />
-                <span asp-validation-for="TagsId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Сохранить" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+                    @for (int i = 0; i < Model.questions.Count; i++)
+                    {
+                        <li class="list-group-item">
+                            <input type="checkbox" asp-for="@Model.questions[i].IsSelected" />
+                            <label asp-for="@Model.questions[i].IsSelected"> @Model.questions[i].Name</label>
+                            <input type="hidden" asp-for="@Model.questions[i].Id" />
+                            <input type="hidden" asp-for="@Model.questions[i].Name" />
+                        </li>
+                    }
+                }
+            </ul>
+            <span asp-validation-for="@Model.questions" class="text-danger"></span>
+        </div>
 
-<div>
-    <a asp-action="Index">Обратно к списку</a>
-</div>
+        <div class="form-group">
+            <label asp-for="@Model.pack.TagsId" class="control-label"></label>
+            <ul class="list-group">
+                @for (int i = 0; i < Model.tags.Count; i++)
+                {
+                    <li class="list-group-item">
+                        <input type="checkbox" asp-for="@Model.tags[i].IsSelected" />
+                        <label asp-for="@Model.tags[i].IsSelected"> @Model.tags[i].Name</label>
+                        <input type="hidden" asp-for="@Model.tags[i].Id" />
+                        <input type="hidden" asp-for="@Model.tags[i].Name" />
+                    </li>
+                }
+            </ul>
+            <span asp-validation-for="@Model.pack.TagsId" class="text-danger"></span>
+        </div>
+        <input type="submit" value="Сохранить изменения" class="btn btn-primary mt-3" />
+    </form>
+
+
+    <a asp-action="Index">
+        <button type="button" class="btn btn-danger mt-3">Обратно к списку</button>
+    </a>
+</main>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
