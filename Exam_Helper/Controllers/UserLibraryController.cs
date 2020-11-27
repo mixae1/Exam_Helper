@@ -89,14 +89,17 @@ namespace Exam_Helper.Controllers
 
 
 
-            var question = await _context.Question
+            var question = await _context.Question.AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            var tags = await _context.Tags.AsNoTracking().Where(x => question.TagIds.Contains(x.Id.ToString())).ToListAsync();
+            question.TagIds = string.Join(";", tags.Select(x => x.Title));
             if (question == null)
             {
                 return NotFound();
             }
 
-            return View(question);
+            return PartialView(question);
         }
 
         public async Task<IActionResult> PDetails(int? id)
@@ -106,14 +109,24 @@ namespace Exam_Helper.Controllers
                 return NotFound();
             }
 
-            var pack = await _context.Pack
+            var pack = await _context.Pack.AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            var tags = await _context.Tags.AsNoTracking().Where(x => pack.TagsId.Contains(x.Id.ToString())).ToListAsync();
+            pack.TagsId = string.Join(";", tags.Select(x => x.Title));
+
+            var ques = await _context.Question.AsNoTracking().Where(x => pack.QuestionSet.Contains(x.Id.ToString())).
+                Select(x => x.Title).ToListAsync();
+
+            pack.QuestionSet = string.Join(";", ques);
+
+
             if (pack == null)
             {
                 return NotFound();
             }
 
-            return View(pack);
+            return PartialView(pack);
         }
 
         // GET: QuestionsLib/Create

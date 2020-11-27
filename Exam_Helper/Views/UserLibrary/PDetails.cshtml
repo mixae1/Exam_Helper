@@ -1,48 +1,59 @@
 ﻿@model Exam_Helper.Pack
 
-@{
-    ViewData["Title"] = "Details";
-}
-
-<h1>Детали</h1>
-
-<div>
-    <h4>пак</h4>
+<div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title" style="color:darkred">Подробности пака</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    </div>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.QuestionSet)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.QuestionSet)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Author)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Author)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CreationDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CreationDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdateDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UpdateDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.TagsId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TagsId)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="PEdit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Обратно к списку</a>
+    <div class="modal-body">
+        <dl class="row">
+            <dt class="col-sm-2">
+                Название:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                Вопросы:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.QuestionSet)
+            </dd>
+            <dt class="col-sm-2">
+                Автор:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Author)
+            </dd>
+            <dt class="col-sm-2">
+                Дата создания:
+            </dt>
+            <dd class="col-sm-10">
+                @Model.CreationDate.ToString("dd.MM.yyyy")
+            </dd>
+            <dt class="col-sm-2">
+                Дата обновления:
+            </dt>
+            <dd class="col-sm-10">
+                @Model.UpdateDate.ToString("dd.MM.yyyy")
+            </dd>
+            <dt class="col-sm-2">
+                Теги:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.TagsId)
+            </dd>
+        </dl>
+    </div>
+
+    <div class="modal-footer">
+        <div class="form-group">
+            <div class="d-flex">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Вернуться с библиотеку</button>
+            </div>
+
+        </div>
+    </div>
+
 </div>

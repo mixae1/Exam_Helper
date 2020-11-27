@@ -67,6 +67,7 @@
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" asp-action="QRedirectToTest" asp-route-id="@item.question.Id">Тестирование</a>
                                         <a class="dropdown-item" asp-action="QEdit" asp-route-id="@item.question.Id">Редактирование</a>
+                                        <a class="dropdown-item compItem" asp-action="QDetails" asp-route-id="@item.question.Id">Подробности</a>
                                         <a class="dropdown-item compItem" asp-action="QDelete" asp-route-id="@item.question.Id">Удаление</a>
                                         @if (UserManager.GetUserName(User) == item.question.Author)
                                         {
@@ -111,9 +112,10 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <!--
-                                            <a class="dropdown-item" asp-action="PRedirectToTest" asp-route-id="@item.Id">Tests</a>
-                                        -->
+        <a class="dropdown-item" asp-action="PRedirectToTest" asp-route-id="@item.Id">Tests</a>
+    -->
                                         <a class="dropdown-item" asp-action="PEdit" asp-route-id="@item.Id">Редактирование</a>
+                                        <a class="dropdown-item compItem" asp-action="PDetails" asp-route-id="@item.Id">Подробности</a>
                                         <a class="dropdown-item compItem" asp-action="PDelete" asp-route-id="@item.Id">Удаление</a>
                                         @if (UserManager.GetUserName(User) == item.Author)
                                         {

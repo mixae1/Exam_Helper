@@ -29,11 +29,26 @@ namespace Exam_Helper.Controllers
             //    return RedirectToAction("Login","UserAccount");
    
 
+            var _packs = from _pack in _context.Pack
+                         where _pack.IsPrivate == false
+                         select _pack;
+
+            var ques_in_packs = string.Join(";", _packs.Select(x => x.QuestionSet));
+
+
+            if (!string.IsNullOrEmpty(SearchString))
+                _packs = _packs.Where(
+                    x => x.Author.ToLower().Trim().Contains(SearchString) ||
+                    x.Name.ToLower().Trim().Contains(SearchString));
+
+
+
             var _ques = from _que in _context.Question
-                        where _que.IsPrivate==false
+                        where (_que.IsPrivate == false || ques_in_packs.Contains(_que.Id.ToString()))
                         select _que;
-            if(!string.IsNullOrEmpty(SearchString))
-            SearchString = SearchString.ToLower();
+
+            if (!string.IsNullOrEmpty(SearchString))
+                SearchString = SearchString.ToLower();
 
             if (!string.IsNullOrEmpty(SearchString))
                 _ques = _ques.Where(
@@ -42,14 +57,7 @@ namespace Exam_Helper.Controllers
                      x.TagIds.ToLower().Trim().Contains(SearchString) ||
                      x.Definition.ToLower().Trim().Contains(SearchString));
 
-            var _packs = from _pack in _context.Pack
-                         where _pack.IsPrivate == false
-                         select _pack;
 
-            if (!string.IsNullOrEmpty(SearchString))
-                _packs = _packs.Where(
-                    x => x.Author.ToLower().Trim().Contains(SearchString) ||
-                    x.Name.ToLower().Trim().Contains(SearchString));
 
             var tags = await _context.Tags.AsNoTracking().ToListAsync();
 
@@ -71,14 +79,17 @@ namespace Exam_Helper.Controllers
 
 
 
-            var question = await _context.Question
+            var question = await _context.Question.AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            var tags = await _context.Tags.AsNoTracking().Where(x => question.TagIds.Contains(x.Id.ToString())).ToListAsync();
+            question.TagIds = string.Join(";", tags.Select(x => x.Title));
             if (question == null)
             {
                 return NotFound();
             }
 
-            return View(question);
+            return PartialView(question);
         }
 
         public async Task<IActionResult> PDetails(int? id)
@@ -88,14 +99,24 @@ namespace Exam_Helper.Controllers
                 return NotFound();
             }
 
-            var pack = await _context.Pack
+            var pack = await _context.Pack.AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            var tags = await _context.Tags.AsNoTracking().Where(x => pack.TagsId.Contains(x.Id.ToString())).ToListAsync();
+            pack.TagsId = string.Join(";", tags.Select(x => x.Title));
+
+            var ques = await _context.Question.AsNoTracking().Where(x => pack.QuestionSet.Contains(x.Id.ToString())).
+                Select(x => x.Title).ToListAsync();
+
+            pack.QuestionSet = string.Join(";", ques);
+
+
             if (pack == null)
             {
                 return NotFound();
             }
 
-            return View(pack);
+            return PartialView(pack);
         }
 
         [Authorize]

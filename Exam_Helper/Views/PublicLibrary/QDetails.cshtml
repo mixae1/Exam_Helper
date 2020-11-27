@@ -1,64 +1,67 @@
 ﻿@model Exam_Helper.Question
 
-@{
-    ViewData["Title"] = "Details";
-}
+<div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title" style="color:darkred">Подробности вопроса</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    </div>
 
-<h1>Details</h1>
-
-<div>
-    <h4>Question</h4>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Definition)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Definition)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Proof)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Proof)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Author)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Author)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CreationDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CreationDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdateDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UpdateDate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.TagIds)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.TagIds)
-        </dd>
-    </dl>
+    <div class="modal-body">
+        <dl class="row">
+            <dt class="col-sm-2">
+                Название:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Title)
+            </dd>
+            <dt class="col-sm-2">
+                Определение:
+            </dt>
+            <dd class="col-sm-10" style="white-space: pre-wrap">
+                @Html.DisplayFor(model => model.Definition)
+            </dd>
+            <dt class="col-sm-2">
+                Доказательство  :
+            </dt>
+            <dd class="col-sm-10" style="white-space: pre-wrap">
+                @Html.DisplayFor(model => model.Proof)
+            </dd>
+            <dt class="col-sm-2">
+                Автор   :
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Author)
+            </dd>
+            <dt class="col-sm-2">
+                Дата создания  :
+            </dt>
+            <dd class="col-sm-10">
+                @Model.CreationDate.ToString("dd.MM.yyyy")
+            </dd>
+            <dt class="col-sm-2">
+                Дата обновления  :
+            </dt>
+            <dd class="col-sm-10">
+                @Model.UpdateDate.ToString("dd.MM.yyyy")
+            </dd>
+            <dt class="col-sm-2">
+                Теги  :
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.TagIds)
+            </dd>
+        </dl>
+    </div>
+
+    <div class="modal-footer">
+        <div class="form-group">
+            <div class="d-flex">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Вернуться с библиотеку</button>
+            </div>
+
+        </div>
+    </div>
+
 </div>
-<div>
-    <button type="button" class="btn btn-light">
-        <a asp-action="QEdit" asp-route-id="@Model.Id">Сохранить изменения</a>
-    </button>
-    <button type="button" class="btn btn-light">
-        <a asp-action="Index">Обратно к списку</a>
-    </button>
-</div>
+

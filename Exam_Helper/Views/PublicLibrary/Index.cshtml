@@ -7,6 +7,10 @@
 <main class="container">
     <div class="container">
 
+        <div id="modDialog" class="modal fade">
+            <div id="dialogContent" class="modal-dialog"></div>
+        </div>
+
         <div class="justify-content text-center h1">
             <span>Библиотека</span>
         </div>
@@ -28,7 +32,7 @@
             </form>
         </div>
         <div class="collapse show" id="collapseAllQuestion">
-            @foreach (var item in Model.questions)
+            @foreach (var item in Model.questions.Where(x=>x.IsPrivate==false))
             {
                 <div class="accordion" id="accordionExample">
                     <div class="card border border-info mt-2 shadow mb-5 bg-white rounded">
@@ -42,7 +46,7 @@
                                 </button>
                                 <div class="dropdown-menu">
                                     <a class="dropdown-item" asp-action="QRedirectToTest" asp-route-id="@item.Id">Тест</a>
-
+                                    <a class="dropdown-item compItem" asp-action="QDetails" asp-route-id="@item.Id">Подробности</a>
                                     @{
                                         if (_signInManager.IsSignedIn(User))
                                         {
@@ -87,41 +91,45 @@
                                     Action
                                 </button>
                                 <div class="dropdown-menu">
+
+
+
                                     <!--
-                                    <a class="dropdown-item" asp-action="PRedirectToTest" asp-route-id="@item.Id">Tests</a>
-                                -->
+        <a class="dropdown-item" asp-action="PRedirectToTest" asp-route-id="@item.Id">Tests</a>
+    -->
                                     @{
                                         if (_signInManager.IsSignedIn(User))
                                         {
-                                            <a class="dropdown-item" id="@("p" + item.Id.ToString())" onclick="AddPack(this.id)">Добавить</a>
-                                        }
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                        <div id="p_collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-                            <div class="card-body  d-flex flex-column">
-                                <div class="alert alert-info w-25 text-center">
-                                    @foreach (var t in item.TagsId.Split(';'))
-                                    {
-                                        if (!string.IsNullOrEmpty(t))
-                                        {
-                                            <span>@Html.DisplayFor(modelItem => modelItem.tags.Find(x => x.Id == int.Parse(t)).Title) </span>
-                                        }
-                                    }
-                                </div>
-                                @foreach (var quesId in item.QuestionSet.Split(";"))
-                                {
-                                    <div class="d-flex justify-content-between pt-3 pb-3">
-                                        @Html.DisplayFor(model => model.questions.Find(x => x.Id.ToString() == quesId).Title)
-                                    </div>
+                                    <a class="dropdown-item" id="@("p" + item.Id.ToString())" onclick="AddPack(this.id)">Добавить</a>
                                 }
-                            </div>
-                        </div>
-                    </div>
+    }
+    <a class="dropdown-item compItem" asp-action="PDetails" asp-route-id="@item.Id">Подробности</a>
+    </div>
+    </div>
+    </div>
+    <div id="p_collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+        <div class="card-body  d-flex flex-column">
+            <div class="alert alert-info w-25 text-center">
+                @foreach (var t in item.TagsId.Split(';'))
+                {
+                    if (!string.IsNullOrEmpty(t))
+                    {
+                        <span>@Html.DisplayFor(modelItem => modelItem.tags.Find(x => x.Id == int.Parse(t)).Title) </span>
+                    }
+                }
+            </div>
+            @foreach (var quesId in item.QuestionSet.Split(";"))
+            {
+                <div class="d-flex justify-content-between pt-3 pb-3">
+                    @Html.DisplayFor(model => model.questions.Find(x => x.Id.ToString() == quesId).Title)
                 </div>
-
             }
+        </div>
+    </div>
+    </div>
+    </div>
+
+}
         </div>
 
     </div>
@@ -129,6 +137,20 @@
 </main>
 
 <script>
+
+    
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".compItem").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        });
+
     $("#button_Que").click(function () {
         $('#collapseAllPacks').removeClass('show')
     });
