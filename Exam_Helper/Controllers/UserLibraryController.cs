@@ -538,6 +538,8 @@ namespace Exam_Helper.Controllers
         {
 
             //TempData["question_id"] = id;
+            HttpContext.Session.Remove("question_id");
+            HttpContext.Session.Remove("question");
             HttpContext.Session.SetInt32("question_id", id);
             return RedirectToAction(nameof(Index), nameof(Tests));
         }

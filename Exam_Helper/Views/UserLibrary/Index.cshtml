@@ -157,36 +157,28 @@
 
 <script>
 
-    </div>
-</main>
 
-@section scripts
-{
-    <script>
+    
 
-        $(function () {
-            $.ajaxSetup({ cache: false });
-            $(".compItem").click(function (e) {
+    $(function () {
+        $.ajaxSetup({ cache: false });
+        $(".compItem").click(function (e) {
 
-                e.preventDefault();
-                $.get(this.href, function (data) {
-                    $('#dialogContent').html(data);
-                    $('#modDialog').modal('show');
-                });
+            e.preventDefault();
+            $.get(this.href, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').modal('show');
             });
-        })
-
-</script>
-}
-<script>
+        });
+    });
 
 
   $("#button_Que").click(function () {
         $('#collapseAllPacks').removeClass('show')
-    });
+  });
     $("#button_Pack").click(function () {
         $('#collapseAllQuestion').removeClass('show')
-    });
+     });
 
     function ChangeQuestionPrivate(id) {
         var a = document.getElementById(id);
@@ -206,7 +198,7 @@
                     a.innerHTML = lastText;
                       },
                 error: function (msg) {
-                          alert('sory we fucked everithing up');
+                    alert('Something went wrong');
                       }
             })
 
