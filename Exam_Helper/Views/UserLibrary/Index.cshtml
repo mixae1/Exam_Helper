@@ -16,6 +16,10 @@
 <main class="container" style="padding-top: 3vh;">
     <div class="container">
 
+        <div id="modDialog" class="modal fade">
+            <div id="dialogContent" class="modal-dialog"></div>
+        </div>
+
         <div class="justify-content text-center h1">
             <span>Моя Библиотека</span>
         </div>
@@ -63,6 +67,7 @@
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" asp-action="QRedirectToTest" asp-route-id="@item.question.Id">Тестирование</a>
                                         <a class="dropdown-item" asp-action="QEdit" asp-route-id="@item.question.Id">Редактирование</a>
+                                        <a class="dropdown-item compItem" asp-action="QDelete" asp-route-id="@item.question.Id">Удаление</a>
                                         @if (UserManager.GetUserName(User) == item.question.Author)
                                         {
                                             <button class="btn btn-link" type="button" id="@("q" + item.question.Id.ToString())" onclick="ChangeQuestionPrivate(this.id)">@(item.question.IsPrivate ? "Опубликовать" : "Скрыть")</button>
@@ -109,6 +114,7 @@
         <a class="dropdown-item" asp-action="PRedirectToTest" asp-route-id="@item.Id">Tests</a>
     -->
                                         <a class="dropdown-item" asp-action="PEdit" asp-route-id="@item.Id">Редактирование</a>
+                                        <a class="dropdown-item compItem" asp-action="PDelete" asp-route-id="@item.Id">Удаление</a>
                                         @if (UserManager.GetUserName(User) == item.Author)
                                         {
                                             <button class="btn btn-link" type="button" id="@("p" + item.Id.ToString())" onclick="ChangePackPrivate(this.id)">@(item.IsPrivate ? "Опубликовать" : "Скрыть")</button>
@@ -145,53 +151,38 @@
 
           
         </div>
-        </div>
+    </div>
     
 </main>
 
-            <!--
-            <button data-toggle="collapse" data-parent="#accordion2" data-target="#collapse1">
-                Collapsible Group 1
-            </button>
-
-            <button data-toggle="collapse" data-parent="#accordion2" data-target="#collapse2">
-                Collapsible Group 2
-            </button>
-
-            <button data-toggle="collapse" data-parent="#accordion2" data-target="#collapse3">
-                Collapsible Group 3
-            </button>
-
-            <div class="panel-group" id="accordion2">
-
-                <div class="panel">
-                    <div id="collapse1" class="collapse">
-                        1111111111111111111111111111111111
-                    </div>
-                </div>
-
-                <div class="panel">
-                    <div id="collapse2" class="collapse">
-                        222222222222222222222222222222222222222222222222
-                    </div>
-                </div>
-
-                <div class="panel">
-                    <div id="collapse3" class="collapse">
-                        333333333333333333333333333333333333333333333333
-                    </div>
-                </div>
-
-            </div>
-            -->
-
 <script>
-    $("#button_Que").click(function () {
+    
+    </div>
+</main>
+
+@section scripts
+{
+    <script>
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".compItem").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        })
+  
+  $("#button_Que").click(function () {
         $('#collapseAllPacks').removeClass('show')
     });
     $("#button_Pack").click(function () {
         $('#collapseAllQuestion').removeClass('show')
     });
+  
     function ChangeQuestionPrivate(id) {
         var a = document.getElementById(id);
 
@@ -242,4 +233,6 @@
 
         return false;
     };
-            </script>
+
+    </script>
+}
