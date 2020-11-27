@@ -1,24 +1,31 @@
-﻿@model Exam_Helper.ViewsModel.TestInfoPuzzle
+﻿@model Exam_Helper.ViewsModel.TestInfoMissedWords;
 @{
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "Просмотр";
 }
 
 <head>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 </head>
-<main>
+
+
+
+<main style="height: 85vh;" class="d-flex align-items-center">
     <div>
         @if (Model.IsSuccessed)
         {
-            @foreach (var block in Model.TestStrings)
-            {
-                <div class="mt-2" style="width:40%;">
-                    <div class="p-0 ">
-                        <div class="border border-info text-center">@block</div>
-                    </div>
-
-                </div>
-            }
+            <div class="pt-3">
+                @foreach (var word in Model.Teorem)
+                {
+                    if (word[0] == ' ')
+                    {
+                        <input size="5" class="test" />
+                    }
+                    else
+                    {
+                        <span class="h5">@word</span>
+                    }
+                }
+            </div>
             <div class="form-group mt-3">
                 <input type="submit" value="Проверить ответ" class="btn btn-primary" id="CheckAnswers" />
             </div>
@@ -34,12 +41,13 @@
 </main>
 
 <script>
+
        $("#CheckAnswers").click(function CheckAnswers() {
         var ans = [];
-        //for(int i = 0; i< Model.Answers.Length; i++)
-        //{
-        //    :ans.push("(new Microsoft.AspNetCore.Html.HtmlString(Model.Answers[i]))");
-        //}
+        @for(int i = 0; i< Model.Answers.Length; i++)
+        {
+            @:ans.push("@(new Microsoft.AspNetCore.Html.HtmlString(Model.Answers[i]))");
+        }
         $("input.test").each(function (index) {
             console.log($(this).val(), " ", ans[index]);
             if ($(this).val() === ans[index]) {
@@ -52,15 +60,17 @@
             }
         });
        });
+
 </script>
 
 <style>
+
     .right {
-        background-color: green;
+        border-color: green;
     }
 
     .wrong {
-        background-color: red;
+        border-color: red;
     }
 </style>
 

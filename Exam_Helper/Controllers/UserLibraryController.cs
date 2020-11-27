@@ -28,24 +28,8 @@ namespace Exam_Helper.Controllers
             //    return RedirectToAction("Login","UserAccount");
             var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
 
-            var temp_qa = qa.QuestionSet;
-
-            var qs = string.IsNullOrEmpty(temp_qa) ? new HashSet<int>()
-            : new HashSet<int>(temp_qa.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)));
-
-            var _ques = from _que in _context.Question
-                        where (qs.Contains(_que.Id))
-                        select _que;
-
-            if (!string.IsNullOrEmpty(SearchString))
-                _ques = _ques.Where(
-                     x => x.Title.Contains(SearchString) ||
-                     x.Proof.Contains(SearchString) ||
-                     x.TagIds.Contains(SearchString) ||
-                     x.Definition.Contains(SearchString));
-
             var temp_pa = qa.PackSet;
-            var ps = string.IsNullOrEmpty(temp_pa) ? new HashSet<int>()
+            var ps = string.IsNullOrEmpty(temp_pa) ? new HashSet<int>() //получаем индексы паков юзера и кидаем их в сет 
             : new HashSet<int>(temp_pa.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)));
             var _packs = from _pack in _context.Pack
                          where (ps.Contains(_pack.Id))
@@ -53,15 +37,45 @@ namespace Exam_Helper.Controllers
 
             if (!string.IsNullOrEmpty(SearchString))
                 _packs = _packs.Where(
-                    x => x.Author.Contains(SearchString) ||
-                    x.Name.Contains(SearchString));
+                    x => x.Author.ToLower().Trim().Contains(SearchString) ||
+                    x.Name.ToLower().Trim().Contains(SearchString));
+
+            var ques_in_packs = string.Join(";", _packs.Select(x => x.QuestionSet));// получаем id вопросов ,которые не у пользователя 
+            // но приэтом находятся в паке ( такое возникает когда мы редактируем  вопрос,ибо в паках отсается старая версия и тк 
+            //у юзера старый айди исчезает то вопрос в паках появляться не будет)
+
+
+            var temp_qa = qa.QuestionSet+ques_in_packs;
+
+            var qs = string.IsNullOrEmpty(temp_qa) ? new HashSet<int>()//получаем индесы вопросов юзера 
+            : new HashSet<int>(temp_qa.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)));
+
+            var _ques = from _que in _context.Question //отбираем вопросы которые есть у юзера
+                        where (qs.Contains(_que.Id))
+                        select _que;
+
+            if (!string.IsNullOrEmpty(SearchString))
+                SearchString = SearchString.ToLower();
+
+            if (!string.IsNullOrEmpty(SearchString))
+                _ques = _ques.Where(
+                     x => (x.IsPrivate && (x.Title.ToLower().Trim().Contains(SearchString) ||
+                     x.Proof.ToLower().Trim().Contains(SearchString) ||
+                     x.TagIds.ToLower().Trim().Contains(SearchString) ||
+                     x.Definition.ToLower().Trim().Contains(SearchString))));
+
+            var temp_ques = await _ques.ToListAsync();
+
+            var ques = temp_ques.Select(x => new QuestionInfo() { question = x, IsUser = qa.QuestionSet.Contains(x.Id.ToString()) });
+
+           
 
             var tags =await _context.Tags.AsNoTracking().ToListAsync();
 
-            return View(new ClassForPublicLibrary
+            return View(new ClassForUserLibrary
             {
                 packs = await _packs.ToListAsync(),
-                questions = await _ques.ToListAsync(),
+                questions = ques,
                 tags=tags
             });
         }
@@ -123,9 +137,10 @@ namespace Exam_Helper.Controllers
             {
                 var tags = ob.tags.Where(x => x.IsSelected).Select(x => x.Id);
 
+                /* Пока разрешим создание без тегов
                 if (tags.Count() == 0)
                     ModelState.AddModelError(string.Empty, "вы должны указать как минимум один тег");
-
+                */
 
                 Question obj = new Question();
                 var StringTags = string.Join(";",tags);
@@ -193,10 +208,11 @@ namespace Exam_Helper.Controllers
                 var ques = obj.questions.Where(x => x.IsSelected).Select(x => x.Id);
                 var tags = obj.tags.Where(x => x.IsSelected).Select(x => x.Id);
 
-
+                /* 
+                 * Пока разрешим создание без тегов
                 if (tags.Count() == 0)
                     ModelState.AddModelError(string.Empty, "вы должны указать как минимум один тег");
-
+                */
                 if (ques.Count() == 0)
                 {
                     ModelState.AddModelError(string.Empty, "вы должны выбрать как минимум 1 вопрос");
@@ -280,13 +296,14 @@ namespace Exam_Helper.Controllers
             {
                 var tags_check = ques.tags.Where(x => x.IsSelected).Select(x => x.Id);
 
-
+                /*
                 if (tags_check.Count() == 0)
                 {
                     ModelState.AddModelError(string.Empty, "вы должны указать как минимум один тег");
                     return View(ques);
                 }
                 
+                */
 
                 try
                 {
@@ -341,12 +358,24 @@ namespace Exam_Helper.Controllers
                 return NotFound();
             }
 
-            var pack = await _context.Pack.FindAsync(id);
+            var pack = await _context.Pack.AsNoTracking().FirstOrDefaultAsync(x=>x.Id==id);
             if (pack == null)
             {
                 return NotFound();
             }
-            return View(pack);
+
+           var ques = await _context.Question.AsNoTracking()
+                .Select(x => new QuestionForPackCreatingModel()
+                { Id = x.Id, Name = x.Title, IsSelected = pack.QuestionSet.Contains(x.Id.ToString())}).ToListAsync();
+
+
+            var tags = await _context.Tags.AsNoTracking().Select(x => new TagForPackCreatingModel()
+            { Id = x.Id, Name = x.Title, IsSelected = pack.TagsId.Contains(x.Id.ToString()) }).ToListAsync();
+
+            if (tags == null)
+                tags = new List<TagForPackCreatingModel>();
+
+            return View(new ClassForPackCreatingModel() { questions=ques,pack=pack,tags=tags,pack_name=pack.Name});
         }
 
         // POST: PacksLib/Edit/5
@@ -354,26 +383,65 @@ namespace Exam_Helper.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PEdit(int id, [Bind("Id,QuestionSet,Author,TagsId")] Pack pack)
+        public async Task<IActionResult> PEdit(int Id, ClassForPackCreatingModel old_pack)
         {
-            if (id != pack.Id)
-            {
-                return NotFound();
-            }
+            if (old_pack == null)
+                return View(old_pack);
+
+            Pack new_pack = new Pack();
+
+            if (Id == 0)
+                throw new Exception("incorrect data in post PEdit");
 
             if (ModelState.IsValid)
-            {
+            {  
+                var ques_check = old_pack.questions.Where(x => x.IsSelected).Select(x => x.Id);
+
+                if (ques_check.Count() == 0)
+                {
+                    ModelState.AddModelError(string.Empty, "вы должны выбрать как минимум 1 вопрос");
+                    return View(old_pack);
+                }
+
+
+                var tags_check = old_pack.tags.Where(x => x.IsSelected).Select(x => x.Id);
+              
+                var obj = await _context.Pack.AsNoTracking().FirstAsync(x => x.Id == Id);
+                var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
+
                 try
                 {
-                    var old = await _context.Pack.AsNoTracking().FirstAsync(x => x.Id == id);
-                    pack.CreationDate = old.CreationDate;
-                    pack.UpdateDate = DateTime.Now;
-                    _context.Update(pack);
+                    var StringIds = string.Join(';', ques_check);
+
+
+                    var TagsIds = string.Join(';', tags_check);
+
+
+                    new_pack.Name = old_pack.pack_name;
+                    new_pack.UpdateDate = DateTime.Now;
+                    new_pack.CreationDate = obj.CreationDate;
+                    new_pack.Author = User.Identity.Name;
+                    new_pack.QuestionSet = StringIds;
+                    new_pack.TagsId = TagsIds;
+                    new_pack.IsPrivate = true;
+                    
+
+                    _context.Add(new_pack);
+                    await _context.SaveChangesAsync();
+
+                    if (new_pack.Id == 0)
+                        throw new Exception("smth went wrong with adding to BD");
+
+                    qa.PackSet = qa.PackSet.Replace(Id.ToString(),new_pack.Id.ToString());
+                  //  qa.PackSet = string.IsNullOrEmpty(qa.PackSet) ? pack.Id + ";" : qa.PackSet + pack.Id + ";";
+                    _context.Update(qa);
+
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PackExists(pack.Id))
+                    if (!PackExists(old_pack.Id))
                     {
                         return NotFound();
                     }
@@ -384,7 +452,7 @@ namespace Exam_Helper.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(pack);
+            return View(old_pack);
         }
 
         // GET: QuestionsLib/Delete/5

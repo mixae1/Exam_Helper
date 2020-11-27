@@ -1,13 +1,14 @@
 ﻿@model Exam_Helper.Question
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Удаление";
 }
 
-<h1>Details</h1>
+<h1>Удаление</h1>
 
+<h3>Вы уверены, что хотите удалить это?</h3>
 <div>
-    <h4>Question</h4>
+    <h4>Вопрос</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -53,12 +54,12 @@
             @Html.DisplayFor(model => model.TagIds)
         </dd>
     </dl>
-</div>
-<div>
-    <button type="button" class="btn btn-light">
-        <a asp-action="QEdit" asp-route-id="@Model.Id">Сохранить изменения</a>
-    </button>
-    <button type="button" class="btn btn-light">
-        <a asp-action="Index">Обратно к списку</a>
-    </button>
+
+    <form asp-action="QDelete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Удалить" class="btn btn-danger" /> |
+        <button type="button" class="btn btn-light">
+            <a asp-action="Index">Обратно к списку</a>
+        </button>
+    </form>
 </div>

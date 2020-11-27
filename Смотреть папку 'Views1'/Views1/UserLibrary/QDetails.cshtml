@@ -1,13 +1,13 @@
 ﻿@model Exam_Helper.Question
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Детали";
 }
 
-<h1>Details</h1>
+<h1>Детали</h1>
 
 <div>
-    <h4>Question</h4>
+    <h4>Вопрос</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -56,7 +56,7 @@
 </div>
 <div>
     <button type="button" class="btn btn-light">
-        <a asp-action="QEdit" asp-route-id="@Model.Id">Сохранить изменения</a>
+        <a asp-action="QEdit" asp-route-id="@Model.Id">Edit</a>
     </button>
     <button type="button" class="btn btn-light">
         <a asp-action="Index">Обратно к списку</a>

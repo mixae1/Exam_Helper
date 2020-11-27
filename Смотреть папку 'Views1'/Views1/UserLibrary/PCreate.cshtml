@@ -1,16 +1,16 @@
 ﻿@model Exam_Helper.ViewsModel.ClassForPackCreatingModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Создание";
 }
 <main class="container d-flex flex-column align-items-center">
-    <h1>редактирование</h1>
+    <h1>Создание</h1>
+
     <h4>Пак</h4>
     <hr />
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <form asp-action="PEdit">
+    <form asp-action="PCreate">
 
-        <input type="hidden" asp-for="Id" />
         <div class="form-group">
             <label asp-for="@Model.pack_name" class="control-label"></label>
             <input asp-for="@Model.pack_name" class="form-control" />
@@ -19,7 +19,7 @@
         <div class="form-group">
             <label asp-for="@Model.questions" class="control-label"></label>
             <ul class="list-group">
-                @if (Model.questions == null || Model.questions.Count == 0)
+                @if(Model.questions == null || Model.questions.Count==0)
                 {
                     <span>У вас нет вопросов.</span>
                 }
@@ -51,11 +51,11 @@
                         <input type="hidden" asp-for="@Model.tags[i].Id" />
                         <input type="hidden" asp-for="@Model.tags[i].Name" />
                     </li>
-                }
+}
             </ul>
             <span asp-validation-for="@Model.pack.TagsId" class="text-danger"></span>
         </div>
-        <input type="submit" value="Сохранить изменения" class="btn btn-primary mt-3" />
+        <input type="submit" value="Создать" class="btn btn-primary mt-3" />
     </form>
 
 
