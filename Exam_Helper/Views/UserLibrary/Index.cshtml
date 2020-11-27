@@ -15,6 +15,10 @@
 <main class="container" style="padding-top: 3vh;">
     <div class="container">
 
+        <div id="modDialog" class="modal fade">
+            <div id="dialogContent" class="modal-dialog"></div>
+        </div>
+
         <div class="justify-content text-center h1">
             <span>Моя Библиотека</span>
         </div>
@@ -58,6 +62,7 @@
                                             <span> @Html.DisplayFor(modelItem => item.Title) </span>
                                             <span><a asp-controller="PublicLibrary" asp-action="QRedirectToTest" asp-route-id="@item.Id">Tests</a></span>
                                             <span><a asp-action="QEdit" asp-route-id="@item.Id">Edit</a></span>
+                                            <span><a asp-action="QDelete" asp-route-id="@item.Id" class="compItem">Delete</a></span>
                                         </button>
                                         @if (UserManager.GetUserName(User) == item.Author)
                                         {
@@ -68,13 +73,13 @@
 
                                 <div id="collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                                     <div class="card-body">
-                                        <span  style="white-space: pre-wrap">@Html.DisplayFor(modelItem => item.Definition) </span>
+                                        <span style="white-space: pre-wrap">@Html.DisplayFor(modelItem => item.Definition) </span>
 
                                         @foreach (var t in item.TagIds.Split(';'))
                                         {
                                             if (!string.IsNullOrEmpty(t))
                                             {
-                                              <span>@Html.DisplayFor(modelItem => modelItem.tags.Find(x => x.Id == int.Parse(t)).Title)</span>
+                                                <span>@Html.DisplayFor(modelItem => modelItem.tags.Find(x => x.Id == int.Parse(t)).Title)</span>
                                             }
                                         }
 
@@ -97,6 +102,7 @@
                                     <h5 class="mb-0">
                                         <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="collapse_@item.Id.ToString()">
                                             <span> @Html.DisplayFor(modelItem => item.Name) </span>
+                                            <span><a asp-action="PDelete" asp-route-id="@item.Id" class="compItem">Delete</a></span>
                                         </button>
                                         @if (UserManager.GetUserName(User) == item.Author)
                                         {
@@ -123,45 +129,24 @@
             </div>
         </div>
     </div>
-    <!--
-    <button data-toggle="collapse" data-parent="#accordion2" data-target="#collapse1">
-        Collapsible Group 1
-    </button>
-
-    <button data-toggle="collapse" data-parent="#accordion2" data-target="#collapse2">
-        Collapsible Group 2
-    </button>
-
-    <button data-toggle="collapse" data-parent="#accordion2" data-target="#collapse3">
-        Collapsible Group 3
-    </button>
-
-    <div class="panel-group" id="accordion2">
-
-        <div class="panel">
-            <div id="collapse1" class="collapse">
-                1111111111111111111111111111111111
-            </div>
-        </div>
-
-        <div class="panel">
-            <div id="collapse2" class="collapse">
-                222222222222222222222222222222222222222222222222
-            </div>
-        </div>
-
-        <div class="panel">
-            <div id="collapse3" class="collapse">
-                333333333333333333333333333333333333333333333333
-            </div>
-        </div>
-
-    </div>
-    -->
-
 </main>
 
-<script>
+@section scripts
+{
+    <script>
+
+        $(function () {
+            $.ajaxSetup({ cache: false });
+            $(".compItem").click(function (e) {
+
+                e.preventDefault();
+                $.get(this.href, function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                });
+            });
+        })
+
     function ChangeQuestionPrivate(id) {
         var a = document.getElementById(id);
 
@@ -212,4 +197,5 @@
 
         return false;
     };
-</script>
+    </script>
+}
