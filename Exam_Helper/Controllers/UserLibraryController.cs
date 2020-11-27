@@ -388,76 +388,82 @@ namespace Exam_Helper.Controllers
         }
 
         // GET: QuestionsLib/Delete/5
+        [HttpGet]
         public async Task<IActionResult> QDelete(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var question = await _context.Question
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (question == null)
-            {
-                return NotFound();
-            }
-
-            return View(question);
+            return PartialView(await _context.Question.AsNoTracking().FirstAsync(x => x.Id == id.Value));
         }
+
 
         // POST: QuestionsLib/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[HttpPost, ActionName("QDelete")]
+        //[ValidateAntiForgeryToken]
+        
         public async Task<IActionResult> QDeleteConfirmed(int id)
         {
-            var question = await _context.Question.FindAsync(id);
-            _context.Question.Remove(question);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
+
+            if (!string.IsNullOrEmpty(qa.QuestionSet))
+            {
+                if (qa.QuestionSet.Contains(id.ToString()))
+                {
+                    var qs = qa.QuestionSet.Split(';', StringSplitOptions.RemoveEmptyEntries);
+                    qa.QuestionSet = string.Join(';', qs.Where(s => s != id.ToString())) + ';';
+                    _context.Update(qa);
+                    await _context.SaveChangesAsync();
+                    //return Json(new { success = true });
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+            //return RedirectToAction(nameof(Index));
+            return Json(new { success = false });
         }
 
-        // POST: PublicLibraryController/Delete/5
-        /*[HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }*/
 
         // GET: PacksLib/Delete/5
+        [HttpGet]
         public async Task<IActionResult> PDelete(int? id)
         {
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var pack = await _context.Pack
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (pack == null)
+            return PartialView(await _context.Pack.AsNoTracking().FirstAsync(x => x.Id == id.Value));
+        }
+        /*
+        // POST: PacksLib/Delete/5
+        [HttpPost, ActionName("PDelete")]
+        [ValidateAntiForgeryToken]
+        */
+        
+         public async Task<IActionResult> PDeleteConfirmed(int id)
+        {
+            var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
+
+            if (!string.IsNullOrEmpty(qa.PackSet))
             {
-                return NotFound();
+                if (qa.PackSet.Contains(id.ToString()))
+                {
+                    var ps = qa.PackSet.Split(';', StringSplitOptions.RemoveEmptyEntries);
+                    qa.PackSet = string.Join(';', ps.Where(s => s != id.ToString())) + ';';
+                    _context.Update(qa);
+                    await _context.SaveChangesAsync();
+                    //return Json(new { success = true });
+                    return RedirectToAction(nameof(Index));
+                }
             }
 
-            return View(pack);
-        }
-
-        // POST: PacksLib/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> PDeleteConfirmed(int id)
-        {
-            var pack = await _context.Pack.FindAsync(id);
-            _context.Pack.Remove(pack);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+            return Json(new { success = false });
         }
 
         public RedirectToActionResult QRedirectToTest(int id)
