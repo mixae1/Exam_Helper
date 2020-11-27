@@ -10,21 +10,21 @@
     <div class="modal-body">
         <dl class="row">
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Definition)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Definition)
-            </dd>
-            <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Title)
             </dt>
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Title)
             </dd>
             <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Definition)
+            </dt>
+            <dd class="col-sm-10" style="white-space: pre-wrap">
+                @Html.DisplayFor(model => model.Definition)
+            </dd>
+            <dt class="col-sm-2">
                 @Html.DisplayNameFor(model => model.Proof)
             </dt>
-            <dd class="col-sm-10">
+            <dd class="col-sm-10" style="white-space: pre-wrap">
                 @Html.DisplayFor(model => model.Proof)
             </dd>
             <dt class="col-sm-2">

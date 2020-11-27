@@ -52,7 +52,7 @@
         </div>
         <div class="panel-group" id="accordionCommon">
             <div class="collapse show" id="collapseAllQuestion">
-                @foreach (var item in Model.questions.Where(x=>x.IsUser))
+                @foreach (var item in Model.questions.Where(x => x.IsUser))
                 {
                     <div class="accordion" id="accordionExample">
                         <div class="card border border-info mt-2 shadow mb-5 bg-white rounded">
@@ -111,8 +111,8 @@
                                     </button>
                                     <div class="dropdown-menu">
                                         <!--
-        <a class="dropdown-item" asp-action="PRedirectToTest" asp-route-id="@item.Id">Tests</a>
-    -->
+                                            <a class="dropdown-item" asp-action="PRedirectToTest" asp-route-id="@item.Id">Tests</a>
+                                        -->
                                         <a class="dropdown-item" asp-action="PEdit" asp-route-id="@item.Id">Редактирование</a>
                                         <a class="dropdown-item compItem" asp-action="PDelete" asp-route-id="@item.Id">Удаление</a>
                                         @if (UserManager.GetUserName(User) == item.Author)
@@ -136,7 +136,7 @@
                                     @foreach (var quesId in item.QuestionSet.Split(";"))
                                     {
                                         <div class="d-flex justify-content-between pt-3 pb-3">
-                                            @Html.DisplayFor(model => model.questions.Select(x=>x.question).First(x=>x.Id.ToString()==quesId).Title)
+                                            @Html.DisplayFor(model => model.questions.Select(x => x.question).First(x => x.Id.ToString() == quesId).Title)
                                         </div>
                                     }
                                 </div>
@@ -149,14 +149,14 @@
 
 
 
-          
+
         </div>
     </div>
-    
+
 </main>
 
 <script>
-    
+
     </div>
 </main>
 
@@ -175,14 +175,19 @@
                 });
             });
         })
-  
+
+</script>
+}
+<script>
+
+
   $("#button_Que").click(function () {
         $('#collapseAllPacks').removeClass('show')
     });
     $("#button_Pack").click(function () {
         $('#collapseAllQuestion').removeClass('show')
     });
-  
+
     function ChangeQuestionPrivate(id) {
         var a = document.getElementById(id);
 
@@ -234,5 +239,4 @@
         return false;
     };
 
-    </script>
-}
+</script>
