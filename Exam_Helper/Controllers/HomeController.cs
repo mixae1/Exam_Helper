@@ -23,6 +23,16 @@ namespace Exam_Helper.Controllers
             return View();
         }
 
+        public IActionResult InWork()
+        {
+            return View();
+        }
+
+        public IActionResult PackTests()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

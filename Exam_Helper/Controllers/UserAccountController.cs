@@ -41,7 +41,9 @@ namespace Exam_Helper.Controllers
                     await _signInManager.SignInAsync(new_user, false);
                     if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                         return Redirect(returnUrl);
-                 
+                    return RedirectToAction("Index", "PublicLibrary");
+
+
                 }
 
                 else

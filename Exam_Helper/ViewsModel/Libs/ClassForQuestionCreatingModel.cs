@@ -12,7 +12,6 @@ namespace Exam_Helper.ViewsModel
        public string Proof { get; set; }
        
         [Required]
-        [StringLength(1000,MinimumLength =10)]
         public string Definition { get; set; }
 
         [Required]
