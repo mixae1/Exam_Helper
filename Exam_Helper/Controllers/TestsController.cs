@@ -77,7 +77,7 @@ namespace Exam_Helper.Controllers
                 switch (temp.SelectedId)
                 {
                     case 1: return RedirectToAction(nameof(MissingWordsTest), new { Instruction = temp.ServiceInfo });
-                    case 2: return RedirectToAction(nameof(PuzzleTest), new { Instruction = temp.ServiceInfo });
+                    case 2: return RedirectToAction("Inwork", "Home"); //return RedirectToAction(nameof(PuzzleTest), new { Instruction = temp.ServiceInfo });
                     default: return RedirectToAction(nameof(Index));
                 }
             }

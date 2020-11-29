@@ -8,13 +8,14 @@ namespace Exam_Helper.ViewsModel.Account
 {
     public class UserRegistration
     {
-        [Required]
+        [Required(ErrorMessage ="адрес электронной почты не задан")]
         [Display(Name = "Email")]
         [EmailAddress]
         public string Login { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="имя пользователя не задано")]
         [Display(Name = "UserName")]
+       
         public string UserName { get; set; }
 
         [Required]
