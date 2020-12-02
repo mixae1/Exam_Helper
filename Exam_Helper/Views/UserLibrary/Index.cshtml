@@ -57,14 +57,14 @@
                     <div class="accordion" id="accordionExample">
                         <div class="card border border-info mt-2 shadow mb-5 bg-white rounded">
                             <div class="card-header bg-white d-flex justify-content-between" id="headingOne">
-                                <button class="btn" type="button" data-toggle="collapse" data-target="#q_collapse_@item.question.Id.ToString()" aria-expanded="false" aria-controls="q_collapse_@item.question.Id.ToString()">
+                                <button class="btn titleText" type="button" data-toggle="collapse" data-target="#q_collapse_@item.question.Id.ToString()" aria-expanded="false" aria-controls="q_collapse_@item.question.Id.ToString()">
                                     <span class="h4">@item.question.Title </span>
                                 </button>
-                                <div class="btn-group  w-25">
+                                <div class="btn-group w-25 actionButton">
                                     <button type="button" class="btn collapse btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="q_collapse_@item.question.Id.ToString()" data-parent="#accordionExample">
                                         Action
                                     </button>
-                                    <div class="dropdown-menu">
+                                    <div class="dropdown-menu mt-3 actionButton">
                                         <a class="dropdown-item" asp-action="QRedirectToTest" asp-route-id="@item.question.Id">Тестирование</a>
                                         <a class="dropdown-item" asp-action="QEdit" asp-route-id="@item.question.Id">Редактирование</a>
                                         <a class="dropdown-item compItem" asp-action="QDetails" asp-route-id="@item.question.Id">Подробности</a>
@@ -79,7 +79,7 @@
 
                             <div id="q_collapse_@item.question.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                                 <div class="card-body  d-flex flex-column">
-                                    <div class="alert alert-info w-25 text-center">
+                                    <div class="alert alert-info text-center tags mt-3">
                                         @foreach (var t in item.question.TagIds.Split(';'))
                                         {
                                             if (!string.IsNullOrEmpty(t))
@@ -88,7 +88,7 @@
                                             }
                                         }
                                     </div>
-                                    <span class="h5 mt-2" style="white-space: pre-wrap">@item.question.Definition</span>
+                                    <span class="h5 mt- mb-5" style="white-space: pre-wrap">@item.question.Definition</span>
                                 </div>
                             </div>
                         </div>
@@ -158,7 +158,14 @@
 </main>
 
 <script>
-
+    $(document).ready(function () {
+        if (screen.width < 768) {
+            $(document).ready(function () {
+                $('.card-header').addClass('flex-column')
+                $('.card-header').addClass('mt-2')
+            });
+        }
+    });
 
     
 
@@ -173,6 +180,7 @@
             });
         });
     });
+
 
 
   $("#button_Que").click(function () {
