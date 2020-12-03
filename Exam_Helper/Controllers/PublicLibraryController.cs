@@ -56,8 +56,8 @@ namespace Exam_Helper.Controllers
             if (!string.IsNullOrEmpty(SearchString))
                 ques_help = ques_help.Where(
                      x => x.IsSearched || x.question.Title.ToLower().Trim().Contains(SearchString) ||
-                     x.question.Proof.ToLower().Trim().Contains(SearchString) ||
-                     x.question.TagIds.ToLower().Trim().Contains(SearchString) ||
+                     (x.question.Proof != null && x.question.Proof.ToLower().Trim().Contains(SearchString)) ||
+                      (x.question.Proof != null && x.question.TagIds.ToLower().Trim().Contains(SearchString)) ||
                      x.question.Definition.ToLower().Trim().Contains(SearchString));
 
 
