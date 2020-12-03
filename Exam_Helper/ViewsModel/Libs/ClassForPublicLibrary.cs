@@ -28,5 +28,6 @@ namespace Exam_Helper.ViewsModel
     {
         public Question question { get; set; }
         public bool IsUser { get; set; }
+        public bool IsSearched { get; set; }
     }
 }

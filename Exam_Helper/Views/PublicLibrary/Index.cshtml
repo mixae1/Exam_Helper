@@ -1,4 +1,4 @@
-﻿@model Exam_Helper.ViewsModel.ClassForPublicLibrary
+﻿@model Exam_Helper.ViewsModel.ClassForUserLibrary
 @inject SignInManager<User> _signInManager;
 @{
     ViewData["Title"] = "Public Library";
@@ -32,7 +32,7 @@
             </form>
         </div>
         <div class="collapse show" id="collapseAllQuestion">
-            @foreach (var item in Model.questions.Where(x=>x.IsPrivate==false))
+            @foreach (var item in Model.questions.Where(x=>x.question.IsPrivate==false).Select(x=>x.question))
             {
                 <div class="accordion" id="accordionExample">
                     <div class="card border border-info mt-2 shadow mb-5 bg-white rounded">
@@ -117,7 +117,7 @@
                                 @foreach (var quesId in item.QuestionSet.Split(";"))
                                 {
                                     <div class="d-flex justify-content-between pt-3 pb-3">
-                                        @Html.DisplayFor(model => model.questions.Find(x => x.Id.ToString() == quesId).Title)
+                                        @Html.DisplayFor(model => model.questions.FirstOrDefault(x => x.question.Id.ToString() == quesId).question.Title)
                                     </div>
                                 }
                             </div>

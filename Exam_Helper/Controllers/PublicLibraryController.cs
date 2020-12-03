@@ -33,7 +33,7 @@ namespace Exam_Helper.Controllers
                          where _pack.IsPrivate == false
                          select _pack;
 
-            var ques_in_packs = string.Join(";", _packs.Select(x => x.QuestionSet));
+            
 
 
             if (!string.IsNullOrEmpty(SearchString))
@@ -41,31 +41,34 @@ namespace Exam_Helper.Controllers
                     x => x.Author.ToLower().Trim().Contains(SearchString) ||
                     x.Name.ToLower().Trim().Contains(SearchString));
 
+                var ques_in_packs = string.Join(";", _packs.Select(x => x.QuestionSet));
 
 
             var _ques = from _que in _context.Question
                         where (_que.IsPrivate == false || ques_in_packs.Contains(_que.Id.ToString()))
                         select _que;
 
+            var ques_help = _ques.Select(x => new QuestionInfo() { question = x,IsUser=x.IsPrivate ,IsSearched = ques_in_packs.Contains(x.Id.ToString()) });
+
             if (!string.IsNullOrEmpty(SearchString))
                 SearchString = SearchString.ToLower();
 
             if (!string.IsNullOrEmpty(SearchString))
-                _ques = _ques.Where(
-                     x => x.Title.ToLower().Trim().Contains(SearchString) ||
-                     x.Proof.ToLower().Trim().Contains(SearchString) ||
-                     x.TagIds.ToLower().Trim().Contains(SearchString) ||
-                     x.Definition.ToLower().Trim().Contains(SearchString));
+                ques_help = ques_help.Where(
+                     x => x.IsSearched || x.question.Title.ToLower().Trim().Contains(SearchString) ||
+                     x.question.Proof.ToLower().Trim().Contains(SearchString) ||
+                     x.question.TagIds.ToLower().Trim().Contains(SearchString) ||
+                     x.question.Definition.ToLower().Trim().Contains(SearchString));
 
 
 
             var tags = await _context.Tags.AsNoTracking().ToListAsync();
 
 
-            return View(new ClassForPublicLibrary
+            return View(new ClassForUserLibrary
             {
                 packs = await _packs.ToListAsync(),
-                questions = await _ques.ToListAsync(),
+                questions = ques_help,
                 tags=tags
             });
         }

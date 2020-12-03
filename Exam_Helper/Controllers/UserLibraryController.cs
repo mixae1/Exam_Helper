@@ -51,24 +51,22 @@ namespace Exam_Helper.Controllers
             : new HashSet<int>(temp_qa.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)));
 
             var _ques = from _que in _context.Question //отбираем вопросы которые есть у юзера
-                        where (qs.Contains(_que.Id))
+                        where (qs.Contains(_que.Id) )
                         select _que;
 
             if (!string.IsNullOrEmpty(SearchString))
                 SearchString = SearchString.ToLower();
 
-            if (!string.IsNullOrEmpty(SearchString))
-                _ques = _ques.Where(
-                     x => (x.IsPrivate && (x.Title.ToLower().Trim().Contains(SearchString) ||
-                     x.Proof.ToLower().Trim().Contains(SearchString) ||
-                     x.TagIds.ToLower().Trim().Contains(SearchString) ||
-                     x.Definition.ToLower().Trim().Contains(SearchString))));
-
             var temp_ques = await _ques.ToListAsync();
+            var ques = temp_ques.Select(x => new QuestionInfo() { question = x, IsUser = qa.QuestionSet.Contains(x.Id.ToString()) ,IsSearched=ques_in_packs.Contains(x.Id.ToString())});
 
-            var ques = temp_ques.Select(x => new QuestionInfo() { question = x, IsUser = qa.QuestionSet.Contains(x.Id.ToString()) });
+            if (!string.IsNullOrEmpty(SearchString))
+                ques = ques.Where(
+                     x => (x.IsSearched || x.IsUser && (x.question.Title.ToLower().Trim().Contains(SearchString) ||
+                     (x.question.Proof!=null && x.question.Proof.ToLower().Trim().Contains(SearchString)) ||
+                      (x.question.Proof!=null  && x.question.TagIds.ToLower().Trim().Contains(SearchString)) ||
+                     x.question.Definition.ToLower().Trim().Contains(SearchString))));
 
-           
 
             var tags =await _context.Tags.AsNoTracking().ToListAsync();
 

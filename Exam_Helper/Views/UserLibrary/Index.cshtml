@@ -1,5 +1,6 @@
 ﻿@model Exam_Helper.ViewsModel.ClassForUserLibrary
 @using Microsoft.AspNetCore.Identity
+@using System.Linq;
 
 @{
     ViewData["Title"] = "Library Page";
@@ -138,7 +139,7 @@
                                     @foreach (var quesId in item.QuestionSet.Split(";"))
                                     {
                                         <div class="d-flex justify-content-between pt-3 pb-3">
-                                            @Html.DisplayFor(model => model.questions.Select(x => x.question).First(x => x.Id.ToString() == quesId).Title)
+                                            @Html.DisplayFor(model => model.questions.Select(x => x.question).FirstOrDefault(x => x.Id.ToString() == quesId).Title)
                                         </div>
                                     }
                                 </div>
