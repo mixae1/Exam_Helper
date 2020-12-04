@@ -30,6 +30,16 @@ html {
   font-size: 14px;
 }
 @media (min-width: 768px) {
+
+    #first_icon {
+        content: url("../user-black-close-up-shape_icon.png");
+    }
+
+    #second_icon {
+        content: url("../book_dictionary_icon.png");
+    }
+
+
   html {
     font-size: 16px;
   }
