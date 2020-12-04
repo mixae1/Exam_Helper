@@ -45,12 +45,12 @@
                                     Action
                                 </button>
                                 <div class="dropdown-menu actionDrop">
-                                    <a class="dropdown-item" asp-action="QRedirectToTest" asp-route-id="@item.Id">Тест</a>
+                                    <a class="dropdown-item" asp-action="QRedirectToTest" asp-route-id="@item.Id">Тестирование</a>
                                     <a class="dropdown-item compItem" asp-action="QDetails" asp-route-id="@item.Id">Подробности</a>
                                     @{
                                         if (_signInManager.IsSignedIn(User))
                                         {
-                                            <a class="dropdown-item" id="@("p" + item.Id.ToString())" onclick="AddQuestion(this.id)">Добавить</a>
+                                            <a class="dropdown-item" id="@("q" + item.Id.ToString())" onclick="AddQuestion(this.id)">Добавить</a>
                                         }
                                     }
                                 </div>
@@ -91,15 +91,14 @@
                                     Action
                                 </button>
                                 <div class="dropdown-menu">
-                                     <a class="dropdown-item"  asp-controller="Home" asp-action="PackTests">Tests</a>
-    
+                                    <a class="dropdown-item"  asp-controller="Home" asp-action="PackTests">Тестирование</a>
+                                    <a class="dropdown-item compItem" asp-action="PDetails" asp-route-id="@item.Id">Подробности</a>
                                     @{
                                         if (_signInManager.IsSignedIn(User))
                                         {
-                                    <a class="dropdown-item" id="@("p" + item.Id.ToString())" onclick="AddPack(this.id)">Добавить</a>
-                                }
-    }
-                                    <a class="dropdown-item compItem" asp-action="PDetails" asp-route-id="@item.Id">Подробности</a>
+                                            <a class="dropdown-item" id="@("p" + item.Id.ToString())" onclick="AddPack(this.id)">Добавить</a>
+                                        }
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -156,7 +155,8 @@
         var a = document.getElementById(id);
 
         if (a.innerHTML != "Добавить") {
-            return false; alert("didnt stop");
+            //alert("Error:223");
+            return false; 
         }
          a.innerHTML = "Пожалуйста, подождите, идёт процесс добавления...";
         $.ajax(
@@ -168,7 +168,7 @@
                           a.innerHTML = "Добавлено!";
                       },
                 error: function (msg) {
-                    alert('sory something went wrong');
+                    alert("Error:224");
                       }
                   })
 
@@ -179,21 +179,22 @@
 
         var a = document.getElementById(id);
 
-         if (a.innerHTML != "Добавить") {
-            return false;
-         }
+        //if (a.innerHTML != "Добавить") {
+        //    //alert("Error:225");
+        //    return false;
+        //}
 
              a.innerHTML = "Пожалуйста, подождите, идёт процесс добавления...";
              $.ajax(
                  {
-                     type: "Post",
+                     type: "POST",
                      data: { pack_id: id },
                      url: '@Url.Action("AddPackToMyLib", "PublicLibrary")',
                      success: function (msg) {
                          a.innerHTML = "Добавлено!";
                      },
                      error: function (msg) {
-                         alert('sory something went wrong');
+                         alert("Error:226");
                      }
                  })
 

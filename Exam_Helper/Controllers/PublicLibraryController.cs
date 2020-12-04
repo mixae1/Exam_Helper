@@ -163,6 +163,7 @@ namespace Exam_Helper.Controllers
             var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
 
             ques_id = ques_id.Substring(1);
+
             if (string.IsNullOrEmpty(qa.QuestionSet))
                 qa.QuestionSet = "";
 
