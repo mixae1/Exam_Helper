@@ -503,7 +503,11 @@ namespace Exam_Helper.Controllers
                 return NotFound();
             }
 
-            return PartialView(await _context.Question.AsNoTracking().FirstAsync(x => x.Id == id.Value));
+            var question = await _context.Question.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id.Value);
+            var tags = await _context.Tags.AsNoTracking().Where(x => question.TagIds.Contains(x.Id.ToString())).ToListAsync();
+            question.TagIds = string.Join(";", tags.Select(x => x.Title));
+
+            return PartialView(question);
         }
 
 
@@ -543,7 +547,23 @@ namespace Exam_Helper.Controllers
                 return NotFound();
             }
 
-            return PartialView(await _context.Pack.AsNoTracking().FirstAsync(x => x.Id == id.Value));
+            var pack = await _context.Pack.AsNoTracking()
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (pack == null)
+            {
+                return NotFound();
+            }
+
+            var tags = await _context.Tags.AsNoTracking().Where(x => pack.TagsId.Contains(x.Id.ToString())).ToListAsync();
+            pack.TagsId = string.Join(";", tags.Select(x => x.Title));
+
+            var ques = await _context.Question.AsNoTracking().Where(x => pack.QuestionSet.Contains(x.Id.ToString())).
+                Select(x => x.Title).ToListAsync();
+
+            pack.QuestionSet = string.Join(";", ques);
+
+            return PartialView(pack);
         }
         /*
         // POST: PacksLib/Delete/5
