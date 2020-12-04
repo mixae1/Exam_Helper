@@ -23,58 +23,81 @@ namespace Exam_Helper.Controllers
         // GET: PublicLibraryController
         public async Task<IActionResult> Index(string SearchString)
         {
-           
+
             //  if (!User.Identity.IsAuthenticated)
             //    return RedirectToAction("Login","UserAccount");
+
+            //Приводим SearchString к нижнему регистру
+            if (!string.IsNullOrEmpty(SearchString))
+                SearchString = SearchString.ToLower();
+
+            //Загружаем пользователя
             var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
 
+            //Получаем список паков пользователя
             var temp_pa = qa.PackSet;
-            var ps = string.IsNullOrEmpty(temp_pa) ? new HashSet<int>() //получаем индексы паков юзера и кидаем их в сет 
-            : new HashSet<int>(temp_pa.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)));
+
+            //Получаем HashSet паков пользователя
+            var ps = string.IsNullOrEmpty(temp_pa) ? 
+                new HashSet<int>()
+                : new HashSet<int>(temp_pa.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)));
+            
+            //Подгружаем паки пользователя из бд
             var _packs = from _pack in _context.Pack
                          where (ps.Contains(_pack.Id))
                          select _pack;
 
+            //Отбираем паки по SearchString
             if (!string.IsNullOrEmpty(SearchString))
                 _packs = _packs.Where(
                     x => x.Author.ToLower().Trim().Contains(SearchString) ||
                     x.Name.ToLower().Trim().Contains(SearchString));
 
-            var ques_in_packs = string.Join(";", _packs.Select(x => x.QuestionSet));// получаем id вопросов ,которые не у пользователя 
-            // но приэтом находятся в паке ( такое возникает когда мы редактируем  вопрос,ибо в паках отсается старая версия и тк 
-            //у юзера старый айди исчезает то вопрос в паках появляться не будет)
+            //Собираем все вопросы, состоящие в паках = дельта вопросы(для простоты)
+            var ques_in_packs = string.Join(";", _packs.Select(x => x.QuestionSet));
+            /* получаем id вопросов ,которые не у пользователя 
+             но приэтом находятся в паке ( такое возникает когда мы редактируем  вопрос,ибо в паках отсается старая версия и тк 
+            у юзера старый айди исчезает то вопрос в паках появляться не будет)
+            */
 
+            //Собираем вопросы юзера а также дельта вопросы вместе
+            var temp_qa = qa.QuestionSet + ques_in_packs;
 
-            var temp_qa = qa.QuestionSet+ques_in_packs;
+            //Получаем HashSet вопросов пользователя
+            var qs = string.IsNullOrEmpty(temp_qa) ? 
+                new HashSet<int>()
+                : new HashSet<int>(temp_qa.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)));
 
-            var qs = string.IsNullOrEmpty(temp_qa) ? new HashSet<int>()//получаем индесы вопросов юзера 
-            : new HashSet<int>(temp_qa.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)));
-
-            var _ques = from _que in _context.Question //отбираем вопросы которые есть у юзера
+            //Подгружаем вопросы пользователя
+            var _ques = from _que in _context.Question
                         where (qs.Contains(_que.Id) )
                         select _que;
 
-            if (!string.IsNullOrEmpty(SearchString))
-                SearchString = SearchString.ToLower();
+            //Преобразуем вопросы пользователя в List - WHY?
+            //var temp_ques = await _ques.ToListAsync();
 
-            var temp_ques = await _ques.ToListAsync();
-            var ques = temp_ques.Select(x => new QuestionInfo() { question = x, IsUser = qa.QuestionSet.Contains(x.Id.ToString()) ,IsSearched=ques_in_packs.Contains(x.Id.ToString())});
+            //Создаём вспомогательную структуру для вопросов 
+            var ques = _ques.Select(x => new QuestionInfo()
+            {
+                question = x,
+                IsUser = x.IsPrivate,
+                IsSearched = string.IsNullOrEmpty(SearchString) ? true :
+                (//Отбираем вопросы по SearchString
+                    x.Title.ToLower().Trim().Contains(SearchString) ||
+                    (x.Proof != null && x.Proof.ToLower().Trim().Contains(SearchString)) ||
+                    (x.TagIds != null && x.TagIds.ToLower().Trim().Contains(SearchString)) ||
+                    x.Definition.ToLower().Trim().Contains(SearchString) ||
+                    x.Author.ToLower().Trim().Contains(SearchString))
+            });
 
-            if (!string.IsNullOrEmpty(SearchString))
-                ques = ques.Where(
-                     x => (x.IsSearched || x.IsUser && (x.question.Title.ToLower().Trim().Contains(SearchString) ||
-                     (x.question.Proof!=null && x.question.Proof.ToLower().Trim().Contains(SearchString)) ||
-                      (x.question.Proof!=null  && x.question.TagIds.ToLower().Trim().Contains(SearchString)) ||
-                     x.question.Definition.ToLower().Trim().Contains(SearchString))));
-
-
+            //Загружаем тэги
             var tags =await _context.Tags.AsNoTracking().ToListAsync();
 
             return View(new ClassForUserLibrary
             {
                 packs = await _packs.ToListAsync(),
                 questions = ques,
-                tags=tags
+                tags = tags
             });
         }
 

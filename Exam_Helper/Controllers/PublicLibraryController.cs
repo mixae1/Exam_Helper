@@ -24,44 +24,57 @@ namespace Exam_Helper.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Index(string SearchString)
         {
-            
+
             //  if (!User.Identity.IsAuthenticated)
             //    return RedirectToAction("Login","UserAccount");
-   
 
+            //Приводим SearchString к нижнему регистру
+            if (!string.IsNullOrEmpty(SearchString))
+                SearchString = SearchString.ToLower();
+
+            //Загружаем все публичные паки
             var _packs = from _pack in _context.Pack
                          where _pack.IsPrivate == false
                          select _pack;
 
-            
-
-
+            //Отбираем паки по SearchString
             if (!string.IsNullOrEmpty(SearchString))
                 _packs = _packs.Where(
                     x => x.Author.ToLower().Trim().Contains(SearchString) ||
                     x.Name.ToLower().Trim().Contains(SearchString));
 
-                var ques_in_packs = string.Join(";", _packs.Select(x => x.QuestionSet));
+            //Собираем все вопросы, состоящие в паках = дельта вопросы(для простоты)
+            var ques_in_packs = string.Join(";", _packs.Select(x => x.QuestionSet));
 
-
+            //Загружаем все публичные ИЛИ дельта вопросы
             var _ques = from _que in _context.Question
                         where (_que.IsPrivate == false || ques_in_packs.Contains(_que.Id.ToString()))
                         select _que;
 
-            var ques_help = _ques.Select(x => new QuestionInfo() { question = x,IsUser=x.IsPrivate ,IsSearched = ques_in_packs.Contains(x.Id.ToString()) });
+            //Создаём вспомогательную структуру для вопросов 
+            var ques_help = _ques.Select(x => new QuestionInfo()
+            {
+                question = x,
+                IsUser = x.IsPrivate,
+                IsSearched = string.IsNullOrEmpty(SearchString) ? true :
+                (//Отбираем вопросы по SearchString
+                    x.Title.ToLower().Trim().Contains(SearchString) ||
+                    (x.Proof != null && x.Proof.ToLower().Trim().Contains(SearchString)) ||
+                    (x.TagIds != null && x.TagIds.ToLower().Trim().Contains(SearchString)) ||
+                    x.Definition.ToLower().Trim().Contains(SearchString) ||
+                    x.Author.ToLower().Trim().Contains(SearchString))
+            });
 
-            if (!string.IsNullOrEmpty(SearchString))
-                SearchString = SearchString.ToLower();
-
+            /*
             if (!string.IsNullOrEmpty(SearchString))
                 ques_help = ques_help.Where(
                      x => x.IsSearched || x.question.Title.ToLower().Trim().Contains(SearchString) ||
                      (x.question.Proof != null && x.question.Proof.ToLower().Trim().Contains(SearchString)) ||
                       (x.question.Proof != null && x.question.TagIds.ToLower().Trim().Contains(SearchString)) ||
                      x.question.Definition.ToLower().Trim().Contains(SearchString));
+            */
 
-
-
+            //Загружаем тэги
             var tags = await _context.Tags.AsNoTracking().ToListAsync();
 
 
