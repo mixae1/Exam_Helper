@@ -80,7 +80,7 @@ namespace Exam_Helper.Controllers
             var ques = _ques.Select(x => new QuestionInfo()
             {
                 question = x,
-                IsUser = x.IsPrivate,
+                IsUser = qa.QuestionSet.Contains(x.Id.ToString()),
                 IsSearched = string.IsNullOrEmpty(SearchString) ? true :
                 (//Отбираем вопросы по SearchString
                     x.Title.ToLower().Trim().Contains(SearchString) ||

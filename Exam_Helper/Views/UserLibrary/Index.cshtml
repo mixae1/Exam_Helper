@@ -53,7 +53,7 @@
         </div>
         <div class="panel-group" id="accordionCommon">
             <div class="collapse show" id="collapseAllQuestion">
-                @foreach (var item in Model.questions.Where(x => x.IsSearched))
+                @foreach (var item in Model.questions.Where(x => x.IsSearched && x.IsUser))
                 {
                     <div class="accordion" id="accordionExample">
                         <div class="card border border-info mt-2 shadow mb-5 bg-white rounded">
@@ -72,7 +72,7 @@
                                         <a class="dropdown-item compItem" asp-action="QDelete" asp-route-id="@item.question.Id">Удаление</a>
                                         @if (UserManager.GetUserName(User) == item.question.Author)
                                         {
-                                            <button class="btn btn-link" type="button" id="@("q" + item.question.Id.ToString())" onclick="ChangeQuestionPrivate(this.id)">@(item.question.IsPrivate ? "Опубликовать" : "Скрыть")</button>
+                                            <a class="dropdown-item" id="@("q" + item.question.Id.ToString())" onclick="ChangeQuestionPrivate(this.id)">@(item.question.IsPrivate ? "Опубликовать" : "Скрыть")</a>
                                         }
                                     </div>
                                 </div>
