@@ -514,8 +514,8 @@ namespace Exam_Helper.Controllers
         // POST: QuestionsLib/Delete/5
         //[HttpPost, ActionName("QDelete")]
         //[ValidateAntiForgeryToken]
-        
-        public async Task<IActionResult> QDeleteConfirmed(int id)
+        //[HttpPost, ActionName("QDelete")]
+        public async Task<RedirectToActionResult> QDeleteComfirmed(int id)
         {
             var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
 
@@ -532,8 +532,8 @@ namespace Exam_Helper.Controllers
                 }
             }
 
-            //return RedirectToAction(nameof(Index));
-            return Json(new { success = false });
+            //return Json(new { success = false });
+            return RedirectToAction(nameof(Index));
         }
 
 
@@ -570,8 +570,8 @@ namespace Exam_Helper.Controllers
         [HttpPost, ActionName("PDelete")]
         [ValidateAntiForgeryToken]
         */
-        
-         public async Task<IActionResult> PDeleteConfirmed(int id)
+
+        public async Task<RedirectToActionResult> PDeleteComfirmed(int id)
         {
             var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
 
@@ -588,8 +588,8 @@ namespace Exam_Helper.Controllers
                 }
             }
 
-            //return RedirectToAction(nameof(Index));
-            return Json(new { success = false });
+            //return Json(new { success = false });
+            return RedirectToAction(nameof(Index));
         }
 
         public RedirectToActionResult QRedirectToTest(int id)

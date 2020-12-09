@@ -3,7 +3,7 @@
 <div class="modal-content">
     <div class="modal-header">
         <h4 class="modal-title" style="color:darkred">Вы точно хотите удалить?</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     </div>
 
     <hr />
@@ -54,10 +54,13 @@
         </dl>
     </div>
 
+
     <div class="modal-footer">
         <div class="form-group">
             <div class="d-flex">
-                <button type="submit" class="btn btn-danger" data-dismiss="modal" onclick="QDeleteConfirmed()">Удалить</button>|
+                <a asp-action="QDeleteComfirmed" asp-route-id="@Model.Id">
+                    <button type="submit" class="btn btn-danger">Удалить</button>|
+                </a>
                 <button type="button" class="btn btn-light" data-dismiss="modal">Вернуться с библиотеку</button>
             </div>
 
@@ -65,19 +68,3 @@
     </div>
 
 </div>
-
-<script>
-        function QDeleteConfirmed(){
-            $.ajax({
-                type: 'POST',
-                url: 'UserLibrary/QDeleteConfirmed',
-                data: { id: parseInt('@Model.Id') },
-                success: function () {
-                    location.reload();
-                },
-                error: function () {
-                    alert("Что-то пошло не так...");
-                }
-            });
-        }
-</script>
