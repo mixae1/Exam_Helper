@@ -58,9 +58,7 @@
     <div class="modal-footer">
         <div class="form-group">
             <div class="d-flex">
-                <a asp-action="QDeleteComfirmed" asp-route-id="@Model.Id">
-                    <button type="submit" class="btn btn-danger">Удалить</button>|
-                </a>
+                <button type="submit" class="btn btn-danger" onclick="QDeleteComfirm()" data-dismiss="modal">Удалить</button>|
                 <button type="button" class="btn btn-light" data-dismiss="modal">Вернуться с библиотеку</button>
             </div>
 
@@ -68,3 +66,18 @@
     </div>
 
 </div>
+
+<script>
+    function QDeleteComfirm() {
+        $.ajax({
+            type: "POST",
+            url: 'UserLibrary/QDeleteComfirmed',
+            data: { id: '@Model.Id' },
+            success: function (msg) {
+                $('div[data-fordisabling="' + msg + '"]').remove();
+            },
+            error: function () {
+            }
+        });
+    };
+</script>
