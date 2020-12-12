@@ -29,7 +29,12 @@ namespace Exam_Helper
             services.AddDbContext<CommonDbContext>(opt=>opt.UseNpgsql(temp));
 
             services.AddIdentity<User, IdentityRole>(
-                opt=>opt.User.RequireUniqueEmail=true
+                opt=>
+                {
+                    opt.User.RequireUniqueEmail = true;
+                    opt.Password.RequireNonAlphanumeric = false;
+                    
+                }
                 ).AddEntityFrameworkStores<CommonDbContext>().AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(opt => 
