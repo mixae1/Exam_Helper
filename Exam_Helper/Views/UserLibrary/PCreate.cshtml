@@ -15,44 +15,47 @@
             <input asp-for="@Model.pack_name" class="form-control" />
             <span asp-validation-for="@Model.pack_name" class="text-danger"></span>
         </div>
-        <div class="form-group">
-            <label asp-for="@Model.questions" class="control-label"></label>
-            <ul class="list-group">
-                @if(Model.questions == null || Model.questions.Count==0)
-                {
-                    <span>У вас нет вопросов.</span>
-                }
-                else
-                {
+        <div style="display:flex; flex-direction: row; justify-content: center;">
+            <div class="form-group">
+                <label asp-for="@Model.questions" class="control-label"></label>
+                <ul class="list-group" id="questions" style="height: 288px; overflow-y: scroll; width: 284px;">
+                    @if (Model.questions == null || Model.questions.Count == 0)
+                    {
+                        <span>У вас нет вопросов.</span>
+                    }
+                    else
+                    {
+                        <input class="form-control" id="qInput" type="text" placeholder="Поиск..">
+                        @for (int i = 0; i < Model.questions.Count; i++)
+                        {
+                            <li class="list-group-item">
+                                <input type="checkbox" asp-for="@Model.questions[i].IsSelected" />
+                                <label asp-for="@Model.questions[i].IsSelected" id="qName"> @Model.questions[i].Name</label>
+                                <input type="hidden" asp-for="@Model.questions[i].Id" />
+                                <input type="hidden" asp-for="@Model.questions[i].Name" />
+                            </li>
+                        }
+                    }
+                </ul>
+                <span asp-validation-for="@Model.questions" class="text-danger"></span>
+            </div>
 
-                    @for (int i = 0; i < Model.questions.Count; i++)
+            <div class="form-group">
+                <label asp-for="@Model.pack.TagsId" class="control-label"></label>
+                <ul class="list-group" id="tags" style="height: 288px; overflow-y: scroll; width: 284px;">
+                    <input class="form-control" id="tInput" type="text" placeholder="Поиск..">
+                    @for (int i = 0; i < Model.tags.Count; i++)
                     {
                         <li class="list-group-item">
-                            <input type="checkbox" asp-for="@Model.questions[i].IsSelected" />
-                            <label asp-for="@Model.questions[i].IsSelected"> @Model.questions[i].Name</label>
-                            <input type="hidden" asp-for="@Model.questions[i].Id" />
-                            <input type="hidden" asp-for="@Model.questions[i].Name" />
+                            <input type="checkbox" asp-for="@Model.tags[i].IsSelected" />
+                            <label asp-for="@Model.tags[i].IsSelected" id="tName"> @Model.tags[i].Name</label>
+                            <input type="hidden" asp-for="@Model.tags[i].Id" />
+                            <input type="hidden" asp-for="@Model.tags[i].Name" />
                         </li>
                     }
-                }
-            </ul>
-            <span asp-validation-for="@Model.questions" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="@Model.pack.TagsId" class="control-label"></label>
-            <ul class="list-group">
-                @for (int i = 0; i < Model.tags.Count; i++)
-                {
-                    <li class="list-group-item">
-                        <input type="checkbox" asp-for="@Model.tags[i].IsSelected" />
-                        <label asp-for="@Model.tags[i].IsSelected"> @Model.tags[i].Name</label>
-                        <input type="hidden" asp-for="@Model.tags[i].Id" />
-                        <input type="hidden" asp-for="@Model.tags[i].Name" />
-                    </li>
-}
-            </ul>
-            <span asp-validation-for="@Model.pack.TagsId" class="text-danger"></span>
+                </ul>
+                <span asp-validation-for="@Model.pack.TagsId" class="text-danger"></span>
+            </div>
         </div>
         <input type="submit" value="Create" class="btn btn-primary mt-3" />
     </form>
@@ -63,6 +66,25 @@
     </a>
 </main>
 
+<script>
+    $(document).ready(function () {
+        $("#qInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("ul.list-group#questions li").filter(function () {
+                $(this).toggle($(this).find("label#qName").text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $("#tInput").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("ul.list-group#tags li").filter(function () {
+                $(this).toggle($(this).find("label#tName").text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
