@@ -27,7 +27,7 @@
 
         <hr color="brown" />
 
-        <div class="container d-flex bd-highlight pt-3">
+        <div class="container d-flex bd-highlight pt-3" style="padding-bottom:1rem;">
             <button class="btn btn-primary" type="button" id="button_Que" data-toggle="collapse" data-target="#collapseAllQuestion" aria-expanded="true" aria-controls="collapseAllQuestion">
                 Вопросы
             </button>
@@ -46,9 +46,8 @@
             </a>
         </div>
         <div class="form-group pb-3 bd-highlight ml-auto p-2">
-            <span class="mr-3"> Поиск: </span>
             <form asp-action="Index">
-                <input type="text" name="SearchString" class="form-control">
+                <input type="text" name="SearchString" class="form-control" placeholder="Поиск..">
             </form>
         </div>
         <div class="panel-group" id="accordionCommon">

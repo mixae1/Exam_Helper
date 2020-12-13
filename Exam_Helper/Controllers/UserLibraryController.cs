@@ -393,14 +393,20 @@ namespace Exam_Helper.Controllers
             }
 
             var qa = await _context.User.AsNoTracking().FirstAsync(x => x.UserName == User.Identity.Name);
-
+            
             var pack = await _context.Pack.AsNoTracking().FirstOrDefaultAsync(x=>x.Id==id);
+
             if (pack == null)
             {
                 return NotFound();
             }
 
             var temp = new HashSet<int>(qa.QuestionSet.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)));
+
+            foreach(var q_id in pack.QuestionSet.Split(';', StringSplitOptions.RemoveEmptyEntries))
+            {
+                temp.Add(int.Parse(q_id));
+            }
 
             var ques = await _context.Question.AsNoTracking().Where(x => temp.Contains(x.Id))
                 .Select(x => new QuestionForPackCreatingModel()
