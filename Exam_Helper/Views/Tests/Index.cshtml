@@ -6,8 +6,9 @@
 <main style="height: 75vh;" class="d-flex align-items-center justify-content-center">
     <form asp-action="Index" method="post">
         <h2>
-            Choose Test Method:
+            Выберете метод тестирования:
         </h2>
+        <div asp-validation-summary="All" class="text-danger"></div>
         @for (int i = 0; i < Model.TestMethodsNames.Length; i++)
         {
             <div class="panel-group" id="accordion">
@@ -18,12 +19,22 @@
                                 <div class="input-group-prepend bg-white mr-3">
                                     <div class="input-group-text">
                                         <input asp-for="@Model.SelectedId" value="@Model.TestsMethodsIds[i]" type="radio" id="method" method-type="@Model.TestMethodsNames[i]" />
-                                        <input asp-for="@Model.TestsMethodsIds" type="hidden" />
+                                        <input asp-for="@Model.TestsMethodsIds[i]" type="hidden" />
                                         <input asp-for="@Model.ServiceInfo" type="hidden" id="ServiceInfo" />
-                                        <span asp-validation-for="@Model.SelectedId"></span>
+                                        <span asp-validation-for="@Model.SelectedId" hidden></span>
                                     </div>
                                     <button class="btn btn-light border" style="background-color: #e9ecef; border-color:#e9ecef;" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
-                                        <span asp-for="@Model.TestsMethodsIds">  @Model.TestMethodsNames[i] </span>
+                                        <span asp-for="@Model.TestsMethodsIds[i]">
+                                            @switch (Model.TestMethodsNames[i])
+                                            {
+                                                case "missed_words":
+                                                    @:Метод пропущенных слов
+                                                    break;
+                                                case "puzzle":
+                                                    @:Воссоздание по частям
+                                                    break;
+                                            }
+                                        </span>
                                     </button>
                                 </div>
                             </div>
@@ -31,52 +42,52 @@
                     </div>
                     <div id="collapse_@Model.TestMethodsNames[i]" class="panel-collapse collapse in">
                         <div class="panel-body">
-                            @switch (@Model.TestMethodsNames[i])
+                            @switch (Model.TestMethodsNames[i])
                             {
                                 case "missed_words":
-                            <p>
-                                Количество пропущенных слов:
-                                <input type="range" min="1" max="100" value="50" id="mw_quantity">
-                            </p>
+                                    <p>
+                                        Количество пропущенных слов:
+                                        <input type="range" min="1" max="100" value="50" id="mw_quantity">
+                                    </p>
                                     <p>
                                         <span>
-                                            убираем из текста прилагательные?
+                                            Прилагательные:
                                             <input type="checkbox" id="mw_isPrill">
                                         </span>
                                         <br />
                                         <span>
-                                            убираем из текста прил?
+                                            Знаки:
                                             <input type="checkbox" id="mw_isLetter" disabled>
                                         </span>
                                         <br />
                                         <span>
-                                            убираем из текста буквы специальные символы?
+                                            Спец. символы:
                                             <input type="checkbox" id="mw_isSign" disabled>
                                         </span>
                                     </p>
                                     break;
                                 case "puzzle":
-                        <p>
-                            Количество блоков:
-                            <input type="range" min="1" max="100" value="50" id="p_quantity">
-                        </p>
+                                    <p>
+                                        Количество частей:
+                                        <input type="range" min="1" max="100" value="50" id="p_quantity">
+                                    </p>
                                     <p>
                                         <span>
-                                            различная длина блоков
+                                            Различная длина частей:
                                             <input type="checkbox" id="p_diffLenghtOfBlock">
                                         </span>
                                         <br />
                                         <span>
-                                           установить блоки по умолчанию:
-                                            <input type = "checkbox" id = "p_defaultBlocks">
+                                            Части по умолчанию:
+                                            <input type="checkbox" id="p_defaultBlocks">
                                         </span>
                                     </p>
 
                                     <p>
 
                                         <span>
-                                            разделяем слова:
-                                            <input type="range" min="0" max="2" step="1" value="0" id="p_sep" onchange="UpdateSepName()"/>
+                                            Тип разделения:
+                                            <input type="range" min="0" max="2" step="1" value="0" id="p_sep" onchange="UpdateSepName()" />
                                             <span id="sepLog">sepIndulge</span>
                                         </span>
 
