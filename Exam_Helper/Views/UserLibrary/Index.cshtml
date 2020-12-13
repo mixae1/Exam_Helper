@@ -35,12 +35,12 @@
                 Паки
             </button>
             <a asp-action="QCreate">
-                <button class="btn btn-primary ml-1" type="button">
+                <button class="btn btn-primary ml-1" type="button" style="cursor:cell;">
                     Добавить вопрос
                 </button>
             </a>
             <a asp-action="PCreate">
-                <button class="btn btn-primary ml-1" type="button">
+                <button class="btn btn-primary ml-1" type="button" style="cursor:cell;">
                     Добавить пак
                 </button>
             </a>
@@ -63,7 +63,7 @@
                                 </button>
                                 <div class="btn-group w-25 actionButton">
                                     <button type="button" class="btn collapse btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="q_collapse_@item.question.Id.ToString()" data-parent="#accordionExample">
-                                        Action
+                                        Действия
                                     </button>
                                     <div class="dropdown-menu mt-3 actionButton">
                                         <a class="dropdown-item" asp-action="QRedirectToTest" asp-route-id="@item.question.Id">Тестирование</a>
@@ -72,7 +72,7 @@
                                         <a class="dropdown-item compItem" asp-action="QDelete" asp-route-id="@item.question.Id">Удаление</a>
                                         @if (UserManager.GetUserName(User) == item.question.Author)
                                         {
-                                            <a class="dropdown-item" id="@("q" + item.question.Id.ToString())" onclick="ChangeQuestionPrivate(this.id)">@(item.question.IsPrivate ? "Опубликовать" : "Скрыть")</a>
+                                            <a class="dropdown-item" id="@("q" + item.question.Id.ToString())" onclick="ChangeQuestionPrivate(this.id)" style="cursor:pointer;">@(item.question.IsPrivate ? "Опубликовать" : "Скрыть")</a>
                                         }
                                     </div>
                                 </div>
@@ -80,16 +80,16 @@
 
                             <div id="q_collapse_@item.question.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                                 <div class="card-body  d-flex flex-column">
-                                    <div class="alert alert-info text-center tags mt-3">
-                                        @foreach (var t in item.question.TagIds.Split(';'))
+                                    @foreach (var t in item.question.TagIds.Split(';'))
+                                    {
+                                        if (!string.IsNullOrEmpty(t))
                                         {
-                                            if (!string.IsNullOrEmpty(t))
-                                            {
+                                            <div class="alert alert-info text-center tags mt-3">
                                                 <span>@Html.DisplayFor(modelItem => modelItem.tags.Find(x => x.Id == int.Parse(t)).Title) </span>
-                                            }
+                                            </div>
                                         }
-                                    </div>
-                                    <span class="h5 mt- mb-5" style="white-space: pre-wrap">@item.question.Definition</span>
+                                    }
+                                    <span class="h5 mt- mb-5" style="white-space: pre-wrap; margin-bottom: 0rem!important;">@item.question.Definition</span>
                                 </div>
                             </div>
                         </div>
@@ -109,7 +109,7 @@
                                 </button>
                                 <div class="btn-group  w-25">
                                     <button type="button" class="btn collapse btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="p_collapse_@item.Id.ToString()" data-parent="#accordionExample">
-                                        Action
+                                        Действия
                                     </button>
                                     <div class="dropdown-menu">
                                         <!--
@@ -121,22 +121,22 @@
                                         <a class="dropdown-item compItem" asp-action="PDelete" asp-route-id="@item.Id">Удаление</a>
                                         @if (UserManager.GetUserName(User) == item.Author)
                                         {
-                                        <button class="btn btn-link" type="button" id="@("p" + item.Id.ToString())" onclick="ChangePackPrivate(this.id)">@(item.IsPrivate ? "Опубликовать" : "Скрыть")</button>
+                                            <button class="btn btn-link" type="button" id="@("p" + item.Id.ToString())" onclick="ChangePackPrivate(this.id)" style="cursor:pointer;">@(item.IsPrivate ? "Опубликовать" : "Скрыть")</button>
                                         }
                                     </div>
                                 </div>
                             </div>
                             <div id="p_collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                                 <div class="card-body  d-flex flex-column">
-                                    <div class="alert alert-info w-25 text-center">
-                                        @foreach (var t in item.TagsId.Split(';'))
+                                    @foreach (var t in item.TagsId.Split(';'))
+                                    {
+                                        if (!string.IsNullOrEmpty(t))
                                         {
-                                            if (!string.IsNullOrEmpty(t))
-                                            {
+                                            <div class="alert alert-info w-25 text-center">
                                                 <span>@Html.DisplayFor(modelItem => modelItem.tags.Find(x => x.Id == int.Parse(t)).Title) </span>
-                                            }
+                                            </div>
                                         }
-                                    </div>
+                                    }
                                     @foreach (var quesId in item.QuestionSet.Split(";"))
                                     {
                                         <div class="d-flex justify-content-between pt-3 pb-3">
@@ -150,10 +150,6 @@
 
                 }
             </div>
-
-
-
-
         </div>
     </div>
 

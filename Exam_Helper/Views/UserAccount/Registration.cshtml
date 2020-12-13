@@ -29,7 +29,10 @@
             <input asp-for="@Model.PasswordConfirm" class="form-control" />
             <span asp-validation-for="@Model.PasswordConfirm" class="text-danger"></span>
         </div>
-        <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+            <button class="btn btn-secondary">У меня уже есть аккаунт</button>
+        </div>
     </form>
 </main>
 

@@ -8,14 +8,13 @@ namespace Exam_Helper.ViewsModel.Account
 {
     public class UserRegistration
     {
-        [Required(ErrorMessage ="адрес электронной почты не задан")]
-        [Display(Name = "Email")]
+        [Required(ErrorMessage ="Логин или aдрес электронной почты не задан.")]
+        [Display(Name = "Логин или электронная почта")]
         [EmailAddress]
         public string Login { get; set; }
 
-        [Required(ErrorMessage ="имя пользователя не задано")]
-        [Display(Name = "UserName")]
-       
+        [Required(ErrorMessage ="Имя пользователя не задано")]
+        [Display(Name = "Имя пользователя")]
         public string UserName { get; set; }
 
         [Required]
@@ -26,7 +25,7 @@ namespace Exam_Helper.ViewsModel.Account
         [Required]
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         [DataType(DataType.Password)]
-        [Display(Name = "Подтвердить пароль")]
+        [Display(Name = "Подтверждение пароля")]
         public string PasswordConfirm { get; set; }
     }
 }
