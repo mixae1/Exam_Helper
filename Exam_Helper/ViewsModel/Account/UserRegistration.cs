@@ -8,23 +8,23 @@ namespace Exam_Helper.ViewsModel.Account
 {
     public class UserRegistration
     {
-        [Required(ErrorMessage ="Логин или aдрес электронной почты не задан.")]
-        [Display(Name = "Логин или электронная почта")]
-        [EmailAddress]
+        [Required(ErrorMessage ="Адрес электронной почты не задан")]
+        [Display(Name = "Электронная почта")]
+        [EmailAddress(ErrorMessage = "Адрес электронной почты некорректен")]
         public string Login { get; set; }
 
         [Required(ErrorMessage ="Имя пользователя не задано")]
         [Display(Name = "Имя пользователя")]
         public string UserName { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "Пароль не задан")]
+        [DataType(DataType.Password, ErrorMessage = "Пароль некорректен")]
         [Display(Name = "Пароль")]
         public string Password { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Подтверждение пароль не задано")]
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
-        [DataType(DataType.Password)]
+        [DataType(DataType.Password, ErrorMessage = "Пароль некорректен")]
         [Display(Name = "Подтверждение пароля")]
         public string PasswordConfirm { get; set; }
     }

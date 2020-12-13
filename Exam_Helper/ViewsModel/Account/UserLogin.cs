@@ -7,13 +7,13 @@ namespace Exam_Helper.ViewsModel.Account
 {
     public class UserLogin
     {
-        [EmailAddress]
-        [Required]
+        [EmailAddress(ErrorMessage = "Адрес электронной почты некорректен")]
+        [Required(ErrorMessage = "Aдрес электронной почты не задан")]
         [Display(Name = "Электронная почта")]
         public string Email { get; set; }
        
-        [Required]
-        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "Пароль не задан")]
+        [DataType(DataType.Password, ErrorMessage = "Пароль некорректен")]
         [Display(Name = "Пароль")]
         public string Password { get; set; }
 
