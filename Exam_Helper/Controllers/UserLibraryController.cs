@@ -514,8 +514,8 @@ namespace Exam_Helper.Controllers
         // POST: QuestionsLib/Delete/5
         //[HttpPost, ActionName("QDelete")]
         //[ValidateAntiForgeryToken]
-        
-        public async Task<IActionResult> QDeleteConfirmed(int id)
+        //[HttpPost, ActionName("QDelete")]
+        public async Task<string> QDeleteComfirmed(int id)
         {
             var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
 
@@ -528,12 +528,12 @@ namespace Exam_Helper.Controllers
                     _context.Update(qa);
                     await _context.SaveChangesAsync();
                     //return Json(new { success = true });
-                    return RedirectToAction(nameof(Index));
+                    return "dq" + id.ToString();
                 }
             }
 
-            //return RedirectToAction(nameof(Index));
-            return Json(new { success = false });
+            //return Json(new { success = false });
+            return "error";
         }
 
 
@@ -570,8 +570,8 @@ namespace Exam_Helper.Controllers
         [HttpPost, ActionName("PDelete")]
         [ValidateAntiForgeryToken]
         */
-        
-         public async Task<IActionResult> PDeleteConfirmed(int id)
+
+        public async Task<string> PDeleteComfirmed(int id)
         {
             var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
 
@@ -584,12 +584,12 @@ namespace Exam_Helper.Controllers
                     _context.Update(qa);
                     await _context.SaveChangesAsync();
                     //return Json(new { success = true });
-                    return RedirectToAction(nameof(Index));
+                    return "dp"+id.ToString();
                 }
             }
 
-            //return RedirectToAction(nameof(Index));
-            return Json(new { success = false });
+            //return Json(new { success = false });
+            return "error";
         }
 
         public RedirectToActionResult QRedirectToTest(int id)

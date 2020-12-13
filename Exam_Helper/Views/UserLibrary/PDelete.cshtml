@@ -1,77 +1,75 @@
 ﻿@model Exam_Helper.Pack
 
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="modal-title" style="color:darkred">Вы точно хотите удалить?</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        </div>
-        <hr />
-        <div class="modal-body">
-            <dl class="row">
-                <dt class="col-sm-2">
-                    Название:
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Name)
-                </dd>
-                <dt class="col-sm-2">
-                    Вопросы:
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.QuestionSet)
-                </dd>
-                <dt class="col-sm-2">
-                    Автор:
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Author)
-                </dd>
-                <dt class="col-sm-2">
-                    Дата создания:
-                </dt>
-                <dd class="col-sm-10">
-                    @Model.CreationDate.ToString("dd.MM.yyyy")
-                </dd>
-                <dt class="col-sm-2">
-                    Дата обновления:
-                </dt>
-                <dd class="col-sm-10">
-                    @Model.UpdateDate.ToString("dd.MM.yyyy")
-                </dd>
-                <dt class="col-sm-2">
-                    Теги:
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.TagsId)
-                </dd>
-            </dl>
-        </div>
-        <div class="modal-footer">
-            <div class="form-group">
-                <div class="d-flex">
-                    <button type="submit" class="btn btn-danger" data-dismiss="modal" onclick="PDeleteConfirmed()">Удалить</button>|
-                    <button type="button" class="btn btn-light" data-dismiss="modal">Вернуться с библиотеку</button>
-                </div>
-
-            </div>
-        </div>
-
+<div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title" style="color:darkred">Вы точно хотите удалить?</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    </div>
+    <hr />
+    <div class="modal-body">
+        <dl class="row">
+            <dt class="col-sm-2">
+                Название:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Name)
+            </dd>
+            <dt class="col-sm-2">
+                Вопросы:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.QuestionSet)
+            </dd>
+            <dt class="col-sm-2">
+                Автор:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Author)
+            </dd>
+            <dt class="col-sm-2">
+                Дата создания:
+            </dt>
+            <dd class="col-sm-10">
+                @Model.CreationDate.ToString("dd.MM.yyyy")
+            </dd>
+            <dt class="col-sm-2">
+                Дата обновления:
+            </dt>
+            <dd class="col-sm-10">
+                @Model.UpdateDate.ToString("dd.MM.yyyy")
+            </dd>
+            <dt class="col-sm-2">
+                Теги:
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.TagsId)
+            </dd>
+        </dl>
     </div>
 
+    <div class="modal-footer">
+        <div class="form-group">
+            <div class="d-flex">
+                <button type="submit" class="btn btn-danger" onclick="PDeleteComfirm()" data-dismiss="modal">Удалить</button>|
+                <button type="button" class="btn btn-light" data-dismiss="modal">Вернуться с библиотеку</button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
 
 <script>
-        function PDeleteConfirmed(){
-
-            $.ajax({
-                type: 'POST',
-                url: 'UserLibrary/PDeleteConfirmed',
-                data: { id: parseInt('@Model.Id') },
-                success: function () {
-                    location.reload();
-                },
-                error: function () {
-                    alert("Что-то пошло не так...");
-                }
-            });
-        }
+    function PDeleteComfirm() {
+        $.ajax({
+            type: "POST",
+            url: 'UserLibrary/PDeleteComfirmed',
+            data: { id: '@Model.Id' },
+            success: function (msg) {
+                $('div[data-fordisabling="' + msg + '"]').remove();
+            },
+            error: function () {
+            }
+        });
+    };
 </script>
