@@ -21,7 +21,7 @@
                 <ul class="list-group" id="questions" style="height: 288px; overflow-y: scroll; width: 284px;">
                     @if (Model.questions == null || Model.questions.Count == 0)
                     {
-                        <span>У вас нет вопросов.</span>
+                        <input class="form-control" id="qInput" type="text" placeholder="У вас нет вопросов.." disabled>
                     }
                     else
                     {

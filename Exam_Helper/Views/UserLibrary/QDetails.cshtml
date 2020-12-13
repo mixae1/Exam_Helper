@@ -9,44 +9,44 @@
     <hr />
     <div class="modal-body">
         <dl class="row">
-            <dt class="col-sm-2">
-                Название:
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.Title):
             </dt>
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Title)
             </dd>
-            <dt class="col-sm-2">
-                Определение:
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.Definition):
             </dt>
             <dd class="col-sm-10" style="white-space: pre-wrap">
                 @Html.DisplayFor(model => model.Definition)
             </dd>
-            <dt class="col-sm-2">
-                Доказательство:
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.Proof):
             </dt>
             <dd class="col-sm-10" style="white-space: pre-wrap">
                 @Html.DisplayFor(model => model.Proof)
             </dd>
-            <dt class="col-sm-2">
-                Автор:
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.Author):
             </dt>
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.Author)
             </dd>
-            <dt class="col-sm-2">
-                Дата создания:
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.CreationDate):
             </dt>
             <dd class="col-sm-10">
                 @Model.CreationDate.ToString("dd.MM.yyyy")
             </dd>
-            <dt class="col-sm-2">
-                Дата обновления:
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.UpdateDate):
             </dt>
             <dd class="col-sm-10">
                 @Model.UpdateDate.ToString("dd.MM.yyyy")
             </dd>
-            <dt class="col-sm-2">
-                Теги:
+            <dt class="col-sm-10">
+                @Html.DisplayNameFor(model => model.TagIds):
             </dt>
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.TagIds)

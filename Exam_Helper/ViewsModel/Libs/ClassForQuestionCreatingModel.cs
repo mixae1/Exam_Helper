@@ -9,18 +9,19 @@ namespace Exam_Helper.ViewsModel
     public class ClassForQuestionCreatingModel
     {   
        
-       public string Proof { get; set; }
+        public string Proof { get; set; }
        
-        [Required]
+        [Required(ErrorMessage = "Определение не задано")]
         public string Definition { get; set; }
 
-        [Required]
-        [MaxLength(100)]
-        [MinLength(1)]
+        [Required(ErrorMessage = "Наименование не задано")]
+        [MaxLength(100, ErrorMessage = "Максимальная длина наименования - 100 символов")]
+        [MinLength(1, ErrorMessage = "Наименование не задано")]
         public string Title { get; set; }
 
         public int Id { get;set; }
 
+        [Display(Name = "Теги")]
         public List<TagForQuestionCreatingModel> tags { get; set; }
 
         
