@@ -17,7 +17,7 @@ namespace Exam_Helper.ViewsModel
         public int Id { get; set; }
 
         [Required(ErrorMessage ="Наименование не задано")]
-        [Display(Name ="Наименование пака")]
+        [Display(Name ="Наименование")]
         public string pack_name { get; set; }
     }
 

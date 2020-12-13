@@ -7,13 +7,15 @@ using System.ComponentModel.DataAnnotations;
 namespace Exam_Helper.ViewsModel
 {
     public class ClassForQuestionCreatingModel
-    {   
-       
+    {
+        [Display(Name = "Доказательство")]
         public string Proof { get; set; }
        
         [Required(ErrorMessage = "Определение не задано")]
+        [Display(Name = "Определение")]
         public string Definition { get; set; }
 
+        [Display(Name = "Наименование")]
         [Required(ErrorMessage = "Наименование не задано")]
         [MaxLength(100, ErrorMessage = "Максимальная длина наименования - 100 символов")]
         [MinLength(1, ErrorMessage = "Наименование не задано")]

@@ -57,13 +57,13 @@
                 <span asp-validation-for="@Model.pack.TagsId" class="text-danger"></span>
             </div>
         </div>
-        <input type="submit" value="Create" class="btn btn-primary mt-3" />
+        <div class="form-group">
+            <input type="submit" value="Создать" class="btn btn-success" />
+            <a asp-action="Index">
+                <button type="button" class="btn btn-secondary">Обратно к списку</button>
+            </a>
+        </div>
     </form>
-
-
-    <a asp-action="Index">
-        <button type="button" class="btn btn-danger mt-3">Обратно к списку</button>
-    </a>
 </main>
 
 <script>
