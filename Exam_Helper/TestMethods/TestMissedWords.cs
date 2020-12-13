@@ -68,7 +68,7 @@ namespace Exam_Helper.TestMethods
                     if (stringUnioner[stringUnioner.Count - 1] != "")
                     {
                         stringUnioner[stringUnioner.Count - 1] = "<span class=\"h5\">" + stringUnioner[stringUnioner.Count - 1] + "</span>";
-                        stringUnioner.Add("<input size=\"5\" class=\"test\" />");
+                        stringUnioner.Add("<input class=\"editablesection\" maxlength=\"" + answers[curr_word].Length + "\" style=\"width: " + answers[curr_word].Length*10 + "px;\" class=\"test\" />");
                     }
                     else
                     {
@@ -79,7 +79,7 @@ namespace Exam_Helper.TestMethods
                 }
                 curr_word++;
             }
-            stringUnioner[stringUnioner.Count - 1] = "<span class=\"h5\">" + stringUnioner[stringUnioner.Count - 1] + "</span>";
+            stringUnioner[stringUnioner.Count - 1] = "<span class=\"h5\"> " + stringUnioner[stringUnioner.Count - 1] + "</span>";
             return stringUnioner.ToArray();
             //return Words.Select((x, i) => answers.ContainsKey(i) ?
             //"<input size=\"5\" class=\"test\" />" :
