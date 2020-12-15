@@ -27,17 +27,17 @@
         </div>
         <div class="form-group pb-3 bd-highlight ml-auto p-2">
             <form asp-action="Index">
-                <input type="text" name="SearchString" class="form-control" placeholder="Поиск..">
+                <input type="text" name="SearchString" class="form-control" placeholder="Поиск.." id="Search">
             </form>
         </div>
         <div class="collapse show" id="collapseAllQuestion">
             @foreach (var item in Model.questions.Where(x=>x.question.IsPrivate==false && x.IsSearched).Select(x=>x.question))
             {
-                <div class="accordion" id="accordionExample">
+                <div class="accordion" id="accordionExample" data-fordisabling="dq@(item.Id)">
                     <div class="card border border-info mt-2 shadow mb-5 bg-white rounded">
                         <div class="card-header bg-white d-flex justify-content-between" id="headingOne">
                             <button class="btn titleText" type="button" data-toggle="collapse" data-target="#q_collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="q_collapse_@item.Id.ToString()">
-                                <span class="h4">@item.Title </span>
+                                <span class="h4" id="qTitle">@item.Title </span>
                             </button>
                             <div class="btn-group  w-25 ml-3 actionButton">
                                 <button type="button" class="btn collapse btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="q_collapse_@item.Id.ToString()" data-parent="#accordionExample">
@@ -63,11 +63,11 @@
                                     if (!string.IsNullOrEmpty(t))
                                     {
                                         <div class="alert alert-info text-center tags mt-3">
-                                            <span class="titleText">@Html.DisplayFor(modelItem => modelItem.tags.Find(x => x.Id == int.Parse(t)).Title) </span>
+                                            <span class="titleText" id="qTags">@Html.DisplayFor(modelItem => modelItem.tags.Find(x => x.Id == int.Parse(t)).Title) </span>
                                         </div>
                                     }
                                 }
-                                <span class="h5 mt-2 mb-3" style="white-space: pre-wrap; margin-bottom: 0rem!important;">@item.Definition</span>
+                                <span class="h5 mt-2 mb-3" style="white-space: pre-wrap; margin-bottom: 0rem!important;" id="qDefinition">@item.Definition</span>
                             </div>
                         </div>
                     </div>
@@ -79,11 +79,11 @@
         <div class="collapse" id="collapseAllPacks">
             @foreach (var item in Model.packs)
             {
-                <div class="accordion" id="accordionExample">
+                <div class="accordion" id="accordionExample" data-fordisabling="dp@(item.Id)">
                     <div class="card border border-info mt-2 shadow mb-5 bg-white rounded">
                         <div class="card-header bg-white d-flex justify-content-between" id="headingOne">
                             <button class="btn" type="button" data-toggle="collapse" data-target="#p_collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="p_collapse_@item.Id.ToString()">
-                                <span class="h4 titleText"> @Html.DisplayFor(modelItem => item.Name) </span>
+                                <span class="h4 titleText" id="pName"> @Html.DisplayFor(modelItem => item.Name) </span>
                             </button>
                             <div class="btn-group  w-25">
                                 <button type="button" class="btn collapse btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="p_collapse_@item.Id.ToString()" data-parent="#accordionExample">
@@ -108,14 +108,14 @@
                                     if (!string.IsNullOrEmpty(t))
                                     {
                                         <div class="alert alert-info w-25 text-center">
-                                            <span>@Html.DisplayFor(modelItem => modelItem.tags.Find(x => x.Id == int.Parse(t)).Title) </span>
+                                            <span id="pTags">@Html.DisplayFor(modelItem => modelItem.tags.Find(x => x.Id == int.Parse(t)).Title) </span>
                                         </div>
                                     }
                                 }
                                 @foreach (var quesId in item.QuestionSet.Split(";"))
                                 {
                                     <div class="d-flex justify-content-between pt-3 pb-3">
-                                        @Html.DisplayFor(model => model.questions.FirstOrDefault(x => x.question.Id.ToString() == quesId).question.Title)
+                                        <span id="pqList">@Html.DisplayFor(model => model.questions.FirstOrDefault(x => x.question.Id.ToString() == quesId).question.Title)</span>
                                     </div>
                                 }
                             </div>
@@ -130,6 +130,29 @@
 
 <script>
 
+    $(document).ready(function () {
+        $("#Search").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("div[data-fordisabling*='dq']").filter(function () {
+                $(this).toggle(
+                    $(this).find("span#qTitle").text().toLowerCase().indexOf(value) > -1 ||
+                    $(this).find("span#qTags").text().toLowerCase().indexOf(value) > -1 ||
+                    $(this).find("span#qDefinition").text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $("#Search").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("div[data-fordisabling*='dp']").filter(function () {
+                $(this).toggle(
+                    $(this).find("span#pName").text().toLowerCase().indexOf(value) > -1 ||
+                    $(this).find("span#pTags").text().toLowerCase().indexOf(value) > -1 ||
+                    $(this).find("span#pqList").text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+    });
     
         $(function () {
             $.ajaxSetup({ cache: false });

@@ -159,7 +159,7 @@
     $(document).ready(function () {
         $("#Search").on("keyup", function () {
             var value = $(this).val().toLowerCase();
-            $("div#accordionExample").filter(function () {
+            $("div[data-fordisabling*='dq']").filter(function () {
                 $(this).toggle(
                     $(this).find("span#qTitle").text().toLowerCase().indexOf(value) > -1 || 
                     $(this).find("span#qTags").text().toLowerCase().indexOf(value) > -1 ||
@@ -168,17 +168,17 @@
         });
     });
 
-    /*$(document).ready(function () {
+    $(document).ready(function () {
         $("#Search").on("keyup", function () {
             var value = $(this).val().toLowerCase();
-            $("div#accordionExample").filter(function () {
+            $("div[data-fordisabling*='dp']").filter(function () {
                 $(this).toggle(
                     $(this).find("span#pName").text().toLowerCase().indexOf(value) > -1 ||
                     $(this).find("span#pTags").text().toLowerCase().indexOf(value) > -1 ||
                     $(this).find("span#pqList").text().toLowerCase().indexOf(value) > -1)
             });
         });
-    });*/
+    });
 
     $(document).ready(function () {
         if (screen.width < 768) {
