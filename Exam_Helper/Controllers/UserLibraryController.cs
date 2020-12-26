@@ -87,7 +87,8 @@ namespace Exam_Helper.Controllers
                     (x.Proof != null && x.Proof.ToLower().Trim().Contains(SearchString)) ||
                     (x.TagIds != null && x.TagIds.ToLower().Trim().Contains(SearchString)) ||
                     x.Definition.ToLower().Trim().Contains(SearchString) ||
-                    x.Author.ToLower().Trim().Contains(SearchString))
+                    x.Author.ToLower().Trim().Contains(SearchString)),
+                    IsSelected = false
             });
 
             //Загружаем тэги
@@ -96,7 +97,7 @@ namespace Exam_Helper.Controllers
             return View(new ClassForUserLibrary
             {
                 packs = await _packs.ToListAsync(),
-                questions = ques,
+                questions = await ques.ToListAsync(),
                 tags = tags
             });
         }
@@ -542,6 +543,47 @@ namespace Exam_Helper.Controllers
             return "error";
         }
 
+        [HttpGet]
+        public async Task<IActionResult> QDeleteSelected(ClassForUserLibrary classForUserLibrary)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return NotFound();//знаю что так не надо делать, но пусть пока так!
+            }
+
+            var ques = classForUserLibrary.questions.Where(x => x.IsSelected).Select(x => x.question.Id);
+
+            var questions = await _context.Question.AsNoTracking().Where(x => ques.Contains(x.Id)).ToListAsync();//Select(x => (x, x.Title))
+
+            return PartialView(questions);
+        }
+
+        public async Task<List<string>> QDeleteSelectedComfirmed(IEnumerable<int> ids)
+        {
+            var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
+
+            if (!string.IsNullOrEmpty(qa.QuestionSet))
+            {
+                List<string> dqs = new List<string>();
+                foreach(var id in ids)
+                {
+                    if (qa.QuestionSet.Contains(id.ToString()))
+                    {
+                        var qs = qa.QuestionSet.Split(';', StringSplitOptions.RemoveEmptyEntries);
+                        qa.QuestionSet = string.Join(';', qs.Where(s => s != id.ToString())) + ';';
+                        _context.Update(qa);
+                        await _context.SaveChangesAsync();
+                        //return Json(new { success = true });
+                        dqs.Add("dq" + id.ToString());
+                    }
+                }
+                return dqs;
+            }
+
+            //return Json(new { success = false });
+            return null;
+        }
 
         // GET: PacksLib/Delete/5
         [HttpGet]

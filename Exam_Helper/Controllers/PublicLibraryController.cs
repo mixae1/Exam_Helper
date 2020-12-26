@@ -81,7 +81,7 @@ namespace Exam_Helper.Controllers
             return View(new ClassForUserLibrary
             {
                 packs = await _packs.ToListAsync(),
-                questions = ques_help,
+                questions = await ques_help.ToListAsync(),
                 tags=tags
             });
         }
