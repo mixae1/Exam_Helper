@@ -4,21 +4,38 @@
 }
 
 <head>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
 </head>
 <main>
     <div>
+
+        @{int num_ans = 0; int num = 0; }
+
         @if (Model.IsSuccessed)
         {
-            @foreach (var block in Model.TestStrings)
-            {
-                <div class="mt-2" style="width:40%;">
-                    <div class="p-0 ">
-                        <div class="border border-info text-center">@block</div>
+            <div class="droppable-elems">
+
+                @foreach (var block in Model.TestStrings)
+                {
+                    <div class="mt-2" style="width:250px;height:30px;float:left;margin:2px;border-bottom-style:double;border-bottom-color:black;" id="@("droppable" + num_ans.ToString())">
+                    </div>
+                    num_ans++;
+                }
+            </div>
+
+            <div class="draggable-elems">
+                @foreach (var block in Model.TestStrings)
+                {
+                    <div class="mt-2" style="width:40%;">
+                        <div class="p-0 " id="@("draggable" + @num.ToString())">
+                            <div class="border border-info text-center">@block</div>
+                        </div>
                     </div>
 
-                </div>
-            }
+                    num++;
+                }
+            </div>
+
             <div class="form-group mt-3">
                 <input type="submit" value="Проверить ответ" class="btn btn-primary" id="CheckAnswers" />
             </div>
@@ -34,15 +51,19 @@
 </main>
 
 <script>
-       $("#CheckAnswers").click(function CheckAnswers() {
+
+    $("#CheckAnswers").click(function CheckAnswers() {
         var ans = [];
-        //for(int i = 0; i< Model.Answers.Length; i++)
-        //{
-        //    :ans.push("(new Microsoft.AspNetCore.Html.HtmlString(Model.Answers[i]))");
-        //}
-        $("input.test").each(function (index) {
-            console.log($(this).val(), " ", ans[index]);
-            if ($(this).val() === ans[index]) {
+         @for(int i = 0; i< Model.RightIndexes.Length; i++)
+        {
+            @:ans.push("@(new Microsoft.AspNetCore.Html.HtmlString(Model.RightIndexes[i].ToString()))");
+        }
+
+
+        $("[id^=droppable]").each(function (index, elem) {
+            var id_elem = $(elem).children("[id^=draggable]");
+            console.log('id is ' + $(id_elem).attr("id"));
+            if ($(id_elem).attr("id") === ('draggable' + ans[index])) {
                 $(this).removeClass("wrong");
                 $(this).addClass("right");
             }
@@ -51,7 +72,35 @@
                 $(this).addClass("wrong");
             }
         });
-       });
+    });
+
+    $(function () {
+
+        $("[id^=draggable]").draggable({ revert: true });
+
+        $("[id^=droppable]").droppable({
+            over: function (event, ui) {
+                $(this).addClass('hover');
+
+            },
+            out: function (event, ui) {
+                $(this).removeClass('hover');
+                $(this).position = 'absolute';
+            },
+            drop: function (event, ui) {
+
+                $(this).remove(ui.draggable);
+                $(this).css('height', ui.draggable.css('height'));
+                $(this).css('width', ui.draggable.css('width'));
+                $(this).append(ui.draggable);
+                $(this).removeClass('hover');
+            }
+
+        });
+    });
+
+
+
 </script>
 
 <style>
@@ -61,6 +110,23 @@
 
     .wrong {
         background-color: red;
+    }
+
+    .hover {
+        border-style: double;
+        border-color: black;
+    }
+
+    .droppable-elems {
+        display: inline-block;
+    }
+
+    .draggable-elems {
+        display: inline-block;
+    }
+
+    .mt-2 {
+        float: left;
     }
 </style>
 
