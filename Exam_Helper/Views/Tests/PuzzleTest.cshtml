@@ -28,7 +28,7 @@
                 {
                     <div class="mt-2" style="width:40%;">
                         <div class="p-0 " id="@("draggable" + @num.ToString())">
-                            <div class="border border-info text-center">@block</div>
+                            <div class="border border-info text-center" style="padding-left:0px ; padding-right:0px;">@block</div>
                         </div>
                     </div>
 
@@ -81,21 +81,27 @@
         $("[id^=droppable]").droppable({
             over: function (event, ui) {
                 $(this).addClass('hover');
-
             },
             out: function (event, ui) {
                 $(this).removeClass('hover');
                 $(this).position = 'absolute';
+             
             },
             drop: function (event, ui) {
+                console.log($(this).children("[id^=draggable]"));
+                if ($(this).children("[id^=draggable]").attr("id") == undefined) {
 
-                $(this).remove(ui.draggable);
-                $(this).css('height', ui.draggable.css('height'));
-                $(this).css('width', ui.draggable.css('width'));
-                $(this).append(ui.draggable);
-                $(this).removeClass('hover');
+                    // измененяем размеры контейнеров (ширину и высоту )первые 2 строки - меняем контейнер в которых кидаем , последние 2 строки - меняем контейнер который переносим
+                    // $(this).css('height', ui.draggable.css('height'));
+                    //  $(this).css('width', ui.draggable.css('width'));
+                    ui.draggable.css('height', $(this).css('height'));
+                    ui.draggable.css('width', $(this).css('width'));
+                    $(this).append(ui.draggable);
+                    $(this).removeClass('hover');
+                }
+                
             }
-
+            
         });
     });
 
