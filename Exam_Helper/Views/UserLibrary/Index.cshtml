@@ -41,7 +41,7 @@
                 <a class="btn btn-primary ml-1" type="button" style="cursor:cell;" asp-action="PCreate">
                     Добавить пак
                 </a>
-                <button type="submit" class="btn btn-primary ml-1 compItem2" asp-action="QDeleteSelected">
+                <button class="btn btn-primary ml-1" type="button" onclick="DeleteSelected()">
                     Удалить выбранное
                 </button>
 
@@ -51,38 +51,37 @@
             </div>
             <div class="panel-group" id="accordionCommon">
                 <div class="collapse show" id="collapseAllQuestion">
-                    @foreach (var item in Model.questions.Where(x => x.IsSearched && x.IsUser).Select((x, i) => (ques: x, index: i)))
+                    @foreach (var item in Model.questions.Where(x => x.IsSearched && x.IsUser))
                     {
-                        <div class="accordion" id="accordionExample" data-fordisabling="dq@(item.ques.question.Id)">
+                        <div class="accordion" id="accordionExample" data-id="@(item.question.Id)" data-type="question">
                             <div class="card border border-info mt-2 shadow mb-5 bg-white rounded">
                                 <div class="card-header bg-white d-flex justify-content-between" id="headingOne">
                                     <div class="d-flex justify-content-start">
-                                        <input asp-for="@Model.questions[item.index].question.Id" hidden/>
-                                        <input type="checkbox" asp-for="@Model.questions[item.index].IsSelected" style="margin:auto;" />
-                                        <button class="btn titleText" type="button" data-toggle="collapse" data-target="#q_collapse_@item.ques.question.Id.ToString()" aria-expanded="false" aria-controls="q_collapse_@item.ques.question.Id.ToString()">
-                                            <span class="h4" id="qTitle">@item.ques.question.Title </span>
+                                        <input type="checkbox" style="margin:auto;" id="qSelect" data-id="@(item.question.Id)"/>
+                                        <button class="btn titleText" type="button" data-toggle="collapse" data-target="#q_collapse_@item.question.Id.ToString()" aria-expanded="false" aria-controls="q_collapse_@item.question.Id.ToString()">
+                                            <span class="h4" id="qTitle">@item.question.Title </span>
                                         </button>
                                     </div>
                                     <div class="btn-group w-25 actionButton">
-                                        <button type="button" class="btn collapse btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="q_collapse_@item.ques.question.Id.ToString()" data-parent="#accordionExample">
+                                        <button type="button" class="btn collapse btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="q_collapse_@item.question.Id.ToString()" data-parent="#accordionExample">
                                             Действия
                                         </button>
                                         <div class="dropdown-menu mt-3 actionButton">
-                                            <a class="dropdown-item" asp-action="QRedirectToTest" asp-route-id="@item.ques.question.Id">Тестирование</a>
-                                            <a class="dropdown-item" asp-action="QEdit" asp-route-id="@item.ques.question.Id">Редактирование</a>
-                                            <a class="dropdown-item compItem" asp-action="QDetails" asp-route-id="@item.ques.question.Id">Подробности</a>
-                                            <a class="dropdown-item compItem" asp-action="QDelete" asp-route-id="@item.ques.question.Id">Удаление</a>
-                                            @if (UserManager.GetUserName(User) == item.ques.question.Author)
+                                            <a class="dropdown-item" asp-action="QRedirectToTest" asp-route-id="@item.question.Id">Тестирование</a>
+                                            <a class="dropdown-item" asp-action="QEdit" asp-route-id="@item.question.Id">Редактирование</a>
+                                            <a class="dropdown-item compItem" asp-action="QDetails" asp-route-id="@item.question.Id">Подробности</a>
+                                            <a class="dropdown-item compItem" asp-action="QDelete" asp-route-id="@item.question.Id">Удаление</a>
+                                            @if (UserManager.GetUserName(User) == item.question.Author)
                                             {
-                                                <a class="dropdown-item" id="@("q" + item.ques.question.Id.ToString())" onclick="ChangeQuestionPrivate(this.id)" style="cursor:pointer;">@(item.ques.question.IsPrivate ? "Опубликовать" : "Скрыть")</a>
+                                                <a class="dropdown-item" id="@("q" + item.question.Id.ToString())" onclick="ChangeQuestionPrivate(this.id)" style="cursor:pointer;">@(item.question.IsPrivate ? "Опубликовать" : "Скрыть")</a>
                                             }
                                         </div>
                                     </div>
                                 </div>
 
-                                <div id="q_collapse_@item.ques.question.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                                <div id="q_collapse_@item.question.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                                     <div class="card-body  d-flex flex-column">
-                                        @foreach (var t in item.ques.question.TagIds.Split(';'))
+                                        @foreach (var t in item.question.TagIds.Split(';'))
                                         {
                                             if (!string.IsNullOrEmpty(t))
                                             {
@@ -91,7 +90,7 @@
                                                 </div>
                                             }
                                         }
-                                        <span class="h5 mt- mb-5" style="white-space: pre-wrap; margin-bottom: 0rem!important;" id="qDefinition">@item.ques.question.Definition</span>
+                                        <span class="h5 mt- mb-5" style="white-space: pre-wrap; margin-bottom: 0rem!important;" id="qDefinition">@item.question.Definition</span>
                                     </div>
                                 </div>
                             </div>
@@ -164,7 +163,7 @@
             var value = $(this).val().toLowerCase();
             $("div[data-fordisabling*='dq']").filter(function () {
                 $(this).toggle(
-                    $(this).find("span#qTitle").text().toLowerCase().indexOf(value) > -1 || 
+                    $(this).find("span#qTitle").text().toLowerCase().indexOf(value) > -1 ||
                     $(this).find("span#qTags").text().toLowerCase().indexOf(value) > -1 ||
                     $(this).find("span#qDefinition").text().toLowerCase().indexOf(value) > -1)
             });
@@ -205,18 +204,28 @@
         });
     });
 
-    $(function () {
-        $.ajaxSetup({ cache: false });
-        $(".compItem2").click(function (e) {
+    function DeleteSelected() {
 
-            e.preventDefault();
+        var buf = [];
 
-            $.get(this.formAction + '?' + $("#form").serialize(), function (data) {
-                $('#dialogContent').html(data);
-                $('#modDialog').modal('show');
-            });
+        $("input[type='checkbox'][id='qSelect']").each(function () {
+            if ($(this).is(':checked')) buf.push(this.dataset.id);
         });
-    });
+
+        $.ajax(
+        {
+            type: "Post",
+            url: '@Url.Action("QDeleteSelected", "UserLibrary")',
+                data: { ids: buf },
+                success: function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                    },
+                error: function (data) {
+
+                    }
+        })
+    }
 
     $("#button_Que").click(function () {
         $('#collapseAllPacks').removeClass('show');
