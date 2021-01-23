@@ -5,17 +5,17 @@ using System.Threading.Tasks;
 
 namespace Exam_Helper.ViewsModel.Libs
 {
-    public class ClassForQDeleteSelectedComfirmed
+    public class ClassForDeleteSelectedComfirmed
     {
         public string Title { get; set; }
         public int Id { get; set; }
 
-        public ClassForQDeleteSelectedComfirmed()
+        public ClassForDeleteSelectedComfirmed()
         {
 
         }
 
-        public ClassForQDeleteSelectedComfirmed(string Title, int Id)
+        public ClassForDeleteSelectedComfirmed(string Title, int Id)
         {
             this.Title = Title;
             this.Id = Id;

@@ -10,7 +10,7 @@
     <div class="modal-body">
         <dl class="row">
             <dt class="col-sm-10">
-                Список вопросов:
+                Список паков:
             </dt>
             @for (int i = 0; i < Model.Count; i++)
             {
@@ -25,7 +25,7 @@
     <div class="modal-footer">
         <div class="form-group">
             <div class="d-flex">
-                <button type="button" class="btn btn-danger" onclick="QDeleteSelectedComfirm()" data-dismiss="modal">Удалить</button>|
+                <button type="button" class="btn btn-danger" onclick="PDeleteSelectedComfirm()" data-dismiss="modal">Удалить</button>|
                 <button type="button" class="btn btn-light" data-dismiss="modal">Вернуться с библиотеку</button>
             </div>
 
@@ -34,7 +34,7 @@
 
 </div>
 <script>
-    function QDeleteSelectedComfirm() {
+    function PDeleteSelectedComfirm() {
         var _ids = [];
         @foreach(var item in Model)
         {
@@ -43,11 +43,11 @@
 
         $.ajax({
         type: "POST",
-            url: '@(Url.ActionLink("QDeleteSelectedComfirmed", "UserLibrary"))',
+            url: '@(Url.ActionLink("PDeleteSelectedComfirmed", "UserLibrary"))',
             data: { ids: _ids }
         }).done(function (dqs) {
 
-            $('div[class="accordion"][id="accordionExample"][data-type="question"]').filter(function () {
+            $('div[class="accordion"][id="accordionExample"][data-type="pack"]').filter(function () {
                 return dqs.includes(this.dataset.id.toString());
             }).remove();
             
