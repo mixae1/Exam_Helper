@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Exam_Helper.ViewsModel;
+using Exam_Helper.ViewsModel.Libs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -87,7 +88,8 @@ namespace Exam_Helper.Controllers
                     (x.Proof != null && x.Proof.ToLower().Trim().Contains(SearchString)) ||
                     (x.TagIds != null && x.TagIds.ToLower().Trim().Contains(SearchString)) ||
                     x.Definition.ToLower().Trim().Contains(SearchString) ||
-                    x.Author.ToLower().Trim().Contains(SearchString))
+                    x.Author.ToLower().Trim().Contains(SearchString)),
+                    IsSelected = false
             });
 
             //Загружаем тэги
@@ -96,7 +98,7 @@ namespace Exam_Helper.Controllers
             return View(new ClassForUserLibrary
             {
                 packs = await _packs.ToListAsync(),
-                questions = ques,
+                questions = await ques.ToListAsync(),
                 tags = tags
             });
         }
@@ -542,6 +544,38 @@ namespace Exam_Helper.Controllers
             return "error";
         }
 
+        public async Task<IActionResult> QDeleteSelected(List<int> ids)
+        {
+            var tuples = await _context.Question.AsNoTracking().Where(x=>ids.Contains(x.Id)).Select(x=> new ClassForDeleteSelectedComfirmed(x.Title, x.Id)).ToListAsync();
+
+            return PartialView(tuples);
+        }
+
+        public async Task<List<string>> QDeleteSelectedComfirmed(List<int> ids)
+        {
+            var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
+
+            if (!string.IsNullOrEmpty(qa.QuestionSet))
+            {
+                var qs = qa.QuestionSet.Split(';', StringSplitOptions.RemoveEmptyEntries).ToHashSet();
+                
+                foreach(var id in ids)
+                {
+                    if(qs.Remove(id.ToString()))
+                    {
+                        //smth
+                    }
+                }
+                qa.QuestionSet = string.Join(';', qs) + ';';
+                _context.Update(qa);
+                await _context.SaveChangesAsync();
+
+                return ids.Select(x => x.ToString()).ToList();
+            }
+
+            //return Json(new { success = false });
+            return null;
+        }
 
         // GET: PacksLib/Delete/5
         [HttpGet]
@@ -596,6 +630,39 @@ namespace Exam_Helper.Controllers
 
             //return Json(new { success = false });
             return "error";
+        }
+
+        public async Task<IActionResult> PDeleteSelected(List<int> ids)
+        {
+            var tuples = await _context.Pack.AsNoTracking().Where(x => ids.Contains(x.Id)).Select(x => new ClassForDeleteSelectedComfirmed(x.Name, x.Id)).ToListAsync();
+
+            return PartialView(tuples);
+        }
+
+        public async Task<List<string>> PDeleteSelectedComfirmed(List<int> ids)
+        {
+            var pa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
+
+            if (!string.IsNullOrEmpty(pa.QuestionSet))
+            {
+                var ps = pa.PackSet.Split(';', StringSplitOptions.RemoveEmptyEntries).ToHashSet();
+
+                foreach (var id in ids)
+                {
+                    if (ps.Remove(id.ToString()))
+                    {
+                        //smth
+                    }
+                }
+                pa.PackSet = string.Join(';', ps) + ';';
+                _context.Update(pa);
+                await _context.SaveChangesAsync();
+
+                return ids.Select(x => x.ToString()).ToList();
+            }
+
+            //return Json(new { success = false });
+            return null;
         }
 
         public RedirectToActionResult QRedirectToTest(int id)

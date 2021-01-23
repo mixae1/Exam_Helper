@@ -19,7 +19,7 @@ namespace Exam_Helper.ViewsModel
         public List<Pack> packs { get; set; }
         public List<Tags> tags { get; set; }
 
-        public IEnumerable<QuestionInfo> questions { get; set; }
+        public List<QuestionInfo> questions { get; set; }
     }
 
 
@@ -29,5 +29,6 @@ namespace Exam_Helper.ViewsModel
         public Question question { get; set; }
         public bool IsUser { get; set; }
         public bool IsSearched { get; set; }
+        public bool IsSelected { get; set; }
     }
 }
