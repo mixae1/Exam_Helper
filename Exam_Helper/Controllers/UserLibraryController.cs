@@ -546,7 +546,7 @@ namespace Exam_Helper.Controllers
 
         public async Task<IActionResult> QDeleteSelected(List<int> ids)
         {
-            var tuples = await _context.Question.AsNoTracking().Where(x=>ids.Contains(x.Id)).Select(x=> new ClassForDeleteSelectedComfirmed(x.Title, x.Id)).ToListAsync();
+            var tuples = await _context.Question.AsNoTracking().Where(x=>ids.Contains(x.Id)).Select(x=> new ClassForSelectedComfirmed(x.Title, x.Id)).ToListAsync();
 
             return PartialView(tuples);
         }
@@ -634,7 +634,7 @@ namespace Exam_Helper.Controllers
 
         public async Task<IActionResult> PDeleteSelected(List<int> ids)
         {
-            var tuples = await _context.Pack.AsNoTracking().Where(x => ids.Contains(x.Id)).Select(x => new ClassForDeleteSelectedComfirmed(x.Name, x.Id)).ToListAsync();
+            var tuples = await _context.Pack.AsNoTracking().Where(x => ids.Contains(x.Id)).Select(x => new ClassForSelectedComfirmed(x.Name, x.Id)).ToListAsync();
 
             return PartialView(tuples);
         }
@@ -767,6 +767,35 @@ namespace Exam_Helper.Controllers
                 await _context.SaveChangesAsync();
                 return true;
             }
+        }
+
+        public async Task<IActionResult> ChangeQuestionPrivateSelected(List<int> ids, bool publish)
+        {
+            var qa = await _context.User.AsNoTracking().FirstAsync(x => x.UserName == User.Identity.Name);
+            var tuples = await _context.Question.AsNoTracking().Where(x => ids.Contains(x.Id) && qa.QuestionSet.Contains(x.Id.ToString()) && x.IsPrivate == publish).Select(x => new ClassForSelectedComfirmed(x.Title, x.Id)).ToListAsync();
+
+            return PartialView(new ClassForChangePrivateSelectedConfirmed(tuples, publish));
+        }
+
+        public async Task<string> ChangeQuestionPrivateSelectedComfirmed(List<int> ids, bool publish)
+        {
+            var qa = await _context.User.AsNoTracking().FirstAsync(x => x.UserName == User.Identity.Name);
+
+            foreach(var id in ids)
+            {
+                if (qa.QuestionSet.Contains(id.ToString()))
+                {
+                    var temp = await _context.Question.FindAsync(id);
+
+                    temp.IsPrivate = !publish;
+
+                    _context.Update(temp);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            return "inDeveloping";
         }
 
         public async Task<bool> ChangePackPrivate(string pack_id)

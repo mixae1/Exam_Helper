@@ -2,7 +2,7 @@
 
 <div class="modal-content">
     <div class="modal-header">
-        <h4 class="modal-title" style="color:darkred">Вы точно хотите удалить?</h4>
+        <h4 class="modal-title" style="color:darkred">Вы точно хотите добавить?</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     </div>
 
@@ -10,7 +10,7 @@
     <div class="modal-body">
         <dl class="row">
             <dt class="col-sm-10">
-                Список паков:
+                Список вопросов:
             </dt>
             @for (int i = 0; i < Model.Count; i++)
             {
@@ -25,7 +25,7 @@
     <div class="modal-footer">
         <div class="form-group">
             <div class="d-flex">
-                <button type="button" class="btn btn-danger" onclick="PDeleteSelectedComfirm()" data-dismiss="modal">Удалить</button>|
+                <button type="button" class="btn btn-danger" onclick="QAddSelectedComfirm()" data-dismiss="modal">Добавить</button>|
                 <button type="button" class="btn btn-light" data-dismiss="modal">Вернуться с библиотеку</button>
             </div>
 
@@ -34,7 +34,7 @@
 
 </div>
 <script>
-    function PDeleteSelectedComfirm() {
+    function QAddSelectedComfirm() {
         var _ids = [];
         @foreach(var item in Model)
         {
@@ -43,13 +43,13 @@
 
         $.ajax({
         type: "POST",
-            url: '@(Url.ActionLink("PDeleteSelectedComfirmed", "UserLibrary"))',
+            url: '@(Url.ActionLink("QAddSelectedComfirmed", "PublicLibrary"))',
             data: { ids: _ids }
         }).done(function (dqs) {
 
-            $('div[class="accordion"][id="accordionExample"][data-type="pack"]').filter(function () {
-                return dqs.includes(this.dataset.id.toString());
-            }).remove();
+            //$('div[class="accordion"][id="accordionExample"][data-type="question"]').filter(function () {
+            //    return dqs.includes(this.dataset.id.toString());
+            //}).remove();
             
         })
     };

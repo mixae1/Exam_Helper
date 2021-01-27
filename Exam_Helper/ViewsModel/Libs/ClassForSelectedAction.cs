@@ -5,20 +5,32 @@ using System.Threading.Tasks;
 
 namespace Exam_Helper.ViewsModel.Libs
 {
-    public class ClassForDeleteSelectedComfirmed
+    public class ClassForSelectedComfirmed
     {
         public string Title { get; set; }
         public int Id { get; set; }
 
-        public ClassForDeleteSelectedComfirmed()
+        public ClassForSelectedComfirmed()
         {
 
         }
 
-        public ClassForDeleteSelectedComfirmed(string Title, int Id)
+        public ClassForSelectedComfirmed(string Title, int Id)
         {
             this.Title = Title;
             this.Id = Id;
+        }
+    }
+
+    public class ClassForChangePrivateSelectedConfirmed
+    {
+        public List<ClassForSelectedComfirmed> tuples { get; set; }
+        public bool publish { get; set; }
+
+        public ClassForChangePrivateSelectedConfirmed(List<ClassForSelectedComfirmed> tuples, bool publish)
+        {
+            this.tuples = tuples;
+            this.publish = publish;
         }
     }
 }
