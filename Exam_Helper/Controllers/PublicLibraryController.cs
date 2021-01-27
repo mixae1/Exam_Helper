@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Exam_Helper.ViewsModel;
+using Exam_Helper.ViewsModel.Libs;
 
 namespace Exam_Helper.Controllers
 {
@@ -177,6 +179,32 @@ namespace Exam_Helper.Controllers
             }
         }
         
+        public async Task<IActionResult> QAddSelected(List<int> ids)
+        {
+            var qa = await _context.User.AsNoTracking().FirstAsync(x => x.UserName == User.Identity.Name);
+            var tuples = await _context.Question.AsNoTracking().Where(x => ids.Contains(x.Id) && !qa.QuestionSet.Contains(x.Id.ToString())).Select(x => new ClassForSelectedComfirmed(x.Title, x.Id)).ToListAsync();
+
+            return PartialView(tuples);
+        }
+
+        public async Task<string> QAddSelectedComfirmed(List<int> ids)
+        {
+            var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
+
+            if (string.IsNullOrEmpty(qa.QuestionSet))
+                qa.QuestionSet = "";
+            foreach(var id in ids)
+            {
+                if (!qa.QuestionSet.Contains(ids.ToString()))
+                {
+                    qa.QuestionSet += id.ToString() + ";";
+                }
+            }
+            _context.Update(qa);
+            await _context.SaveChangesAsync();
+            return "InDeveloping";
+        }
+
         public async Task<bool> AddPackToMyLib(string pack_id)
         {
             var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);

@@ -24,6 +24,14 @@
             <button class="btn btn-primary ml-1" type="button" id="button_Pack" data-toggle="collapse" data-target="#collapseAllPacks" aria-expanded="true" aria-controls="collapseAllPacks">
                 Паки
             </button>
+            @{
+                if (_signInManager.IsSignedIn(User))
+                {
+                    <button class="btn btn-primary ml-1" type="button" onclick="EngageSelected('add')" id="AddSelectedButton">
+                        Добавить выделенное
+                    </button>
+                }
+            }
         </div>
         <div class="form-group pb-3 bd-highlight ml-auto p-2">
             <form asp-action="Index">
@@ -31,14 +39,22 @@
             </form>
         </div>
         <div class="collapse show" id="collapseAllQuestion">
-            @foreach (var item in Model.questions.Where(x=>x.question.IsPrivate==false && x.IsSearched).Select(x=>x.question))
+            @foreach (var item in Model.questions.Where(x => x.question.IsPrivate == false && x.IsSearched).Select(x => x.question))
             {
-                <div class="accordion" id="accordionExample" data-fordisabling="dq@(item.Id)">
+                <div class="accordion" id="accordionExample" data-fordisabling="dq@(item.Id)" data-id="@(item.Id)" data-type="question">
                     <div class="card border border-info mt-2 shadow mb-5 bg-white rounded">
                         <div class="card-header bg-white d-flex justify-content-between" id="headingOne">
-                            <button class="btn titleText" type="button" data-toggle="collapse" data-target="#q_collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="q_collapse_@item.Id.ToString()">
-                                <span class="h4" id="qTitle">@item.Title </span>
-                            </button>
+                            <div class="d-flex justify-content-start">
+                                @{
+                                    if (_signInManager.IsSignedIn(User))
+                                    {
+                                        <input type="checkbox" style="margin:auto;" id="qSelect" />
+                                    }
+                                }
+                                <button class="btn titleText" type="button" data-toggle="collapse" data-target="#q_collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="q_collapse_@item.Id.ToString()">
+                                    <span class="h4" id="qTitle">@item.Title </span>
+                                </button>
+                            </div>
                             <div class="btn-group  w-25 ml-3 actionButton">
                                 <button type="button" class="btn collapse btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="q_collapse_@item.Id.ToString()" data-parent="#accordionExample">
                                     Действия
@@ -79,18 +95,26 @@
         <div class="collapse" id="collapseAllPacks">
             @foreach (var item in Model.packs)
             {
-                <div class="accordion" id="accordionExample" data-fordisabling="dp@(item.Id)">
+                <div class="accordion" id="accordionExample" data-fordisabling="dp@(item.Id)" data-id="@(item.Id)" data-type="pack">
                     <div class="card border border-info mt-2 shadow mb-5 bg-white rounded">
                         <div class="card-header bg-white d-flex justify-content-between" id="headingOne">
-                            <button class="btn" type="button" data-toggle="collapse" data-target="#p_collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="p_collapse_@item.Id.ToString()">
-                                <span class="h4 titleText" id="pName"> @Html.DisplayFor(modelItem => item.Name) </span>
-                            </button>
+                            <div class="d-flex justify-content-start">
+                                @{
+                                    if (_signInManager.IsSignedIn(User))
+                                    {
+                                        <input type="checkbox" style="margin:auto;" id="pSelect" />
+                                    }
+                                }
+                                <button class="btn" type="button" data-toggle="collapse" data-target="#p_collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="p_collapse_@item.Id.ToString()">
+                                    <span class="h4 titleText" id="pName"> @Html.DisplayFor(modelItem => item.Name) </span>
+                                </button>
+                            </div>
                             <div class="btn-group  w-25">
                                 <button type="button" class="btn collapse btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="p_collapse_@item.Id.ToString()" data-parent="#accordionExample">
                                     Действия
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item"  asp-controller="Home" asp-action="PackTests">Тестирование</a>
+                                    <a class="dropdown-item" asp-controller="Home" asp-action="PackTests">Тестирование</a>
                                     <a class="dropdown-item compItem" asp-action="PDetails" asp-route-id="@item.Id">Подробности</a>
                                     @{
                                         if (_signInManager.IsSignedIn(User))
@@ -129,6 +153,10 @@
 </main>
 
 <script>
+    var Page = { None: 0, QuestionPage: 1, PackPage: 2 };
+
+    var SearchString = $("#Search");
+    var SelectedPage = Page.QuestionPage;
 
     $(document).ready(function () {
         $("#Search").on("keyup", function () {
@@ -153,24 +181,79 @@
             });
         });
     });
-    
-        $(function () {
-            $.ajaxSetup({ cache: false });
-            $(".compItem").click(function (e) {
 
-                e.preventDefault();
-                $.get(this.href, function (data) {
-                    $('#dialogContent').html(data);
-                    $('#modDialog').modal('show');
-                });
+    $(function () {
+        $.ajaxSetup({ cache: false });
+        $(".compItem").click(function (e) {
+
+            e.preventDefault();
+            $.get(this.href, function (data) {
+                $('#dialogContent').html(data);
+                $('#modDialog').modal('show');
             });
         });
+    });
+
+    function EngageSelected(arg) {
+
+        var buf = [];
+
+        if (SelectedPage == Page.None) {
+            alert("Ни одна из вкладок не открыта.");
+        }
+        else {
+
+            if (SelectedPage == Page.QuestionPage) {
+                $("input[type='checkbox'][id='qSelect']").each(function () {
+                    var chBox = $(this);
+                    if (chBox.is(':checked')) buf.push(chBox.closest("div.accordion#accordionExample").data('id'));
+                });
+            }
+
+            if (SelectedPage == Page.PackPage) {
+                $("input[type='checkbox'][id='pSelect']").each(function () {
+                    var chBox = $(this);
+                    if (chBox.is(':checked')) buf.push(chBox.closest("div.accordion#accordionExample").data('id'));
+                });
+            }
+
+            if (buf.length == 0) {
+                if (SelectedPage == Page.QuestionPage) alert("Ни один вопрос не выбран.");
+                if (SelectedPage == Page.PackPage) alert("Ни один пак не выбран.");
+            }
+            else {
+
+                if (arg == "add") {
+                    __url = (SelectedPage == Page.QuestionPage ? '@Url.Action("QAddSelected", "PublicLibrary")' : '@Url.Action("PAddSelected", "PublicLibrary")');
+                    __data = { ids: buf };
+                }
+
+                $.ajax(
+                {
+                    type: "Post",
+                    url: __url,
+                    data: __data,
+                    success: function (data) {
+                        $('#dialogContent').html(data);
+                        $('#modDialog').modal('show');
+                        },
+                    error: function (data) {
+                        alert("Что-то пошло не так");
+                        }
+                })
+            }
+        }
+    }
 
     $("#button_Que").click(function () {
-        $('#collapseAllPacks').removeClass('show')
+        $('#collapseAllPacks').removeClass('show');
+        if (SelectedPage != Page.QuestionPage) SelectedPage = Page.QuestionPage;
+        else SelectedPage = Page.None;
     });
     $("#button_Pack").click(function () {
-        $('#collapseAllQuestion').removeClass('show')
+        $('#collapseAllQuestion').removeClass('show');
+        if (SelectedPage != Page.PackPage) SelectedPage = Page.PackPage;
+        else SelectedPage = Page.None;
     });
 
     function AddQuestion(id) {
@@ -178,7 +261,7 @@
 
         if (a.innerHTML != "Добавить") {
             //alert("Error:223");
-            return false; 
+            return false;
         }
          a.innerHTML = "Пожалуйста, подождите, идёт процесс добавления...";
         $.ajax(
