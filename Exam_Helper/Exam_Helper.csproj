@@ -5,6 +5,12 @@
     <UserSecretsId>c50ac928-a1bc-40c3-9f00-75b85c3f2c8b</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Views\UserLibrary\Packs\**" />
     <Compile Remove="Views\UserLibrary\Questions\**" />
