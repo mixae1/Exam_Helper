@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
+﻿
 namespace Exam_Helper.ViewsModel
 {
-    public class TestInfoPuzzle
+    public class TestInfoPuzzle:TestParent
     {
         public int[] RightIndexes { get; set; }
 
@@ -13,9 +9,14 @@ namespace Exam_Helper.ViewsModel
 
         public bool IsSuccessed { get; set; }
 
-        public TestInfoPuzzle()
+        public TestInfoPuzzle():base()
         {
 
+        }
+
+        public void Foo()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

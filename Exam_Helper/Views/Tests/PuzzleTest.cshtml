@@ -1,6 +1,8 @@
-﻿@model Exam_Helper.ViewsModel.TestInfoPuzzle
+﻿@using Exam_Helper.ViewsModel
+@model Exam_Helper.ViewsModel.TestParent
 @{
     ViewData["Title"] = "View";
+    var Temp_Model = Model as TestInfoPuzzle;
 }
 
 <head>
@@ -11,11 +13,11 @@
 
         @{int num_ans = 0; int num = 0; }
 
-        @if (Model.IsSuccessed)
+        @if (Temp_Model.IsSuccessed)
         {
             <div class="droppable-elems">
 
-                @foreach (var block in Model.TestStrings)
+                @foreach (var block in Temp_Model.TestStrings)
                 {
                     <div class="mt-2" id="@("droppable" + num_ans.ToString())">
                     </div>
@@ -24,7 +26,7 @@
             </div>
 
             <div class="draggable-elems">
-                @foreach (var block in Model.TestStrings)
+                @foreach (var block in Temp_Model.TestStrings)
                 {
                     <div class="mt-auto flex-nowrap">
                         <div class="p-0 " id="@("draggable" + @num.ToString())">
@@ -54,9 +56,9 @@
 
     $("#CheckAnswers").click(function CheckAnswers() {
         var ans = [];
-         @for(int i = 0; i< Model.RightIndexes.Length; i++)
+         @for(int i = 0; i< Temp_Model.RightIndexes.Length; i++)
         {
-            @:ans.push("@(new Microsoft.AspNetCore.Html.HtmlString(Model.RightIndexes[i].ToString()))");
+            @:ans.push("@(new Microsoft.AspNetCore.Html.HtmlString(Temp_Model.RightIndexes[i].ToString()))");
         }
 
 

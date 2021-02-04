@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Exam_Helper.ViewsModel.Tests;
 
 namespace Exam_Helper.ViewsModel
 {
-    public class TestInfoMissedWords
+    public class TestInfoMissedWords:TestParent
     {   
         public string[] Teorem { get; set; }
 
@@ -13,9 +10,14 @@ namespace Exam_Helper.ViewsModel
 
         public bool IsSuccessed { get; set; }
 
-        public TestInfoMissedWords()
+        public TestInfoMissedWords():base()
         {
 
+        }
+
+        public void Foo()
+        {
+            throw new System.NotImplementedException();
         }
     }
     
