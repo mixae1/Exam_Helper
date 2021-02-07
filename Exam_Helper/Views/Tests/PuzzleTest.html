@@ -1,0 +1,298 @@
+﻿<!doctype html>
+<html lang="ru">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <title>Puzzle Test</title>
+    <link href="StyleSheetLibrary.css" rel="stylesheet" type="text/css">
+
+    <style>
+        .instruction{
+            text-align:center;
+        }
+
+
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" style="text-decoration: none;" href="/"> ExamHelper</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="nav nav-tabs mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="/">Домашняя страница</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="/UserLibrary">Моя библиотека</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" href="/PublicLibrary">Библиотека</a>
+                    </li>
+
+                </ul>
+                <a class="mr-2" id="registration" method="get" href="/UserAccount/Registration">Регистрация</a>
+                <a class="mr-2" id="login" method="get" href="/UserAccount/Login">Вход</a>
+                <img style="height: 4vh; border-radius: 15%;" src="https://shwanoff.ru/wp-content/uploads/2017/12/bootstrap-social.png" alt="">
+            </div>
+
+        </nav>
+
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            <main>
+                <div>
+                    <br />
+                    <div class="instruction">
+                        <h6><span><b>Расставьте части предложения в правильном порядке:</b></span></h6>
+                    </div>
+                    <br />
+                    <div class="draggable-elems">
+                        <div class="mt-auto flex-nowrap">
+                            <div class="p-0 ui-draggable ui-draggable-handle" id="draggable0" style="position: relative;">
+                                <div class="border border-info text-center" style="padding-left:0px ; padding-right:0px;" >у вас </div>
+                            </div>
+                        </div>
+                        <div class="mt-auto flex-nowrap">
+                            <div class="p-0 ui-draggable ui-draggable-handle" id="draggable1" style="position: relative;">
+                                <div class="border border-info text-center" style="padding-left:0px ; padding-right:0px;">добавление вопросов? </div>
+                            </div>
+                        </div>
+                        <div class="mt-auto flex-nowrap">
+                            <div class="p-0 ui-draggable ui-draggable-handle" id="draggable2" style="position: relative;">
+                                <div class="border border-info text-center" style="padding-left:0px ; padding-right:0px;">Работает ли </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="droppable-elems">
+
+                        <div class="mt-2 ui-droppable" id="droppable0">
+                        </div>
+                        <div class="mt-2 ui-droppable" id="droppable1">
+                        </div>
+                        <div class="mt-2 ui-droppable" id="droppable2">
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <input type="submit" value="Проверить ответ" class="btn btn-primary" id="CheckAnswers">
+                    </div>
+                    <div class="form-group2 mt-3">
+                        <a href="/PublicLibrary">
+                            <input type="button" value="Вернуться в библиотеку" class="btn btn-primary">
+                        </a>
+                    </div>
+                    </div>
+</main>
+
+            <script>
+
+    $("#CheckAnswers").click(function CheckAnswers() {
+        var ans = [];
+            ans.push("2");
+            ans.push("0");
+            ans.push("1");
+
+
+        $("[id^=droppable]").each(function (index, elem) {
+            var id_elem = $(elem).children("[id^=draggable]");
+            console.log('id is ' + $(id_elem).attr("id"));
+            if ($(id_elem).attr("id") === ('draggable' + ans[index])) {
+                $(this).removeClass("wrong");
+                $(this).addClass("right");
+            }
+            else {
+                $(this).removeClass("right");
+                $(this).addClass("wrong");
+            }
+        });
+    });
+
+    $(function () {
+
+        $("[id^=draggable]").draggable({ revert: true });
+
+        $("[id^=droppable]").droppable({
+            over: function (event, ui) {
+                if ($(this).children("[id^=draggable]").attr("id") == undefined)
+                $(this).addClass('hover');
+            },
+            out: function (event, ui) {
+                $(this).removeClass('hover');
+                $(this).position = 'absolute';
+
+            },
+            drop: function (event, ui) {
+                console.log($(this).children("[id^=draggable]"));
+                if ($(this).children("[id^=draggable]").attr("id") == undefined) {
+
+                    // измененяем размеры контейнеров (ширину и высоту )первые 2 строки - меняем контейнер в которых кидаем , последние 2 строки - меняем контейнер который переносим
+                    // $(this).css('height', ui.draggable.css('height'));
+                      $(this).css('width', ui.draggable.css('width'));
+                      ui.draggable.css('height', $(this).css('height'));
+                    //ui.draggable.css('width', $(this).css('width'));
+                    $(this).append(ui.draggable);
+                    $(this).removeClass('hover');
+                }
+
+            }
+
+        });
+    });
+
+
+
+            </script>
+
+            <style>
+                .right {
+                    background-color: green;
+                }
+
+                .wrong {
+                    background-color: red;
+                }
+
+                .hover {
+                    border-style: double;
+                    border-color: black;
+                }
+
+                .droppable-elems {
+                    display: inline-block;
+                }
+
+                .draggable-elems {
+                    display: inline-block;
+                }
+
+                .mt-2 {
+                    float: left;
+                    width: 350px;
+                    height: 30px;
+                    float: left;
+                    margin: 5px;
+                    border-bottom-style: double;
+                    border-bottom-color: black;
+                }
+                .form-group{
+                    float:left;
+                    margin-right:50px;
+                }
+                .flex-nowrap{
+                    float:left;
+                    margin-right:40px;
+                }
+
+                @media screen and (max-width:1200px) {
+                    .mt-2 {
+                        float: left;
+                        width: 270px;
+                    }
+                }
+
+                @media screen and (max-width:1100px) {
+                    .mt-2 {
+                        float: left;
+                        width: 245px;
+                    }
+                }
+
+                @media screen and (max-width:1000px) {
+                    .mt-2 {
+                        float: left;
+                        width: 215px;
+                    }
+                }
+
+                @media screen and (max-width:800px) {
+                    .mt-2 {
+                        float: left;
+                        width: 175px;
+                    }
+                }
+
+                @media screen and (max-width:770px) {
+                    .mt-2 {
+                        float: left;
+                        width: 140px;
+                    }
+                }
+
+                @media screen and (max-width:600px) {
+                    .mt-2 {
+                        float: left;
+                        width: 120px;
+                    }
+                }
+
+                @media screen and (max-width:450px) {
+                    .mt-2 {
+                        float: left;
+                        width: 100px;
+                    }
+                    .p-0{
+                        width:70px;
+                        font-size:12px;
+                        text-align:center;
+                        margin-right:5px;
+                        margin-bottom:5px;
+                    }
+                }
+                @media screen and (max-width:370px) {
+                    .mt-2 {
+                        float:left;
+                        width: 70px;
+                    }
+                    .p-0 {
+                        width: 60px;
+                        font-size: 11px;
+                        text-align: center;
+                        margin-right: 5px;
+                        margin-bottom: 5px;
+                    }
+                   
+                }
+                @media screen and (max-width:300px) {
+                    .mt-2 {
+                        float: left;
+                        width: 50px;
+                    }
+                    .p-0 {
+                        width: 45px;
+                        font-size: 8px;
+                        text-align: center;
+                    }
+                }
+                @media screen and (max-width:300px) {
+                    .mt-2 {
+                        float: left;
+                        width: 40px;
+                    }
+
+                    .p-0 {
+                        width: 40px;
+                        font-size: 7px;
+                        text-align: center;
+                    }
+                }
+            </style>
+
+
+
+        </main>
+    </div>
+    <center>
+        <a href="http://somee.com">Web hosting by Somee.com</a>
+    </center>
+</body>
+</html>
