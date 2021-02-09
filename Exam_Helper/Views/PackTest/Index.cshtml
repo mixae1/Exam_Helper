@@ -1,0 +1,51 @@
+﻿@model Exam_Helper.ViewsModel.TestChoiceViewModel
+
+<main style="height: 75vh;" class="d-flex align-items-center justify-content-center">
+    <form asp-action="Index" method="post">
+        <h2>
+            Выберете метод тестирования:
+        </h2>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        @for (int i = 0; i < Model.TestMethodsNames.Length; i++)
+        {
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="d-flex justify-content-between pt-3 pb-2">
+                            <div class="input-group">
+                                <div class="input-group-prepend bg-white mr-3">
+                                    <div class="input-group-text">
+                                        <input asp-for="@Model.SelectedId" value="@Model.TestsMethodsIds[i]" type="radio" id="method" method-type="@Model.TestMethodsNames[i]" />
+                                        <input asp-for="@Model.TestsMethodsIds[i]" type="hidden" />
+                                        <input asp-for="@Model.ServiceInfo" type="hidden" id="ServiceInfo" />
+                                        <span asp-validation-for="@Model.SelectedId" hidden></span>
+                                    </div>
+                                    <button class="btn btn-light border" style="background-color: #e9ecef; border-color:#e9ecef;" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
+                                        <span asp-for="@Model.TestsMethodsIds[i]">
+                                           @Model.TestMethodsNames[i]
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="collapse_@Model.TestMethodsNames[i]" class="panel-collapse collapse in">
+                        <div class="panel-body">
+                           <!-- код для пользовательских настроек -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        }
+        <div class="form-group">
+            <input type="submit" value="Сделать выбор" class="btn btn-primary" id="sumbit" onclick="MakeInstruction()" />
+        </div>
+        <a asp-controller="PublicLibrary" asp-action="Index">
+            <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
+        </a>
+    </form>
+
+
+</main>
+

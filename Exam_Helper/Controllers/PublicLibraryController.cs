@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-using Exam_Helper.ViewsModel;
 using Exam_Helper.ViewsModel.Libs;
 
 namespace Exam_Helper.Controllers
@@ -148,6 +147,17 @@ namespace Exam_Helper.Controllers
             HttpContext.Session.SetInt32("question_id", id);
             return RedirectToAction(nameof(Index), nameof(Tests));
         }
+
+        [Authorize]
+        public RedirectToActionResult PRedirectToTest(int id)
+        {
+            HttpContext.Session.Remove("pack_id");
+            HttpContext.Session.Remove("pack");
+            HttpContext.Session.SetInt32("pack_id", id);
+            return RedirectToAction(nameof(Index),"PackTest");
+        }
+
+
 
         private bool QuestionExists(int id)
         {
