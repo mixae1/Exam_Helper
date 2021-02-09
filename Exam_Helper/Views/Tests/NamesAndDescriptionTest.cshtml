@@ -1,0 +1,89 @@
+﻿@model Exam_Helper.ViewsModel.TestInfoNamesAndDescription;
+@{ ViewData["Title"] = "View"; }
+
+<head>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+</head>
+
+<main style="height: 85vh;" class="d-flex align-items-center">
+    <div>
+        <div class="borderstyle1">@Model.Description</div>
+
+        <div><p></p></div>
+
+        <div>
+            @for (int i = 0; i < Model.Names.Count; ++i)
+            {
+                <span class="borderstyle2">
+                    <input type="radio" id="i" name="FinalNames" value="i">
+                    <label for="i">@Model.Names[i]</label>
+                </span>
+            }
+        </div>
+
+        <div class="form-group mt-3 ml-2 mr-2">
+            <input type="submit" value="Проверить ответ" class="btn btn-primary" id="CheckAnswers" />
+        </div>
+
+        <a asp-controller="PublicLibrary" asp-action="Index">
+            <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
+        </a>
+    </div>
+</main>
+
+
+<script>
+
+    $("#CheckAnswers").click(function CheckAnswers() {
+        $('input[id=="@Model.AnswerID"]');
+        if ($(this).is(":checked")) {
+            $(this).removeClass("borderstyleWrong");
+            $(this).addClass("borderstyleRight");
+        }
+        else {
+            $(this).addClass("borderstyleRight");
+            $(this).removeClass("borderstyleWrong");
+        }
+       });
+
+</script>
+
+<style>
+    .borderstyle1 {
+        border: 4px double green;
+        padding: 10px;
+    }
+
+    .borderstyle2 {
+        border: 4px double blue;
+        padding: 10px;
+    }
+
+    .borderstyleRight {
+        border: 4px double green;
+        padding: 10px;
+    }
+
+    .borderstyleWrong {
+        border: 4px double red;
+        padding: 10px;
+    }
+
+    .editablesection {
+        background-color: #ffffff;
+        display: inline-block;
+        border: none;
+        padding: 0;
+        outline-offset: 0;
+        height: 1.2em;
+        font: inherit;
+        margin: 0;
+        box-sizing: inherit;
+    }
+</style>
+
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
