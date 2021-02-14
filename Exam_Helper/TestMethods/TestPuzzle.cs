@@ -151,15 +151,18 @@ namespace Exam_Helper.TestMethods
 
         private bool CreateTest()
         {
+            //One more ambit                        -editable
+            if (objs.Count < MIN_BLOCKS * MIN_OBJ_IN_BLOCK) return false;
+
             //Counting obj in a block for [isDiffLenghtOfBlocks=false]
             obj_in_block = 
                 percent * MAX_OBJ_IN_BLOCK < MIN_OBJ_IN_BLOCK ?
                 MIN_OBJ_IN_BLOCK :
                 (int)(percent * MAX_OBJ_IN_BLOCK);
             //Counting blocks for [separatingIndex=0]
-            blocks_amount = 
-                objs.Count / obj_in_block + 
-                (objs.Count % obj_in_block == 0 ? 0 : 1);
+            blocks_amount =
+                objs.Count / obj_in_block;
+                //+ (objs.Count % obj_in_block == 0 ? 0 : 1);
 
             //Checking an ambit for [block_amount]
             if (blocks_amount < MIN_BLOCKS) blocks_amount = MIN_BLOCKS;
@@ -168,9 +171,6 @@ namespace Exam_Helper.TestMethods
             right_index_order = new int[blocks_amount];
             test_strings = new string[blocks_amount];
             blocks = new string[blocks_amount];
-
-            //One more ambit                        -editable
-            if (objs.Count < MIN_BLOCKS * MIN_OBJ_IN_BLOCK) return false;
             
             Random rnd = new Random();
 
@@ -220,6 +220,7 @@ namespace Exam_Helper.TestMethods
             }
             else
             {
+                //???
                 while(!(obj_in_block * blocks_amount - (obj_in_block - 1) <= objs.Count || obj_in_block * blocks_amount == objs.Count))
                 {
                     if (--obj_in_block < MIN_OBJ_IN_BLOCK) return false;
