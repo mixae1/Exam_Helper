@@ -18,15 +18,18 @@
             <dt class="col-sm-10">
                 @Html.DisplayNameFor(model => model.Definition):
             </dt>
-            <dd class="col-sm-10" style="white-space: pre-wrap">
-                @Html.DisplayFor(model => model.Definition)
+            <dd class="col-sm-10">
+                <span style="white-space: pre-wrap">@Model.Definition</span>
             </dd>
-            <dt class="col-sm-10">
-                @Html.DisplayNameFor(model => model.Proof):
-            </dt>
-            <dd class="col-sm-10" style="white-space: pre-wrap">
-                @Html.DisplayFor(model => model.Proof)
-            </dd>
+            @if (!string.IsNullOrEmpty(Model.Proof))
+            {
+                <dt class="col-sm-10">
+                    @Html.DisplayNameFor(model => model.Proof):
+                </dt>
+                <dd class="col-sm-10">
+                    <span style="white-space: pre-wrap;">@Model.Proof</span>
+                </dd>
+            }
             <dt class="col-sm-10">
                 @Html.DisplayNameFor(model => model.Author):
             </dt>
@@ -45,12 +48,15 @@
             <dd class="col-sm-10">
                 @Model.UpdateDate.ToString("dd.MM.yyyy")
             </dd>
-            <dt class="col-sm-10">
-                @Html.DisplayNameFor(model => model.TagIds):
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.TagIds)
-            </dd>
+            @if (!string.IsNullOrEmpty(Model.TagIds))
+            {
+                <dt class="col-sm-10">
+                    @Html.DisplayNameFor(model => model.TagIds):
+                </dt>
+                <dd class="col-sm-10">
+                    <span style="white-space: pre-wrap;">@Model.TagIds</span>
+                </dd>
+            }
         </dl>
     </div>
 
