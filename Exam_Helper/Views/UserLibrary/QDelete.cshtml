@@ -74,7 +74,7 @@
             url: 'UserLibrary/QDeleteComfirmed',
             data: { id: '@Model.Id' },
             success: function (msg) {
-                $('div[data-fordisabling="' + msg + '"]').remove();
+                $('div[class="accordion"][id="accordionExample"][data-id="' + msg + '"][data-type="question"]').remove();
             },
             error: function () {
             }
