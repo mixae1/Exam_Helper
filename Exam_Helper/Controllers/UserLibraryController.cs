@@ -136,12 +136,12 @@ namespace Exam_Helper.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             var tags = await _context.Tags.AsNoTracking().Where(x => pack.TagsId.Contains(x.Id.ToString())).ToListAsync();
-            pack.TagsId = string.Join(";", tags.Select(x => x.Title));
+            pack.TagsId = string.Join("\n", tags.Select(x => x.Title));
 
             var ques = await _context.Question.AsNoTracking().Where(x => pack.QuestionSet.Contains(x.Id.ToString())).
                 Select(x => x.Title).ToListAsync();
 
-            pack.QuestionSet = string.Join(";", ques);
+            pack.QuestionSet = string.Join("\n", ques);
 
 
             if (pack == null)
@@ -536,7 +536,7 @@ namespace Exam_Helper.Controllers
                     _context.Update(qa);
                     await _context.SaveChangesAsync();
                     //return Json(new { success = true });
-                    return "dq" + id.ToString();
+                    return id.ToString();
                 }
             }
 
@@ -624,7 +624,7 @@ namespace Exam_Helper.Controllers
                     _context.Update(qa);
                     await _context.SaveChangesAsync();
                     //return Json(new { success = true });
-                    return "dp"+id.ToString();
+                    return id.ToString();
                 }
             }
 

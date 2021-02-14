@@ -126,12 +126,12 @@ namespace Exam_Helper.Controllers
             }
 
             var tags = await _context.Tags.AsNoTracking().Where(x => pack.TagsId.Contains(x.Id.ToString())).ToListAsync();
-            pack.TagsId = string.Join(";", tags.Select(x => x.Title));
+            pack.TagsId = string.Join("\n", tags.Select(x => x.Title));
 
-            var ques = await _context.Question.AsNoTracking().Where(x => pack.QuestionSet.Contains(x.Id.ToString())).
+            var ques = await _context.Question.AsNoTracking().Where(x => pack.QuestionSet.Contains(x.Id.ToString().Trim())).
                 Select(x => x.Title).ToListAsync();
 
-            pack.QuestionSet = string.Join(";", ques);
+            pack.QuestionSet = string.Join("\n", ques);
 
 
 
@@ -232,6 +232,32 @@ namespace Exam_Helper.Controllers
                 await _context.SaveChangesAsync();
                 return true;
             }
+        }
+
+        public async Task<IActionResult> PAddSelected(List<int> ids)
+        {
+            var qa = await _context.User.AsNoTracking().FirstAsync(x => x.UserName == User.Identity.Name);
+            var tuples = await _context.Pack.AsNoTracking().Where(x => ids.Contains(x.Id) && !qa.PackSet.Contains(x.Id.ToString())).Select(x => new ClassForSelectedComfirmed(x.Name, x.Id)).ToListAsync();
+
+            return PartialView(tuples);
+        }
+
+        public async Task<string> PAddSelectedComfirmed(List<int> ids)
+        {
+            var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
+
+            if (string.IsNullOrEmpty(qa.PackSet))
+                qa.PackSet = "";
+            foreach (var id in ids)
+            {
+                if (!qa.PackSet.Contains(ids.ToString()))
+                {
+                    qa.PackSet += id.ToString() + ";";
+                }
+            }
+            _context.Update(qa);
+            await _context.SaveChangesAsync();
+            return "InDeveloping";
         }
     }
 }
