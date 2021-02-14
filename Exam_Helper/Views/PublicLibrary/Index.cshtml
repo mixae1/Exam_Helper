@@ -114,7 +114,7 @@
                                     Действия
                                 </button>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" asp-controller="Home" asp-action="PackTests">Тестирование</a>
+                                    <a class="dropdown-item" asp-action="PRedirectToTest" asp-route-id="@item.Id">Тестирование</a>
                                     <a class="dropdown-item compItem" asp-action="PDetails" asp-route-id="@item.Id">Подробности</a>
                                     @{
                                         if (_signInManager.IsSignedIn(User))
