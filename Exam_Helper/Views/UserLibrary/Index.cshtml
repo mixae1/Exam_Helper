@@ -147,7 +147,7 @@
                                         @foreach (var quesId in item.QuestionSet.Split(";"))
                                         {
                                             <div class="d-flex justify-content-between pt-3 pb-3">
-                                                <span id="pqList">@Html.DisplayFor(model => model.questions.Select(x => x.question).FirstOrDefault(x => x.Id.ToString() == quesId).Title)</span>
+                                                <a class="compItem" asp-action="QDetails" asp-route-id="@quesId" id="pqList"> @Model.questions.FirstOrDefault(x => x.question.Id.ToString() == quesId).question.Title</a>
                                             </div>
                                         }
                                     </div>

@@ -66,7 +66,7 @@
             url: 'UserLibrary/PDeleteComfirmed',
             data: { id: '@Model.Id' },
             success: function (msg) {
-                $('div[data-fordisabling="' + msg + '"]').remove();
+                $('div[class="accordion"][id="accordionExample"][data-id="' + msg + '"][data-type="pack"]').remove();
             },
             error: function () {
             }

@@ -536,7 +536,7 @@ namespace Exam_Helper.Controllers
                     _context.Update(qa);
                     await _context.SaveChangesAsync();
                     //return Json(new { success = true });
-                    return "dq" + id.ToString();
+                    return id.ToString();
                 }
             }
 
@@ -624,7 +624,7 @@ namespace Exam_Helper.Controllers
                     _context.Update(qa);
                     await _context.SaveChangesAsync();
                     //return Json(new { success = true });
-                    return "dp"+id.ToString();
+                    return id.ToString();
                 }
             }
 
