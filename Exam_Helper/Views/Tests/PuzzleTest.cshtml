@@ -3,11 +3,7 @@
     ViewData["Title"] = "View";
 }
 
-<head>
-
-</head>
-<main>
-    <div>
+    <div class="main d-flex flex-column">
 
         @{int num_ans = 0; int num = 0; }
 
@@ -17,7 +13,7 @@
 
                 @foreach (var block in Model.TestStrings)
                 {
-                    <div class="mt-2" id="@("droppable" + num_ans.ToString())">
+                    <div class="main-blocks" id="@("droppable" + num_ans.ToString())">
                     </div>
                     num_ans++;
                 }
@@ -26,9 +22,9 @@
             <div class="draggable-elems">
                 @foreach (var block in Model.TestStrings)
                 {
-                    <div class="mt-auto flex-nowrap">
-                        <div class="p-0 " id="@("draggable" + @num.ToString())">
-                            <div class="border border-info text-center" style="padding-left:0px ; padding-right:0px;">@block</div>
+                    <div class="mt-auto">
+                        <div class="block text-center" id="@("draggable" + @num.ToString())">
+                            <p>@block</p>
                         </div>
                     </div>
 
@@ -48,7 +44,6 @@
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
         </a>
     </div>
-</main>
 
 <script>
 
@@ -111,6 +106,15 @@
 </script>
 
 <style>
+    .main {
+        margin-top: 10%;
+    }
+    .block {
+        display: inline-block;
+        border: 2px solid black;
+        border-radius: 5px;
+        padding: 15px;
+    }
     .right {
         background-color: green;
     }
@@ -132,14 +136,14 @@
         display: inline-block;
     }
 
-    .mt-2  {
+    .main-blocks {
+        width: 30%;
+        height: 75px;
         float: left;
-        width: 450px;
-        height: 30px;
-        float: left;
-        margin: 2px;
-        border-bottom-style: double;
-        border-bottom-color: black;
+        border: 2px solid black;
+        border-radius: 5px;
+        margin:10px;
+        margin-left:0px;
     }
 </style>
 

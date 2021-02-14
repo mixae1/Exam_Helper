@@ -14,13 +14,13 @@
         @if (Model.IsSuccessed)
         {
             <span>Α α Β β Γ γ Δ δ Ε ε Ζ ζ Η η Θ θ Ι ι Κ κ Λ λ Μ μ Ν ν Ξ ξ Ο ο Π π Ρ ρ Σ σ Τ τ Υ υ Φ φ Χ χ Ψ ψ Ω ω</span>
-            <div class="pt-3" style="white-space:pre-wrap; background-color: #f1f1f1;">
+            <div class="p-3" style="white-space:pre-wrap; background-color: #f1f1f1;">
                 @foreach (var word in Model.Teorem)
                 {
                     @Html.Raw(word);
                 }
             </div>
-            <div class="form-group mt-3 ml-2 mr-2">
+            <div class="form-group mt-3">
                 <input type="submit" value="Проверить ответ" class="btn btn-primary" id="CheckAnswers" />
             </div>
         }

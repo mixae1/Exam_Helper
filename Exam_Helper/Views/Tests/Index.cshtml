@@ -23,8 +23,8 @@
                                         <input asp-for="@Model.ServiceInfo" type="hidden" id="ServiceInfo" />
                                         <span asp-validation-for="@Model.SelectedId" hidden></span>
                                     </div>
-                                    <button class="btn btn-light border" style="background-color: #e9ecef; border-color:#e9ecef;" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
-                                        <span asp-for="@Model.TestsMethodsIds[i]">
+                                    <div class="border" style="background-color: #e9ecef; border-color:#e9ecef;">
+                                        <span class="p-1 text-center" asp-for="@Model.TestsMethodsIds[i]">
                                             @switch (Model.TestMethodsNames[i])
                                             {
                                                 case "missed_words":
@@ -35,6 +35,9 @@
                                                     break;
                                             }
                                         </span>
+                                    </div>
+                                    <button class="btn"  type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
+                                        <img class="setting-btn" src="https://icon-icons.com/icons2/1946/PNG/32/1904675-configuration-edit-gear-options-preferences-setting-settings_122525.png"/>
                                     </button>
                                 </div>
                             </div>
@@ -163,6 +166,12 @@
         sepLog.html(buf);
     };
 </script>
+
+<style>
+    .setting-btn {
+        width:50%;
+    }
+</style>
 
 
 
