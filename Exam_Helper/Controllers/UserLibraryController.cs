@@ -575,7 +575,7 @@ namespace Exam_Helper.Controllers
 
             var question = await _context.Question.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id.Value);
             var tags = await _context.Tags.AsNoTracking().Where(x => question.TagIds.Contains(x.Id.ToString())).ToListAsync();
-            question.TagIds = string.Join(";", tags.Select(x => x.Title));
+            question.TagIds = string.Join("\n", tags.Select(x => x.Title));
 
             return PartialView(question);
         }
@@ -658,12 +658,12 @@ namespace Exam_Helper.Controllers
             }
 
             var tags = await _context.Tags.AsNoTracking().Where(x => pack.TagsId.Contains(x.Id.ToString())).ToListAsync();
-            pack.TagsId = string.Join(";", tags.Select(x => x.Title));
+            pack.TagsId = string.Join("\n", tags.Select(x => x.Title));
 
             var ques = await _context.Question.AsNoTracking().Where(x => pack.QuestionSet.Contains(x.Id.ToString())).
                 Select(x => x.Title).ToListAsync();
 
-            pack.QuestionSet = string.Join(";", ques);
+            pack.QuestionSet = string.Join("\n", ques);
 
             return PartialView(pack);
         }

@@ -18,7 +18,7 @@
                 @Html.DisplayNameFor(model => model.QuestionSet):
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.QuestionSet)
+                <span style="white-space: pre-wrap;">@Model.QuestionSet</span>
             </dd>
             <dt class="col-sm-10">
                 @Html.DisplayNameFor(model => model.Author):
@@ -38,12 +38,15 @@
             <dd class="col-sm-10">
                 @Model.UpdateDate.ToString("dd.MM.yyyy")
             </dd>
-            <dt class="col-sm-10">
-                @Html.DisplayNameFor(model => model.TagsId):
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.TagsId)
-            </dd>
+            @if (!string.IsNullOrEmpty(Model.TagsId))
+            {
+                <dt class="col-sm-10">
+                    @Html.DisplayNameFor(model => model.TagsId):
+                </dt>
+                <dd class="col-sm-10">
+                    <span style="white-space: pre-wrap;">@Model.TagsId</span>
+                </dd>
+            }
         </dl>
     </div>
 
