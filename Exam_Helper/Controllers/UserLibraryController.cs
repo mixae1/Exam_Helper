@@ -223,10 +223,27 @@ namespace Exam_Helper.Controllers
                 .Select(x => new QuestionForPackCreatingModel()
                 { Id = x.Id, Name = x.Title, IsSelected = false }).ToListAsync();
             }
-                 var tags = await _context.Tags.AsNoTracking().Select(x => new TagForPackCreatingModel()
+
+            var ps = qa.PackSet;
+            List<PackForPackCreatingModel> packs = new List<PackForPackCreatingModel>();
+            if (string.IsNullOrEmpty(ps))
+            {
+                packs = null;
+            }
+            else
+            {
+
+                var temp = new HashSet<int>(ps.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)));
+
+                packs = await _context.Pack.AsNoTracking().Where(x => temp.Contains(x.Id))
+                .Select(x => new PackForPackCreatingModel()
+                { Id = x.Id, Name = x.Name, IsSelected = false }).ToListAsync();
+            }
+
+            var tags = await _context.Tags.AsNoTracking().Select(x => new TagForPackCreatingModel()
                 { Id = x.Id, Name = x.Title, IsSelected = false }).ToListAsync();
                 
-            return View(new ClassForPackCreatingModel() { questions = ques, pack = new Pack(), tags = tags });
+            return View(new ClassForPackCreatingModel() { questions = ques, packs = packs, tags = tags });
         }
 
         // POST: PacksLib/Create
@@ -240,23 +257,45 @@ namespace Exam_Helper.Controllers
 
             if (ModelState.IsValid)
             {  
+                var pqTemp = obj.packs.Where(x => x.IsSelected).Select(x => x.Id);
+
+                HashSet<int> ques_from_packs = new HashSet<int>();
+
+                //var temp2 = await _context.Pack.AsNoTracking().Where(x => pqTemp.Contains(x.Id)).
+                //    Select(x => x.QuestionSet.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x))).ToListAsync();
+
+                var temp3 = await _context.Pack.AsNoTracking().Where(x => pqTemp.Contains(x.Id)).ToListAsync();
+                foreach(var _pack in temp3)
+                {
+                    var str_pack_ids = _pack.QuestionSet.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    for(int i = 0; i < str_pack_ids.Length; i++)
+                    {
+                        ques_from_packs.Add(int.Parse(str_pack_ids[i]));
+                    }
+                }                
 
                 var ques = obj.questions.Where(x => x.IsSelected).Select(x => x.Id);
+                foreach (var id in ques)
+                {
+                    ques_from_packs.Add(id);
+                }
+
                 var tags = obj.tags.Where(x => x.IsSelected).Select(x => x.Id);
 
                 /* 
                  * Пока разрешим создание без тегов
                 if (tags.Count() == 0)
-                    ModelState.AddModelError(string.Empty, "вы должны указать как минимум один тег");
+                    ModelState.AddModelError(string.Empty, "Вы должны указать как минимум один тег");
                 */
-                if (ques.Count() == 0)
+                /*if (ques.Count() == 0)
                 {
-                    ModelState.AddModelError(string.Empty, "вы должны выбрать как минимум 1 вопрос");
+                    ModelState.AddModelError(string.Empty, "Вы должны выбрать как минимум 1 вопрос");
                     return View(obj);
-                }
+                }*/
+
                 var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
 
-                var StringIds = string.Join(';', ques);
+                var StringIds = string.Join(';', ques_from_packs);
 
                
                 var TagsIds = string.Join(';', tags);
@@ -361,7 +400,7 @@ namespace Exam_Helper.Controllers
                     await _context.SaveChangesAsync();
 
                     if (question.Id == 0)
-                        throw new Exception("smth went wrong with adding to BD");
+                        throw new Exception("smth went wrong with adding to DB");
 
                     qa.QuestionSet = qa.QuestionSet.Replace(Id.ToString(), "");
                     qa.QuestionSet = string.IsNullOrEmpty(qa.QuestionSet) ? question.Id + ";" : qa.QuestionSet + question.Id + ";";
@@ -403,17 +442,22 @@ namespace Exam_Helper.Controllers
                 return NotFound();
             }
 
-            var temp = new HashSet<int>(qa.QuestionSet.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)));
+            var qtemp = new HashSet<int>(qa.QuestionSet.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)));
 
             foreach(var q_id in pack.QuestionSet.Split(';', StringSplitOptions.RemoveEmptyEntries))
             {
-                temp.Add(int.Parse(q_id));
+                qtemp.Add(int.Parse(q_id));
             }
 
-            var ques = await _context.Question.AsNoTracking().Where(x => temp.Contains(x.Id))
+            var ques = await _context.Question.AsNoTracking().Where(x => qtemp.Contains(x.Id))
                 .Select(x => new QuestionForPackCreatingModel()
                 { Id = x.Id, Name = x.Title, IsSelected = pack.QuestionSet.Contains(x.Id.ToString())}).ToListAsync();
 
+            var ptemp = new HashSet<int>(qa.PackSet.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => int.Parse(x)));
+
+            var packs = await _context.Pack.AsNoTracking().Where(x => ptemp.Contains(x.Id))
+                .Select(x => new PackForPackCreatingModel()
+                { Id = x.Id, Name = x.Name, IsSelected = false }).ToListAsync();
 
             var tags = await _context.Tags.AsNoTracking().Select(x => new TagForPackCreatingModel()
             { Id = x.Id, Name = x.Title, IsSelected = pack.TagsId.Contains(x.Id.ToString()) }).ToListAsync();
@@ -421,7 +465,7 @@ namespace Exam_Helper.Controllers
             if (tags == null)
                 tags = new List<TagForPackCreatingModel>();
 
-            return View(new ClassForPackCreatingModel() { questions=ques,pack=pack,tags=tags,pack_name=pack.Name});
+            return View(new ClassForPackCreatingModel() { questions = ques, packs = packs, tags = tags, pack_name = pack.Name});
         }
 
         // POST: PacksLib/Edit/5
@@ -440,12 +484,30 @@ namespace Exam_Helper.Controllers
                 throw new Exception("incorrect data in post PEdit");
 
             if (ModelState.IsValid)
-            {  
-                var ques_check = old_pack.questions.Where(x => x.IsSelected).Select(x => x.Id);
+            {
+                var pqTemp = old_pack.packs.Where(x => x.IsSelected).Select(x => x.Id);
 
-                if (ques_check.Count() == 0)
+                HashSet<int> ques_from_packs = new HashSet<int>();
+
+                var temp3 = await _context.Pack.AsNoTracking().Where(x => pqTemp.Contains(x.Id)).ToListAsync();
+                foreach (var _pack in temp3)
                 {
-                    ModelState.AddModelError(string.Empty, "вы должны выбрать как минимум 1 вопрос");
+                    var str_pack_ids = _pack.QuestionSet.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    for (int i = 0; i < str_pack_ids.Length; i++)
+                    {
+                        ques_from_packs.Add(int.Parse(str_pack_ids[i]));
+                    }
+                }
+
+                var ques = old_pack.questions.Where(x => x.IsSelected).Select(x => x.Id);
+                foreach (var id in ques)
+                {
+                    ques_from_packs.Add(id);
+                }
+
+                if (ques_from_packs.Count() == 0)
+                {
+                    ModelState.AddModelError(string.Empty, "Вы должны выбрать как минимум 1 вопрос");
                     return View(old_pack);
                 }
 
@@ -457,7 +519,7 @@ namespace Exam_Helper.Controllers
 
                 try
                 {
-                    var StringIds = string.Join(';', ques_check);
+                    var StringIds = string.Join(';', ques_from_packs);
 
 
                     var TagsIds = string.Join(';', tags_check);
@@ -513,7 +575,7 @@ namespace Exam_Helper.Controllers
 
             var question = await _context.Question.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id.Value);
             var tags = await _context.Tags.AsNoTracking().Where(x => question.TagIds.Contains(x.Id.ToString())).ToListAsync();
-            question.TagIds = string.Join(";", tags.Select(x => x.Title));
+            question.TagIds = string.Join("\n", tags.Select(x => x.Title));
 
             return PartialView(question);
         }
@@ -596,12 +658,12 @@ namespace Exam_Helper.Controllers
             }
 
             var tags = await _context.Tags.AsNoTracking().Where(x => pack.TagsId.Contains(x.Id.ToString())).ToListAsync();
-            pack.TagsId = string.Join(";", tags.Select(x => x.Title));
+            pack.TagsId = string.Join("\n", tags.Select(x => x.Title));
 
             var ques = await _context.Question.AsNoTracking().Where(x => pack.QuestionSet.Contains(x.Id.ToString())).
                 Select(x => x.Title).ToListAsync();
 
-            pack.QuestionSet = string.Join(";", ques);
+            pack.QuestionSet = string.Join("\n", ques);
 
             return PartialView(pack);
         }
