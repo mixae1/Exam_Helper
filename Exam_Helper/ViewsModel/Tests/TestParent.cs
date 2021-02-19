@@ -8,5 +8,6 @@ namespace Exam_Helper.ViewsModel
     public class TestParent
     {
        public TestParent() { }
+      public string TestInstructions { get; set; }
     }
 }

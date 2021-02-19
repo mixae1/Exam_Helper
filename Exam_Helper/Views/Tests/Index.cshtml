@@ -32,6 +32,9 @@
                                                     break;
                                                 case "puzzle":
                                                     @:Воссоздание по частям
+                                                  break;
+                                                 case "MultiTesting":
+                                                    @:Конструктор тестов
                                                     break;
                                             }
                                         </span>
@@ -96,6 +99,17 @@
 
                                     </p>
                                     break;
+
+                                case "MultiTesting":
+                                <p>
+                                    Количество тестов "Воссоздание по частям":
+                                    <input type="range" min="1" max="5" value="3" id="mtParts_quantity">
+                                </p>
+                                <p>
+                                    Количество тестов "Вставка пропущенных слов":
+                                    <input type="range" min="1" max="5" value="3" id="mtMisWords_quantity">
+                                </p>
+                                    break;
                                 default: break;
                             }
                         </div>
@@ -143,6 +157,11 @@
                     puzzle.find("input#p_diffLenghtOfBlock").is(":checked").toString() + ";" +
                     puzzle.find("input#p_defaultBlocks").is(":checked").toString() + ";" +
                     puzzle.find("input#p_sep").val().toString() + ";";
+                break;
+            case "MultiTesting":
+                instruction =
+                    puzzle.find("input#mtParts_quantity").val().toString() + ";" +
+                    puzzle.find("input#mtMisWords_quantity").val().toString();
                 break;
         }
 

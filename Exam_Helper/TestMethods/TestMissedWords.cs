@@ -88,6 +88,7 @@ namespace Exam_Helper.TestMethods
 
         public TestMissedWords(string Thereom, string Instruction = "33;true")
         {
+            if (string.IsNullOrEmpty(Instruction)) Instruction = "50;false";
             var instructions = new MissedWordsInstruction(Instruction);
 
             percent = instructions.percent;

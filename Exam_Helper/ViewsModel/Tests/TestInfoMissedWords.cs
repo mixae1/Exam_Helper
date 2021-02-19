@@ -10,6 +10,8 @@ namespace Exam_Helper.ViewsModel
 
         public bool IsSuccessed { get; set; }
 
+       
+
         public TestInfoMissedWords():base()
         {
 

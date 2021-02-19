@@ -29,11 +29,14 @@
         }
         else
         {
-        <p>Мы не можем создать данный тест для этого вопроса.</p>
+            <p>Мы не можем создать данный тест для этого вопроса.</p>
         }
         <a asp-controller="PublicLibrary" asp-action="Index">
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
         </a>
+            @Html.ActionLink("пройти еще раз","MissingWordsTest","Tests",new { Instruction = Temp_Model.TestInstructions },new { @type="button",@class= "btn btn-primary"})
+            
+        
     </div>
 </main>
 
@@ -41,7 +44,7 @@
 
     $("#CheckAnswers").click(function CheckAnswers() {
         var ans = [];
-        @for(int i = 0; i< Temp_Model.Answers.Length; i++)
+        @for (int i = 0; i< Temp_Model.Answers.Length; i++)
         {
             @:ans.push("@(new Microsoft.AspNetCore.Html.HtmlString(Temp_Model.Answers[i]))");
         }

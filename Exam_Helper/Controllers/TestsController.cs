@@ -60,11 +60,17 @@ namespace Exam_Helper.Controllers
              
 
             var tests = await _dbContext.Tests.ToListAsync();
+
+            //лень было в БД заносить
+            tests.Add(new Tests() { Name = "MultiTesting", Id = 3 });
+
+
             var models = new TestChoiceViewModel()
             {
                 TestMethodsNames = tests.Select(x => x.Name).ToArray(),
                 TestsMethodsIds = tests.Select(x => x.Id).ToArray()
             };
+
             return View(models);
         }
 
@@ -97,7 +103,8 @@ namespace Exam_Helper.Controllers
             {
                 Teorem = testMissed.GetWordsWithInputs(),
                 Answers = testMissed.Answers,
-                IsSuccessed = testMissed.IsSuccessed
+                IsSuccessed = testMissed.IsSuccessed,
+                TestInstructions=Instruction
             };
 
             return View(ts);
@@ -115,7 +122,8 @@ namespace Exam_Helper.Controllers
             {
                 TestStrings = testPuzzle.TestStrings,
                 RightIndexes = testPuzzle.RightIndexes,
-                IsSuccessed = testPuzzle.IsSuccessed
+                IsSuccessed = testPuzzle.IsSuccessed,
+                TestInstructions=Instruction
             };
 
             return View(ts);
@@ -136,73 +144,33 @@ namespace Exam_Helper.Controllers
         }
         */
 
-        // GET: Tests/Details/5
-        public ActionResult Details(int id)
+        [HttpGet]
+        public IActionResult MultiTesting(string Instruction)
         {
-            return View();
-        }
+            Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session, "question");
+            if (question == null) throw new Exception("question is null");
 
-        // GET: Tests/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+            if (string.IsNullOrEmpty(Instruction)) Instruction = "1;1";
 
-        // POST: Tests/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+            var test_amounts = Instruction.Split(';').Select(x=>int.Parse(x));
 
-        // GET: Tests/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+            TestPuzzle testPuzzle = new TestPuzzle(question.Definition);
+            TestMissedWords testMissed = new TestMissedWords(question.Definition);
+            TestParent[] test = new TestParent[test_amounts.Sum()];
 
-        // POST: Tests/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
+            TestInfoPuzzle ts = new TestInfoPuzzle()
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+                TestStrings = testPuzzle.TestStrings,
+                RightIndexes = testPuzzle.RightIndexes,
+                IsSuccessed = testPuzzle.IsSuccessed,
+                TestInstructions = Instruction
+            };
 
-        // GET: Tests/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
+            return View(ts);
+          
         }
+        
 
-        // POST: Tests/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+     
     }
 }
