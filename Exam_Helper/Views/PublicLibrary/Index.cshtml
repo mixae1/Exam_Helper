@@ -30,6 +30,12 @@
                     <button class="btn btn-primary ml-1" type="button" onclick="EngageSelected('add')" id="AddSelectedButton">
                         Добавить выделенное
                     </button>
+                    <button class="btn btn-primary ml-1" type="button" onclick="CheckAll(true)">
+                        Выбрать всё
+                    </button>
+                    <button class="btn btn-primary ml-1" type="button" onclick="CheckAll(false)">
+                        Выбрать ничего
+                    </button>
                 }
             }
         </div>
@@ -157,6 +163,17 @@
 
     var SearchString = $("#Search");
     var SelectedPage = Page.QuestionPage;
+
+    function CheckAll(flag) {
+        switch (SelectedPage) {
+            case Page.QuestionPage:
+                $("input#qSelect").prop("checked", flag);
+                break;
+            case Page.PackPage:
+                $("input#pSelect").prop("checked", flag);
+                break;
+        }
+    };
 
     $(document).ready(function () {
         $("#Search").on("keyup", function () {

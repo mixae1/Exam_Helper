@@ -88,7 +88,7 @@ namespace Exam_Helper.Controllers
                     }
                     else
                     { 
-                        ModelState.AddModelError(string.Empty,"incorrect email or password");
+                        ModelState.AddModelError(string.Empty,"Неверная почта или пароль");
                         
                     }
 
