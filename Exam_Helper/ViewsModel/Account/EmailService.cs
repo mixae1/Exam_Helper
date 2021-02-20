@@ -24,8 +24,9 @@ namespace Exam_Helper.Services
                 //    (sender, sertificate, certChainType, errors) => true;
                 //client.AuthenticationMechanisms.Remove("XOAUTH2");
 
+                
                 await client.ConnectAsync("smtp.yandex.com", 465, true);
-                await client.AuthenticateAsync("ex.helper@yandex.ru", "nvpwtrsxyqxbshuq"); //**nvpwtrsxyqxbshuq
+                await client.AuthenticateAsync("ex.helper@yandex.ru", "nvpwtrsxyqxbshuq"); //
                 await client.SendAsync(emailMessage);
 
                 await client.DisconnectAsync(true);

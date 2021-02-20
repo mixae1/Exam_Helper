@@ -8,6 +8,7 @@ using Exam_Helper.ViewsModel.Account;
 using Exam_Helper.Models;
 using Microsoft.AspNetCore.Authorization;
 using Exam_Helper.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace Exam_Helper.Controllers
 {
@@ -124,6 +125,7 @@ namespace Exam_Helper.Controllers
                     return View("ForgotPasswordConfirmation");
                 }
 
+                HttpContext.Session.SetString("email", model.Email);
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var callbackUrl = Url.Action("ResetPassword", "UserAccount", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                 EmailService emailService = new EmailService();
@@ -150,7 +152,8 @@ namespace Exam_Helper.Controllers
             {
                 return View(model);
             }
-            var user = await _userManager.FindByEmailAsync(model.Email);
+            var user = await _userManager.FindByEmailAsync(HttpContext.Session.GetString("email"));
+            HttpContext.Session.Remove("email");
             if (user == null)
             {
                 return View("ResetPasswordConfirmation");
