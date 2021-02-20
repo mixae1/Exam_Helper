@@ -34,9 +34,13 @@
         <a asp-controller="PublicLibrary" asp-action="Index">
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
         </a>
-            @Html.ActionLink("пройти еще раз","MissingWordsTest","Tests",new { Instruction = Temp_Model.TestInstructions },new { @type="button",@class= "btn btn-primary"})
-            
-        
+        @{
+            if (Temp_Model.isMulti)
+                @Html.ActionLink("следующее задание", "MultiTesting", "Tests", new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
+              else
+                @Html.ActionLink("пройти еще раз", "MissingWordsTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
+        }
+
     </div>
 </main>
 

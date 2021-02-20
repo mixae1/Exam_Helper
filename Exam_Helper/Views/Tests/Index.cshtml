@@ -134,6 +134,9 @@
 
     const missed_words = $("#collapse_missed_words > div");
     const puzzle = $("#collapse_puzzle > div");
+    /**/
+    const multi = $("#collapse_MultiTesting > div");
+    /**/
 
     function MakeInstruction() {
         var curr_method;
@@ -160,8 +163,8 @@
                 break;
             case "MultiTesting":
                 instruction =
-                    puzzle.find("input#mtParts_quantity").val().toString() + ";" +
-                    puzzle.find("input#mtMisWords_quantity").val().toString();
+                    multi.find("input#mtParts_quantity").val().toString() + ";" +
+                    multi.find("input#mtMisWords_quantity").val().toString();
                 break;
         }
 

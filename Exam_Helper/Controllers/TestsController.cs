@@ -83,7 +83,8 @@ namespace Exam_Helper.Controllers
                 {
                     case 1: return RedirectToAction(nameof(MissingWordsTest), new { Instruction = temp.ServiceInfo });
                     case 2: return RedirectToAction(nameof(PuzzleTest), new { Instruction = temp.ServiceInfo });
-                    default: return RedirectToAction(nameof(Index));
+                    case 3: return RedirectToAction(nameof(MultiTesting), new { Instruction = temp.ServiceInfo });
+                    default:return RedirectToAction(nameof(Index));
                 }
             }
             Console.WriteLine(ModelState.Values);
@@ -92,7 +93,7 @@ namespace Exam_Helper.Controllers
 
         // для подключения к библиотеки question нужно сюда в параметры передать question
         [HttpGet]
-        public IActionResult MissingWordsTest(string Instruction)
+        public IActionResult MissingWordsTest(string Instruction,bool isMulti=false)
         {
              
             Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session,"question");
@@ -104,14 +105,15 @@ namespace Exam_Helper.Controllers
                 Teorem = testMissed.GetWordsWithInputs(),
                 Answers = testMissed.Answers,
                 IsSuccessed = testMissed.IsSuccessed,
-                TestInstructions=Instruction
+                TestInstructions=Instruction,
+                isMulti=isMulti
             };
 
             return View(ts);
         }
 
         [HttpGet]
-        public IActionResult PuzzleTest(string Instruction)
+        public IActionResult PuzzleTest(string Instruction,bool isMulti=false)
         {
 
             Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session, "question");
@@ -123,7 +125,8 @@ namespace Exam_Helper.Controllers
                 TestStrings = testPuzzle.TestStrings,
                 RightIndexes = testPuzzle.RightIndexes,
                 IsSuccessed = testPuzzle.IsSuccessed,
-                TestInstructions=Instruction
+                TestInstructions=Instruction,
+                isMulti=isMulti
             };
 
             return View(ts);
@@ -145,32 +148,54 @@ namespace Exam_Helper.Controllers
         */
 
         [HttpGet]
-        public IActionResult MultiTesting(string Instruction)
+        public RedirectToActionResult MultiTesting(string Instruction)
         {
-            Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session, "question");
-            if (question == null) throw new Exception("question is null");
-
+            /* юзер выбирает этот метод ,указывая настройки : минимум 1 тест с каждого вида тестирования
+             * instruction - имеет вид "d;d" d- число [1,5]. При первом запуске в данных сессии нет ключа "test_times"
+             * поэтому настройки ( кол-во тестов ) будут распарсены из Instruction . Далее выбирем случайное число и перенаправляем
+             * в нужный метод , указывая метод тестирования одиночный или из мультитестирования. При этом в данных сессии уже есть 
+             * нужный ключ , поэтому когда идет очередной вызов этого метода , настройки достаются из сессии , и че там лежит в Instruction
+             * - нам без разницы
+             * 
+             * В дальнейшем структура Instruction изментится - появится возможность указывать настройки ддя методов тестирования
+             
+             */
             if (string.IsNullOrEmpty(Instruction)) Instruction = "1;1";
 
-            var test_amounts = Instruction.Split(';').Select(x=>int.Parse(x));
+            var times = SessionHelper.GetObjectFromJson<int[]>(HttpContext.Session, "test_times");
+            if(times==null) times= Instruction.Split(';').Select(x => int.Parse(x)).ToArray();
 
-            TestPuzzle testPuzzle = new TestPuzzle(question.Definition);
-            TestMissedWords testMissed = new TestMissedWords(question.Definition);
-            TestParent[] test = new TestParent[test_amounts.Sum()];
 
-            TestInfoPuzzle ts = new TestInfoPuzzle()
+
+            if (times[0] > 0 || times[1] > 0)
             {
-                TestStrings = testPuzzle.TestStrings,
-                RightIndexes = testPuzzle.RightIndexes,
-                IsSuccessed = testPuzzle.IsSuccessed,
-                TestInstructions = Instruction
-            };
+                Random r = new Random();
+                int nextTestMethod = r.Next(0, times.Length);
 
-            return View(ts);
+                while(times[nextTestMethod]<=0)
+                  nextTestMethod = r.Next(0, times.Length );
+
+                times[nextTestMethod]--;
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "test_times", times);
+
+                switch (nextTestMethod) 
+                {
+                    case 1:return RedirectToAction(nameof(MissingWordsTest),new { isMulti=true});
+                    case 0:return RedirectToAction(nameof(PuzzleTest), new { isMulti = true });
+                }
+
+            }
+
+
+            HttpContext.Session.Remove("test_times");
+            return RedirectToAction(nameof(UserStats));
           
         }
-        
 
+        public IActionResult UserStats()
+        {
+            return View();
+        }
      
     }
 }
