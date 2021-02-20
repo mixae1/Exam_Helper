@@ -8,7 +8,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using System;
-
 namespace Exam_Helper
 {
     public class Startup

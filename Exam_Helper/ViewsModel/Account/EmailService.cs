@@ -18,10 +18,14 @@ namespace Exam_Helper.Services
                 Text = message
             };
 
-            using (var client = new SmtpClient(new ProtocolLogger("smtp.log")))
+            using (var client = new SmtpClient())
             {
-                await client.ConnectAsync("smtp.gmail.com", 465, true);
-                await client.AuthenticateAsync("ex.helper@yandex.ru", "70aed950fe8f6d4f096d08edaf28051f79f8beaa");
+                //client.ServerCertificateValidationCallback =
+                //    (sender, sertificate, certChainType, errors) => true;
+                //client.AuthenticationMechanisms.Remove("XOAUTH2");
+
+                await client.ConnectAsync("smtp.yandex.com", 465, true);
+                await client.AuthenticateAsync("ex.helper@yandex.ru", "nvpwtrsxyqxbshuq"); //**nvpwtrsxyqxbshuq
                 await client.SendAsync(emailMessage);
 
                 await client.DisconnectAsync(true);
