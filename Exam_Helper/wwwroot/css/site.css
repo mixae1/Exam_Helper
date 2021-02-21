@@ -117,16 +117,3 @@ body {
     transition: none;
     display: none;
 }
-
-.tooltip {
-    display: none;
-    background: #17a2b8;
-    color: white;
-    padding: 10px;
-    font-weight: 400;
-    font-size: 17px;
-    margin-top: 15px;
-    border-radius: 10px;
-    opacity: 0;
-    transition: all 0.5s ease;
-}
