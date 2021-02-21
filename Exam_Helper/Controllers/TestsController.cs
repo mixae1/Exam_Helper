@@ -29,7 +29,6 @@ namespace Exam_Helper.Controllers
 
 
 
-
     public class TestsController : Controller
     {
 
@@ -96,6 +95,7 @@ namespace Exam_Helper.Controllers
             TestMissedWords testMissed = new TestMissedWords(question.Definition, Instruction);
             TestInfoMissedWords ts = new TestInfoMissedWords()
             {
+                Title = question.Title,
                 Teorem = testMissed.GetWordsWithInputs(),
                 Answers = testMissed.Answers,
                 IsSuccessed = testMissed.IsSuccessed
@@ -114,6 +114,7 @@ namespace Exam_Helper.Controllers
             TestPuzzle testPuzzle = new TestPuzzle(question.Definition, Instruction);
             TestInfoPuzzle ts = new TestInfoPuzzle()
             {
+                Title = question.Title,
                 TestStrings = testPuzzle.TestStrings,
                 RightIndexes = testPuzzle.RightIndexes,
                 IsSuccessed = testPuzzle.IsSuccessed

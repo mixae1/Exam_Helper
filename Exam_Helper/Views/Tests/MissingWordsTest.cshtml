@@ -1,6 +1,8 @@
-﻿@model Exam_Helper.ViewsModel.TestInfoMissedWords;
+﻿@using Exam_Helper.ViewsModel
+@model Exam_Helper.ViewsModel.TestParent;
 @{
     ViewData["Title"] = "View";
+    var Temp_Model = Model as TestInfoMissedWords;
 }
 
 <head>
@@ -11,11 +13,14 @@
 
 <main style="height: 85vh;" class="d-flex align-items-center">
     <div>
-        @if (Model.IsSuccessed)
+        @if (Temp_Model.IsSuccessed)
         {
+            <h2>@Temp_Model.Title</h2>
+
             <span>Α α Β β Γ γ Δ δ Ε ε Ζ ζ Η η Θ θ Ι ι Κ κ Λ λ Μ μ Ν ν Ξ ξ Ο ο Π π Ρ ρ Σ σ Τ τ Υ υ Φ φ Χ χ Ψ ψ Ω ω</span>
-            <div class="p-3" style="white-space:pre-wrap; background-color: #f1f1f1;">
-                @foreach (var word in Model.Teorem)
+
+            <div class="pt-3" style="white-space:pre-wrap; background-color: #f1f1f1;">
+                @foreach (var word in Temp_Model.Teorem)
                 {
                     @Html.Raw(word);
                 }
@@ -36,13 +41,13 @@
 
 <script>
 
-       $("#CheckAnswers").click(function CheckAnswers() {
+    $("#CheckAnswers").click(function CheckAnswers() {
         var ans = [];
-        @for(int i = 0; i< Model.Answers.Length; i++)
+        @for(int i = 0; i< Temp_Model.Answers.Length; i++)
         {
-            @:ans.push("@(new Microsoft.AspNetCore.Html.HtmlString(Model.Answers[i]))");
+            @:ans.push("@(new Microsoft.AspNetCore.Html.HtmlString(Temp_Model.Answers[i]))");
         }
-        $("input.test").each(function (index) {
+        $("input.editablesection").each(function (index) {
             console.log($(this).val(), " ", ans[index]);
             if ($(this).val() === ans[index]) {
                 $(this).removeClass("wrong");
@@ -70,7 +75,6 @@
     .editablesection {
         background-color: #ffffff;
         display: inline-block;
-        border: none;
         padding: 0;
         outline-offset: 0;
         height: 1.2em;

@@ -50,6 +50,12 @@
                 <button class="btn btn-primary ml-1" type="button" onclick="EngageSelected('hide')" id="HideSelectedButton">
                     Скрыть выбранное
                 </button>
+                <button class="btn btn-primary ml-1" type="button" onclick="CheckAll(true)">
+                    Выбрать всё
+                </button>
+                <button class="btn btn-primary ml-1" type="button" onclick="CheckAll(false)">
+                    Выбрать ничего
+                </button>
 
             </div>
             <div class="form-group pb-3 bd-highlight ml-auto p-2">
@@ -122,13 +128,13 @@
                                             Действия
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item" asp-controller="Home" asp-action="PackTests">Тестирование</a>
+                                            <a class="dropdown-item" asp-controller="PublicLibrary" asp-action="PRedirectToTest" asp-route-id="@item.Id">Тестирование</a>
                                             <a class="dropdown-item" asp-action="PEdit" asp-route-id="@item.Id">Редактирование</a>
                                             <a class="dropdown-item compItem" asp-action="PDetails" asp-route-id="@item.Id">Подробности</a>
                                             <a class="dropdown-item compItem" asp-action="PDelete" asp-route-id="@item.Id">Удаление</a>
                                             @if (UserManager.GetUserName(User) == item.Author)
                                             {
-                                                <button class="btn btn-link" type="button" id="@("p" + item.Id.ToString())" onclick="ChangePackPrivate(this.id)" style="cursor:pointer;">@(item.IsPrivate ? "Опубликовать" : "Скрыть")</button>
+                                                <a class="dropdown-item" id="@("p" + item.Id.ToString())" onclick="ChangePackPrivate(this.id)" style="cursor:pointer;">@(item.IsPrivate ? "Опубликовать" : "Скрыть")</a>
                                             }
                                         </div>
                                     </div>
@@ -144,10 +150,10 @@
                                                 </div>
                                             }
                                         }
-                                        @foreach (var quesId in item.QuestionSet.Split(";"))
+                                        @foreach (var quesId in item.QuestionSet.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries))
                                         {
                                             <div class="d-flex justify-content-between pt-3 pb-3">
-                                                <span id="pqList">@Html.DisplayFor(model => model.questions.Select(x => x.question).FirstOrDefault(x => x.Id.ToString() == quesId).Title)</span>
+                                                <a class="compItem" asp-action="QDetails" asp-route-id="@quesId" id="pqList"> @Model.questions.FirstOrDefault(x => x.question.Id.ToString() == quesId).question.Title</a>
                                             </div>
                                         }
                                     </div>
@@ -167,6 +173,17 @@
 
     var SearchString = $("#Search");
     var SelectedPage = Page.QuestionPage;
+
+    function CheckAll(flag) {
+        switch (SelectedPage) {
+            case Page.QuestionPage:
+                $("input#qSelect").prop("checked", flag);
+                break;
+            case Page.PackPage:
+                $("input#pSelect").prop("checked", flag);
+                break;
+        }
+    };
 
     $(document).ready(function () {
         SearchString.on("keyup", function () {
