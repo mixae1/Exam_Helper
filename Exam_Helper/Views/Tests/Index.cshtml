@@ -12,7 +12,7 @@
         @for (int i = 0; i < Model.TestMethodsNames.Length; i++)
         {
             <div class="panel-group" id="accordion">
-                <div class="panel panel-default">
+                <div class="panel panel-default mb-3">
                     <div class="panel-heading">
                         <div class="d-flex justify-content-between pt-3 pb-2">
                             <div class="input-group">
@@ -24,20 +24,22 @@
                                         <span asp-validation-for="@Model.SelectedId" hidden></span>
                                     </div>
                                     <div class="border" style="background-color: #e9ecef; border-color:#e9ecef;">
-                                        <span class="p-1 text-center" asp-for="@Model.TestsMethodsIds[i]">
+                                        <div class="text-center" asp-for="@Model.TestsMethodsIds[i]">
                                             @switch (Model.TestMethodsNames[i])
                                             {
                                                 case "missed_words":
-                                                    @:Метод пропущенных слов
+                                                    <div class="miss_word">Метод пропущенных слов</div>
+                                                    <span class="tooltip miss_word_tootlip">Данный метод случайным образом вставляет пропуски, которые вам необходимо будет заполнить</span>
                                                     break;
                                                 case "puzzle":
-                                                    @:Воссоздание по частям
+                                                    <div class="puzzle">Воссоздание по частям</div>
+                                                    <span class="tooltip puzzle_tootlip">Данный метод представляет из себя нечто вроде конструктора, из частей которого вам предстоит собрать правильную последовательность</span>
                                                     break;
                                             }
-                                        </span>
+                                        </div>
                                     </div>
-                                    <button class="btn"  type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
-                                        <img class="setting-btn" src="https://icon-icons.com/icons2/1946/PNG/32/1904675-configuration-edit-gear-options-preferences-setting-settings_122525.png"/>
+                                    <button class="btn" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
+                                        <img class="setting-btn" src="./sett_icon.png" />
                                     </button>
                                 </div>
                             </div>
@@ -104,8 +106,8 @@
 
             </div>
         }
-        <div class="form-group">
-            <input type="submit" value="Сделать выбор" class="btn btn-primary" id="sumbit" onclick="MakeInstruction()" />
+        <div class="form-group mt-3">
+            <button type="submit" class="btn btn-primary" id="sumbit" onclick="MakeInstruction()">Сделать выбор</button>
         </div>
         <a asp-controller="PublicLibrary" asp-action="Index">
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
@@ -169,7 +171,21 @@
 
 <style>
     .setting-btn {
-        width:50%;
+        width: 50%;
+    }
+
+    .tooltip {
+        width: 75%;
+    }
+
+    .miss_word:hover + .miss_word_tootlip {
+        display: block;
+        opacity: 1;
+    }
+
+    .puzzle:hover + .puzzle_tootlip {
+        display: block;
+        opacity: 1;
     }
 </style>
 
