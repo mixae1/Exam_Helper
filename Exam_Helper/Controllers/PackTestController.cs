@@ -45,7 +45,7 @@ namespace Exam_Helper.Controllers
 
             var models = new TestChoiceViewModel()
             {
-                TestMethodsNames = new string[] { "сопоставить название и определение(Тест) ", "сопоставить название и док-во(Тест)", "Методы тестирования/заучивания" },
+                TestMethodsNames = new string[] { "NAD", "сопоставить название и док-во(Тест)", "Методы тестирования/заучивания" },
                 TestsMethodsIds =new int[] { 1,2,3}
             };
             return View(models);
@@ -53,13 +53,13 @@ namespace Exam_Helper.Controllers
 
 
         [HttpPost]
-        public RedirectToActionResult Index([Bind("SelectedId")] TestChoiceViewModel temp)
+        public RedirectToActionResult Index([Bind("ServiceInfo, SelectedId")] TestChoiceViewModel temp)
         {
             if (ModelState.IsValid)
             {
                 switch (temp.SelectedId)
                 {
-                    case 1: return RedirectToAction(nameof(TestNamesAndDescription));
+                    case 1: return RedirectToAction(nameof(TestNamesAndDescription), new { Instruction = temp.ServiceInfo});
                     default: return RedirectToAction(nameof(Index));
                 }
             }
@@ -75,7 +75,8 @@ namespace Exam_Helper.Controllers
 
             var ques = await _dbContext.Question.Where(x => pack.QuestionSet.Contains(x.Id.ToString())).Select(x => new HelpStruct(x.Definition, x.Title)).ToListAsync();
 
-            TestNamesAndDescription testNamesAndDescription = new TestNamesAndDescription(ques);
+
+            TestNamesAndDescription testNamesAndDescription = new TestNamesAndDescription(ques, Instruction);
             TestInfoNamesAndDescription ts = new TestInfoNamesAndDescription()
             {
                 Names = testNamesAndDescription.FinalNames,
