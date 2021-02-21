@@ -3,6 +3,8 @@ namespace Exam_Helper.ViewsModel
 {
     public class TestInfoPuzzle:TestParent
     {
+        public string Title { get; set; }
+
         public int[] RightIndexes { get; set; }
 
         public string[] TestStrings { get; set; }

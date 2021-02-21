@@ -17,6 +17,7 @@ namespace Exam_Helper.ViewsModel
 
         public string ServiceInfo { get; set; }
 
+        [Required(ErrorMessage = "Выберите один из вариантов")]
         [Range(1,100000,ErrorMessage ="Выберите один из вариантов")]
         public int SelectedId { get; set; }
     }

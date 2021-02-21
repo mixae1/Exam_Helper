@@ -1,18 +1,19 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 <style>
-    .lazyBack{
-        text-decoration:none;
-        color:white;
-    }
-
-    .lazyBack:hover{
+    .lazyBack {
         text-decoration: none;
         color: white;
     }
 
-    </style>
+        .lazyBack:hover {
+            text-decoration: none;
+            color: white;
+        }
+</style>
 <main class="d-flex flex-column main_page">
     <div class="container mt-3 mb-3">
         <div class="container text-center mt-3 mb-5">
@@ -29,10 +30,13 @@
         <div class="row">
             <div class="col d-flex flex-column text-center justify-content-center align-items-center  pt-2 pb-2">
                 <span class="h4">Создай свой личный кабинет, в котором будут все необходимые материалы</span>
-                <button type="button" class="btn btn-dark mt-2 pb-2"><a class="lazyBack" asp-controller="UserAccount" asp-action="Login">Вход</a></button>
+                @if (!SignInManager.IsSignedIn(User))
+                {
+                    <button type="button" class="btn btn-dark mt-2 pb-2"><a class="lazyBack" asp-controller="UserAccount" asp-action="Login">Вход</a></button>
+                }
             </div>
             <div class="col d-flex justify-content-center align-items-center pt-2 pb-2">
-                <img id="first_icon"/>
+                <img id="first_icon" />
             </div>
         </div>
     </div>
@@ -45,7 +49,10 @@
 
             <div class="col d-flex flex-column text-center justify-content-center align-items-center  pt-2 pb-2">
                 <span class="h4">Пользуйся всеми вариантами тестирования, это поможет тебе на экзамене</span>
-                <button type="button" class="btn btn-dark mt-2"><a class="lazyBack" asp-controller="UserAccount" asp-action="Registration">Начнём</a></button>
+                @if (!SignInManager.IsSignedIn(User))
+                {
+                    <button type="button" class="btn btn-dark mt-2"><a class="lazyBack" asp-controller="UserAccount" asp-action="Registration">Начнём</a></button>
+                }
             </div>
         </div>
     </div>

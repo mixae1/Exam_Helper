@@ -10,7 +10,8 @@ namespace Exam_Helper.ViewsModel
     {
         [Display(Name = "Вопросы")]
         public List<QuestionForPackCreatingModel> questions { get; set; }
-        public Pack pack { get; set; }
+        [Display(Name = "Паки")]
+        public List<PackForPackCreatingModel> packs { get; set; }
         [Display(Name = "Теги")]
         public List<TagForPackCreatingModel> tags { get; set; }
         
@@ -33,6 +34,14 @@ namespace Exam_Helper.ViewsModel
     {
         public int Id { get; set; }
        
+        public string Name { get; set; }
+
+        public bool IsSelected { get; set; }
+    }
+    public class PackForPackCreatingModel
+    {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public bool IsSelected { get; set; }
