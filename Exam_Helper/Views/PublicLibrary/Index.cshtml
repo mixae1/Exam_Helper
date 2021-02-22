@@ -170,6 +170,36 @@
     var SearchString = $("#Search");
     var SelectedPage = Page.QuestionPage;
 
+    var lastChecked = null;
+
+    $('input#qSelect').on('click', function (e) {
+        var $checkboxes = $('input#qSelect');
+        if (!lastChecked) {
+            lastChecked = this;
+        }
+
+        if (e.shiftKey) {
+            var start = $checkboxes.index(this);
+            var end = $checkboxes.index(lastChecked);
+            $checkboxes.slice(Math.min(start, end), Math.max(start, end) + 1).prop("checked", lastChecked.checked);
+        }
+        lastChecked = this;
+    });
+
+    $('input#pSelect').on('click', function (e) {
+        var $checkboxes = $('input#pSelect');
+        if (!lastChecked) {
+            lastChecked = this;
+        }
+
+        if (e.shiftKey) {
+            var start = $checkboxes.index(this);
+            var end = $checkboxes.index(lastChecked);
+            $checkboxes.slice(Math.min(start, end), Math.max(start, end) + 1).prop("checked", lastChecked.checked);
+        }
+        lastChecked = this;
+    });
+
     function CheckAll(flag) {
         switch (SelectedPage) {
             case Page.QuestionPage:
@@ -272,11 +302,13 @@
         $('#collapseAllPacks').removeClass('show');
         if (SelectedPage != Page.QuestionPage) SelectedPage = Page.QuestionPage;
         else SelectedPage = Page.None;
+        lastChecked = null;
     });
     $("#button_Pack").click(function () {
         $('#collapseAllQuestion').removeClass('show');
         if (SelectedPage != Page.PackPage) SelectedPage = Page.PackPage;
         else SelectedPage = Page.None;
+        lastChecked = null;
     });
 
     function AddQuestion(id) {
