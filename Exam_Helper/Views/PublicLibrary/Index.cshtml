@@ -4,6 +4,48 @@
     ViewData["Title"] = "Public Library";
 }
 
+
+<style>
+    .alert {
+        padding: 20px;
+        background-color: #f44336;
+        color: white;
+        opacity: 1;
+        transition: opacity 0.6s;
+        margin-bottom: 15px;
+    }
+
+        .alert.success {
+            background-color: #4CAF50;
+        }
+
+        .alert.info {
+            background-color: #2196F3;
+        }
+
+        .alert.warning {
+            background-color: #ff9800;
+        }
+
+    .closebtn {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        .closebtn:hover {
+            color: black;
+        }
+</style>
+
+<div id="Alerts" style="position: absolute; right: 0; top: 0;">
+</div>
+
 <main class="container" style="padding-top: 3vh;">
     <div class="container">
 
@@ -172,6 +214,19 @@
 
     var lastChecked = null;
 
+    var alerts = document.getElementsByClassName("closebtn");
+
+    function CreateAlert(str, type) {
+        $('#Alerts').append('<div class="alert ' + type + '"><span class="closebtn";">×</span><strong>' + str + '</strong></div>');
+        alerts = document.getElementsByClassName("closebtn");
+        console.log(alerts);
+        alerts[alerts.length - 1].onclick = function () {
+            var div = this.parentElement;
+            div.style.opacity = "0";
+            setTimeout(function () { div.style.display = "none"; }, 600);
+        }
+    };
+
     $('input#qSelect').on('click', function (e) {
         var $checkboxes = $('input#qSelect');
         if (!lastChecked) {
@@ -252,7 +307,7 @@
         var buf = [];
 
         if (SelectedPage == Page.None) {
-            alert("Ни одна из вкладок не открыта.");
+            CreateAlert("Ни одна из вкладок не открыта.", "warning");
         }
         else {
 
@@ -271,8 +326,8 @@
             }
 
             if (buf.length == 0) {
-                if (SelectedPage == Page.QuestionPage) alert("Ни один вопрос не выбран.");
-                if (SelectedPage == Page.PackPage) alert("Ни один пак не выбран.");
+                if (SelectedPage == Page.QuestionPage) CreateAlert("Ни один вопрос не выбран.", "warning");
+                if (SelectedPage == Page.PackPage) CreateAlert("Ни один пак не выбран.", "warning");
             }
             else {
 
@@ -291,7 +346,7 @@
                         $('#modDialog').modal('show');
                         },
                     error: function (data) {
-                        alert("Что-то пошло не так");
+                        CreateAlert("Что-то пошло не так", "");
                         }
                 })
             }
