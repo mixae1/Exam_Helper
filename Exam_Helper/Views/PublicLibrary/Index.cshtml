@@ -217,7 +217,7 @@
     var alerts = document.getElementsByClassName("closebtn");
 
     function CreateAlert(str, type) {
-        $('#Alerts').append('<div class="alert ' + type + '"><span class="closebtn";">×</span><strong>' + str + '</strong></div>');
+        $('#Alerts').append('<div class="alert ' + type + '"><span class="closebtn">×</span><strong>' + str + '</strong></div>');
         alerts = document.getElementsByClassName("closebtn");
         console.log(alerts);
         alerts[alerts.length - 1].onclick = function () {
