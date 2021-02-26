@@ -70,6 +70,7 @@
             data: { id: '@Model.Id' },
             success: function (msg) {
                 $('div[class="accordion"][id="accordionExample"][data-id="' + msg + '"][data-type="pack"]').remove();
+                CreateAlert("Удалено.", "info");
             },
             error: function () {
             }
