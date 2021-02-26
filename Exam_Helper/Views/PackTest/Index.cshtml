@@ -22,7 +22,7 @@
                                     </div>
                                     <button class="btn btn-light border" style="background-color: #e9ecef; border-color:#e9ecef;" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
                                         <span asp-for="@Model.TestsMethodsIds[i]">
-                                           @Model.TestMethodsNames[i]
+                                            @Model.TestMethodsNames[i];
                                         </span>
                                     </button>
                                 </div>
@@ -31,7 +31,17 @@
                     </div>
                     <div id="collapse_@Model.TestMethodsNames[i]" class="panel-collapse collapse in">
                         <div class="panel-body">
-                           <!-- код для пользовательских настроек -->
+                            <!-- код для пользовательских настроек -->
+                            @switch (Model.TestMethodsNames[i])
+                            {
+                                case "NAD":
+                                    <p>
+                                        Количество вариантов:
+                                        <input type="range" min="1" max="100" value="50" id="mw_quantity">
+                                    </p>
+                                    break;
+                                default: break;
+                            }
                         </div>
                     </div>
                 </div>
@@ -49,3 +59,35 @@
 
 </main>
 
+<script>
+
+    const variants = $("#collapse_NAD > div");
+
+    function MakeInstruction() {
+        var curr_method;
+        $("input#method").each(function () {
+            if ($(this).is(":checked")) {
+                curr_method = $(this).attr("method-type");
+            }
+        });
+
+        var instruction;
+
+        switch (curr_method) {
+            case "NAD":
+                instruction =
+                    variants.find("input#mw_quantity").val().toString();
+                break;
+        }
+
+        console.log(instruction);
+        $("input#ServiceInfo").val(instruction);
+        console.log($("input#ServiceInfo").val());
+    };
+</script>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

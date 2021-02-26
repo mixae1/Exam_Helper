@@ -25,6 +25,7 @@ namespace Exam_Helper.TestMethods
         private string description;
         private int answerId;
         private float percent;
+        private const float PERCENT = 66f;
         private int countOfNames;
 
         public List<string> FinalNames
@@ -59,12 +60,23 @@ namespace Exam_Helper.TestMethods
             }
         }
 
-        public TestNamesAndDescription(List<HelpStruct> Names)
+        public TestNamesAndDescription(List<HelpStruct> Names, string Instruction)
         {
-            percent = 1;
+            if (!float.TryParse(Instruction, out percent)) percent = PERCENT;
+
+            if (percent < 1 || percent > 100)
+                throw new Exception("incorrect percent");
+
+            percent /= 100;
+
             Random r = new Random((int)DateTime.Now.Ticks);
 
             countOfNames = (int)(Names.Count * percent);
+
+            if (countOfNames < 1)
+            {
+                countOfNames = 1;
+            }
 
             while (countOfNames < Names.Count)
             {
