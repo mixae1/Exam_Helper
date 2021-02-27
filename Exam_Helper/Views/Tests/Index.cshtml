@@ -108,9 +108,11 @@
                                     break;
 
                                 case "MultiTesting":
+
                                     <p>
                                         Количество тестов "Воссоздание по частям":
-                                        <input type="range" min="1" max="5" value="3" id="mtParts_quantity">
+                                        <input type="range" min="1" max="5" value="3" id="mtParts_quantity" onchange="displayValue(this,'mtPuzzle-input')">
+                                        <span id="mtPuzzle-input">3</span>
                                     </p>
                                     <p>
                                         Настройка для метода "Воссоздание по частям"
@@ -151,11 +153,14 @@
 
                                     <p>
                                         Количество тестов "Вставка пропущенных слов":
-                                        <input type="range" min="1" max="5" value="3" id="mtMisWords_quantity">
+                                        <input type="range" min="1" max="5" value="3" id="mtMisWords_quantity" onchange="displayValue(this,'mtMisWords-input')">
+                                        <span id="mtMisWords-input">3</span>
                                     </p>
+
                                     <p>
                                         Настройка для метода "Вставка пропущенных слов"
                                     </p>
+
                                     <div id="collapse_MultiTesting_MissedWords" class="panel-collapse collapse in">
                                         <div class="panel-body">
                                             <p>
@@ -260,6 +265,12 @@
 
     const sepSlider = puzzle.find("input#p_sep");
     const sepLog = puzzle.find("span#sepLog");
+
+    function displayValue(obj,id) {
+        var inputSpan = document.getElementById(id);
+        inputSpan.innerHTML = obj.value;
+    }
+
 
     function UpdateSepName() {
         var buf = "";
