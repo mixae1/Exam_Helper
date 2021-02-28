@@ -68,7 +68,7 @@ namespace Exam_Helper.TestMethods
                     if (stringUnioner[stringUnioner.Count - 1] != "")
                     {
                         stringUnioner[stringUnioner.Count - 1] = "<span class=\"h5\">" + stringUnioner[stringUnioner.Count - 1] + "</span>";
-                        stringUnioner.Add("<input class=\"editablesection\" maxlength=\"" + answers[curr_word].Length + "\" style=\"width: " + answers[curr_word].Length*10 + "px;\" class=\"test\" />");
+                        stringUnioner.Add("<input class=\"editablesection test\" maxlength=\"" + answers[curr_word].Length + "\" style=\"width: " + answers[curr_word].Length*10 + "px;\"/>");
                     }
                     else
                     {
@@ -88,6 +88,7 @@ namespace Exam_Helper.TestMethods
 
         public TestMissedWords(string Thereom, string Instruction = "33;true")
         {
+            if (string.IsNullOrEmpty(Instruction)) Instruction = "50;false";
             var instructions = new MissedWordsInstruction(Instruction);
 
             percent = instructions.percent;

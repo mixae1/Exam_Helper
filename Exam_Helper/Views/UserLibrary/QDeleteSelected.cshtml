@@ -50,7 +50,7 @@
             $('div[class="accordion"][id="accordionExample"][data-type="question"]').filter(function () {
                 return dqs.includes(this.dataset.id.toString());
             }).remove();
-            
+            CreateAlert("Удалено.", "info");
         })
     };
 </script>

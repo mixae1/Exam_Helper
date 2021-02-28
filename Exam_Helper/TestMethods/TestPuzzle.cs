@@ -318,6 +318,7 @@ namespace Exam_Helper.TestMethods
 
         public PuzzleInstruction(string instruction)
         {
+            if (string.IsNullOrEmpty(instruction)) instruction = "50;false;false;0;";
             string[] instructions = instruction.Split(";");
 
             if (!float.TryParse(instructions[0], out percent)) percent = PERCENT;

@@ -60,11 +60,17 @@ namespace Exam_Helper.Controllers
              
 
             var tests = await _dbContext.Tests.ToListAsync();
+
+            //лень было в БД заносить
+            tests.Add(new Tests() { Name = "MultiTesting", Id = 3 });
+
+
             var models = new TestChoiceViewModel()
             {
                 TestMethodsNames = tests.Select(x => x.Name).ToArray(),
                 TestsMethodsIds = tests.Select(x => x.Id).ToArray()
             };
+
             return View(models);
         }
 
@@ -77,7 +83,8 @@ namespace Exam_Helper.Controllers
                 {
                     case 1: return RedirectToAction(nameof(MissingWordsTest), new { Instruction = temp.ServiceInfo });
                     case 2: return RedirectToAction(nameof(PuzzleTest), new { Instruction = temp.ServiceInfo });
-                    default: return RedirectToAction(nameof(Index));
+                    case 3: return RedirectToAction(nameof(MultiTesting), new { Instruction = temp.ServiceInfo });
+                    default:return RedirectToAction(nameof(Index));
                 }
             }
             Console.WriteLine(ModelState.Values);
@@ -86,7 +93,7 @@ namespace Exam_Helper.Controllers
 
         // для подключения к библиотеки question нужно сюда в параметры передать question
         [HttpGet]
-        public IActionResult MissingWordsTest(string Instruction)
+        public IActionResult MissingWordsTest(string Instruction,bool isMulti=false)
         {
              
             Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session,"question");
@@ -98,14 +105,16 @@ namespace Exam_Helper.Controllers
                 Title = question.Title,
                 Teorem = testMissed.GetWordsWithInputs(),
                 Answers = testMissed.Answers,
-                IsSuccessed = testMissed.IsSuccessed
+                IsSuccessed = testMissed.IsSuccessed,
+                TestInstructions=Instruction,
+                isMulti=isMulti
             };
 
             return View(ts);
         }
 
         [HttpGet]
-        public IActionResult PuzzleTest(string Instruction)
+        public IActionResult PuzzleTest(string Instruction,bool isMulti=false)
         {
 
             Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session, "question");
@@ -117,7 +126,9 @@ namespace Exam_Helper.Controllers
                 Title = question.Title,
                 TestStrings = testPuzzle.TestStrings,
                 RightIndexes = testPuzzle.RightIndexes,
-                IsSuccessed = testPuzzle.IsSuccessed
+                IsSuccessed = testPuzzle.IsSuccessed,
+                TestInstructions=Instruction,
+                isMulti=isMulti
             };
 
             return View(ts);
@@ -138,73 +149,55 @@ namespace Exam_Helper.Controllers
         }
         */
 
-        // GET: Tests/Details/5
-        public ActionResult Details(int id)
+        [HttpGet]
+        public RedirectToActionResult MultiTesting(string Instruction)
+        {
+            /* юзер выбирает этот метод ,указывая настройки : минимум 1 тест с каждого вида тестирования
+             * instruction - имеет вид "d;d" d- число [1,5]. При первом запуске в данных сессии нет ключа "test_times"
+             * поэтому настройки ( кол-во тестов ) будут распарсены из Instruction . Далее выбирем случайное число и перенаправляем
+             * в нужный метод , указывая метод тестирования одиночный или из мультитестирования. При этом в данных сессии уже есть 
+             * нужный ключ , поэтому когда идет очередной вызов этого метода , настройки достаются из сессии , и че там лежит в Instruction
+             * - нам без разницы
+             * 
+             * В дальнейшем структура Instruction изментится - появится возможность указывать настройки ддя методов тестирования
+             
+             */
+            if (string.IsNullOrEmpty(Instruction)) Instruction = "1;1";
+
+            var times = SessionHelper.GetObjectFromJson<int[]>(HttpContext.Session, "test_times");
+            if(times==null) times= Instruction.Split(';').Select(x => int.Parse(x)).ToArray();
+
+
+
+            if (times[0] > 0 || times[1] > 0)
+            {
+                Random r = new Random();
+                int nextTestMethod = r.Next(0, times.Length);
+
+                while(times[nextTestMethod]<=0)
+                  nextTestMethod = r.Next(0, times.Length );
+
+                times[nextTestMethod]--;
+                SessionHelper.SetObjectAsJson(HttpContext.Session, "test_times", times);
+
+                switch (nextTestMethod) 
+                {
+                    case 1:return RedirectToAction(nameof(MissingWordsTest),new { isMulti=true});
+                    case 0:return RedirectToAction(nameof(PuzzleTest), new { isMulti = true });
+                }
+
+            }
+
+
+            HttpContext.Session.Remove("test_times");
+            return RedirectToAction(nameof(UserStats));
+          
+        }
+
+        public IActionResult UserStats()
         {
             return View();
         }
-
-        // GET: Tests/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Tests/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Tests/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Tests/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Tests/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Tests/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+     
     }
 }

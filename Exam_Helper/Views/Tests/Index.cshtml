@@ -32,8 +32,14 @@
                                                     <span class="tooltip miss_word_tootlip">Данный метод случайным образом вставляет пропуски, которые вам необходимо будет заполнить</span>
                                                     break;
                                                 case "puzzle":
+
+                                                    @:Воссоздание по частям
+                                                  break;
+                              
                                                     <div class="puzzle">Воссоздание по частям</div>
                                                     <span class="tooltip puzzle_tootlip">Данный метод представляет из себя нечто вроде конструктора, из частей которого вам предстоит собрать правильную последовательность</span>
+                                     case "MultiTesting":
+                                                    @:Конструктор тестов
                                                     break;
                                             }
                                         </div>
@@ -98,6 +104,17 @@
 
                                     </p>
                                     break;
+
+                                case "MultiTesting":
+                                <p>
+                                    Количество тестов "Воссоздание по частям":
+                                    <input type="range" min="1" max="5" value="3" id="mtParts_quantity">
+                                </p>
+                                <p>
+                                    Количество тестов "Вставка пропущенных слов":
+                                    <input type="range" min="1" max="5" value="3" id="mtMisWords_quantity">
+                                </p>
+                                    break;
                                 default: break;
                             }
                         </div>
@@ -122,6 +139,9 @@
 
     const missed_words = $("#collapse_missed_words > div");
     const puzzle = $("#collapse_puzzle > div");
+    /**/
+    const multi = $("#collapse_MultiTesting > div");
+    /**/
 
     function MakeInstruction() {
         var curr_method;
@@ -145,6 +165,11 @@
                     puzzle.find("input#p_diffLenghtOfBlock").is(":checked").toString() + ";" +
                     puzzle.find("input#p_defaultBlocks").is(":checked").toString() + ";" +
                     puzzle.find("input#p_sep").val().toString() + ";";
+                break;
+            case "MultiTesting":
+                instruction =
+                    multi.find("input#mtParts_quantity").val().toString() + ";" +
+                    multi.find("input#mtMisWords_quantity").val().toString();
                 break;
         }
 

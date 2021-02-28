@@ -9783,19 +9783,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\fima3\\.nuget\\packages\\": {}
+    "C:\\Users\\Mixael\\.nuget\\packages\\": {},
+    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\work\\ExamHelper\\Ex\\Exam_Helper\\Exam_Helper.csproj",
+      "projectUniqueName": "C:\\Users\\Mixael\\source\\repos\\Exam_Helper\\Exam_Helper\\Exam_Helper.csproj",
       "projectName": "Exam_Helper",
-      "projectPath": "E:\\work\\ExamHelper\\Ex\\Exam_Helper\\Exam_Helper.csproj",
-      "packagesPath": "C:\\Users\\fima3\\.nuget\\packages\\",
-      "outputPath": "E:\\work\\ExamHelper\\Ex\\Exam_Helper\\obj\\",
+      "projectPath": "C:\\Users\\Mixael\\source\\repos\\Exam_Helper\\Exam_Helper\\Exam_Helper.csproj",
+      "packagesPath": "C:\\Users\\Mixael\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Mixael\\source\\repos\\Exam_Helper\\Exam_Helper\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+      ],
       "configFilePaths": [
-        "C:\\Users\\fima3\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Mixael\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -9876,7 +9880,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.406\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
       }
     }
   }
