@@ -26,11 +26,9 @@
             <div class="draggable-elems">
                 @foreach (var block in Temp_Model.TestStrings)
                 {
-                    <div class="mt-auto">
                         <div class="block text-center" id="@("draggable" + @num.ToString())">
                             <p>@block</p>
                         </div>
-                    </div>
 
                     num++;
                 }
@@ -94,10 +92,16 @@
                     // измененяем размеры контейнеров (ширину и высоту )первые 2 строки - меняем контейнер в которых кидаем , последние 2 строки - меняем контейнер который переносим
                     // $(this).css('height', ui.draggable.css('height'));
                       $(this).css('width', ui.draggable.css('width'));
-                      ui.draggable.css('height', $(this).css('height'));
+                        ui.draggable.css('height', $(this).css('height'));
                     //ui.draggable.css('width', $(this).css('width'));
+
                     $(this).append(ui.draggable);
                     $(this).removeClass('hover');
+                    $(this.children).css({
+                        "margin-top": "0px",
+                        "margin-right": "0px"
+                    });
+
                 }
                 
             }
@@ -111,12 +115,14 @@
 
 <style>
     .main {
-        margin-top: 10%;
+        margin-top: 5%;
     }
     .block {
         display: inline-block;
         border: 2px solid black;
         border-radius: 5px;
+        margin-top:10px;
+        margin-right:10px;
         padding: 15px;
     }
     .right {

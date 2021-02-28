@@ -32,11 +32,11 @@ html {
 
 @media screen and (max-width: 768px) {
     #first_icon {
-        content: url("../user-black-close-up-shape_icon-icons.com_56876.png");
+        content: url("../user-black-close-up-shape_icon.png");
     }
 
     #second_icon {
-        content: url("../book_dictionary_icon-icons.com_66121.png");
+        content: url("../book_dictionary_icon.png");
     }
 
     .main_page span {
@@ -45,6 +45,9 @@ html {
 
     .tags {
         width: 50%;
+    }
+    html {
+        font-size: 16px;
     }
 }
 
@@ -59,11 +62,19 @@ html {
         content: url("../book_dictionary_icon.png");
     }
 
-
-  html {
+    html {
     font-size: 16px;
-  }
+    }
 }
+
+
+
+/*@media screen and (max-width: 1200px) {
+    .button-group {
+        display: flex;
+        flex-direction: column;
+    }
+}*/
 
 .border-top {
   border-top: 1px solid #e5e5e5;
