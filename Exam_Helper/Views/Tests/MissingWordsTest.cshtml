@@ -38,9 +38,9 @@
         </a>
         @{
             if (Temp_Model.isMulti)
-                @Html.ActionLink("следующее задание", "MultiTesting", "Tests", new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
+                @Html.ActionLink("Cледующее задание", "MultiTesting", "Tests", new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
               else
-                @Html.ActionLink("пройти еще раз", "MissingWordsTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
+                @Html.ActionLink("Пройти еще раз", "MissingWordsTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
         }
 
     </div>
@@ -56,7 +56,7 @@
         }
         $("input.editablesection").each(function (index) {
             console.log($(this).val(), " ", ans[index]);
-            if ($(this).val() === ans[index]) {
+            if ($(this).val().toLowerCase() === ans[index].toLowerCase()) {
                 $(this).removeClass("wrong");
                 $(this).addClass("right");
             }
