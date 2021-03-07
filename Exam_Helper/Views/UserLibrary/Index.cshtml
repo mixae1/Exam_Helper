@@ -69,38 +69,43 @@
 
             <hr color="brown" />
 
-            <div class="container d-flex bd-highlight pt-3" style="padding-bottom:1rem;">
-                <button class="btn btn-primary" type="button" id="button_Que" data-toggle="collapse" data-target="#collapseAllQuestion" aria-expanded="true" aria-controls="collapseAllQuestion">
-                    Вопросы
-                </button>
-                <button class="btn btn-primary ml-1" type="button" id="button_Pack" data-toggle="collapse" data-target="#collapseAllPacks" aria-expanded="true" aria-controls="collapseAllPacks">
-                    Паки
-                </button>
-                <a class="btn btn-primary ml-1" type="button" style="cursor:cell;" asp-action="QCreate">
-                    Добавить вопрос
-                </a>
-                <a class="btn btn-primary ml-1" type="button" style="cursor:cell;" asp-action="PCreate">
-                    Добавить пак
-                </a>
-                <button class="btn btn-primary ml-1" type="button" onclick="EngageSelected('delete')" id="DeleteSelectedButton">
-                    Удалить выбранное
-                </button>
-                <button class="btn btn-primary ml-1" type="button" onclick="EngageSelected('publish')" id="PublishSelectedButton">
-                    Опубликовать выбранное
-                </button>
-                <button class="btn btn-primary ml-1" type="button" onclick="EngageSelected('hide')" id="HideSelectedButton">
-                    Скрыть выбранное
-                </button>
-                <button class="btn btn-primary ml-1" type="button" onclick="CheckAll(true)">
-                    Выбрать всё
-                </button>
-                <button class="btn btn-primary ml-1" type="button" onclick="CheckAll(false)">
-                    Выбрать ничего
-                </button>
-
+            <div class="container bd-highlight pt-3" style="padding-bottom:1rem;">
+                <div class="row justify-content-between">
+                    <button class="btn btn-primary col col-sm-2" type="button" id="button_Que" data-toggle="collapse" data-target="#collapseAllQuestion" aria-expanded="true" aria-controls="collapseAllQuestion">
+                        Вопросы
+                    </button>
+                    <button class="btn btn-primary col col-sm-2" type="button" id="button_Pack" data-toggle="collapse" data-target="#collapseAllPacks" aria-expanded="true" aria-controls="collapseAllPacks">
+                        Паки
+                    </button>
+                    <a class="btn btn-primary col col-sm-2" type="button" style="cursor:cell;" asp-action="QCreate">
+                        Добавить вопрос
+                    </a>
+                    <a class="btn btn-primary col col-sm-2" type="button" style="cursor:cell;" asp-action="PCreate">
+                        Добавить пак
+                    </a>
+                </div>
             </div>
             <div class="form-group pb-3 bd-highlight ml-auto p-2">
                 <input type="text" name="SearchString" class="form-control" placeholder="Поиск.." id="Search">
+            </div>
+            <div class="container">
+                <div class="row justify-content-between">
+                    <button class="btn btn-primary col col-sm-2" type="button" onclick="EngageSelected('delete')" id="DeleteSelectedButton">
+                        Удалить выбранное
+                    </button>
+                    <button class="btn btn-primary col col-sm-2" type="button" onclick="EngageSelected('publish')" id="PublishSelectedButton">
+                        Опубликовать выбранное
+                    </button>
+                    <button class="btn btn-primary col col-sm-2" type="button" onclick="EngageSelected('hide')" id="HideSelectedButton">
+                        Скрыть выбранное
+                    </button>
+                    <button class="btn btn-primary col col-sm-2" type="button" onclick="CheckAll(true)">
+                        Выбрать всё
+                    </button>
+                    <button class="btn btn-primary col col-sm-2" type="button" onclick="CheckAll(false)">
+                        Выбрать ничего
+                    </button>
+                </div>
             </div>
             <div class="panel-group" id="accordionCommon">
                 <div class="collapse show" id="collapseAllQuestion">
