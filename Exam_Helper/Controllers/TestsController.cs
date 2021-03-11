@@ -144,7 +144,7 @@ namespace Exam_Helper.Controllers
              * нужный ключ , поэтому когда идет очередной вызов этого метода , настройки достаются из сессии , и че там лежит в Instruction
              * - нам без разницы
              * 
-             * В дальнейшем структура Instruction изментится - появится возможность указывать настройки для методов тестирования
+             * 
              
              */
             if (string.IsNullOrEmpty(Instruction)) Instruction = "1;1";
@@ -161,7 +161,7 @@ namespace Exam_Helper.Controllers
             var PuzzleInstructions = HttpContext.Session.GetString("puzzle_inst");
             if (PuzzleInstructions == null) PuzzleInstructions = instructions[1];
 
-            //TODO внедрить инструкции методов тестов - в представлениях все добавлено ,осталось - закинуть в данные сессии и правильно распарсить
+  
 
             if (times[0] > 0 || times[1] > 0)
             {
