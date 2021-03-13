@@ -3,21 +3,21 @@
 <head>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 </head>
-<main style="height: 75vh;" class="d-flex align-items-center justify-content-center">
+<main class="container d-flex align-items-center justify-content-center">
     <form asp-action="Index" method="post">
         <h2>
             Выберете метод тестирования:
         </h2>
         <div asp-validation-summary="All" class="text-danger"></div>
-        <div class="row">
+        <div class="container">
             @for (int i = 0; i < Model.TestMethodsNames.Length; i++)
             {
-                <div class="panel-group col col-sm-4 justify-content-between" id="accordion">
+                <div class="panel-group row justify-content-between" id="accordion">
                     <div class="panel panel-default mb-3">
                         <div class="panel-heading">
                             <div class="d-flex justify-content-between pt-3 pb-2">
                                 <div class="input-group">
-                                    <div class="input-group-prepend bg-white mr-3">
+                                    <div class="input-group-prepend align-content-center bg-white mr-3 test-card">
                                         <div class="input-group-text">
                                             <input asp-for="@Model.SelectedId" value="@Model.TestsMethodsIds[i]" type="radio" id="method" method-type="@Model.TestMethodsNames[i]" />
                                             <input asp-for="@Model.TestsMethodsIds[i]" type="hidden" />
@@ -26,12 +26,12 @@
                                             <span asp-validation-for="@Model.SelectedId" hidden></span>
                                         </div>
                                         <div class="border" style="background-color: #e9ecef; border-color:#e9ecef;">
-                                            <div class="text-center" asp-for="@Model.TestsMethodsIds[i]">
+                                            <div class="text-center p-2" asp-for="@Model.TestsMethodsIds[i]">
                                                 @switch (Model.TestMethodsNames[i])
                                                 {
                                                     case "missed_words":
                                                         <div class="miss_word">Метод пропущенных слов</div>
-                                                        <span class="tooltip miss_word_tootlip">Данный метод случайным образом вставляет пропуски, которые вам необходимо будет заполнить</span>
+                                                        @*<span class="tooltip miss_word_tootlip">Данный метод случайным образом вставляет пропуски, которые вам необходимо будет заполнить</span>*@
                                                         break;
                                                     case "puzzle":
 
@@ -39,7 +39,7 @@
                                                         break;
 
                                                     <div class="puzzle">Воссоздание по частям</div>
-                                                    <span class="tooltip puzzle_tootlip">Данный метод представляет из себя нечто вроде конструктора, из частей которого вам предстоит собрать правильную последовательность</span>
+                                                    @*<span class="tooltip puzzle_tootlip">Данный метод представляет из себя нечто вроде конструктора, из частей которого вам предстоит собрать правильную последовательность</span>*@
                                                     case "MultiTesting":
                                                         @:Конструктор тестов
                                                         break;
@@ -291,11 +291,14 @@
 </script>
 
 <style>
+    main {
+        margin-top: 5%;
+    }
     .setting-btn {
         width: 50%;
     }
 
-    .tooltip {
+    /*.tooltip {
         width: 75%;
     }
 
@@ -307,10 +310,14 @@
     .puzzle:hover + .puzzle_tootlip {
         display: block;
         opacity: 1;
-    }
+    }*/
     .panel-body {
-        height:250px;
-        overflow: scroll
+        padding: 5px;
+        height:175px;
+        overflow-y: scroll
+    }
+    .test-card {
+        height:70px;
     }
 </style>
 
