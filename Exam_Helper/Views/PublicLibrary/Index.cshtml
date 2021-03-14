@@ -62,13 +62,14 @@
                             <div class="row align-items-center">
                                 <div class="col col-sm col-md-8">
                                     <div class="row row-cols-auto align-items-center">
-                                        
-                                        @{
-                                            if (_signInManager.IsSignedIn(User))
-                                            {
-                                                <input class="ml-2" type="checkbox" id="qSelect" />
+                                        <div>
+                                            @{
+                                                if (_signInManager.IsSignedIn(User))
+                                                {
+                                                    <input class="ml-2" type="checkbox" id="qSelect" />
+                                                }
                                             }
-                                        }
+                                        </div>
                                         <button class="btn text-center titleText" type="button" data-toggle="collapse" data-target="#q_collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="q_collapse_@item.Id.ToString()">
                                             <p class="h4" id="qTitle">@item.Title </p>
                                         </button>
