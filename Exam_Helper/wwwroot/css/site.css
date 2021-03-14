@@ -113,7 +113,7 @@ body {
 
 
 .titleText {
-    white-space: pre-line; /*Запрещаем перенос строк */
+    white-space: nowrap; /*Запрещаем перенос строк*/
 }
 
 .actionButton .collapsing {

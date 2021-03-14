@@ -52,10 +52,11 @@
     }
 </style>
 
-<div id="Alerts" style="position: absolute; right: 0; top: 0;">
-</div>
+
 
 <main class="container" style="padding-top: 3vh;">
+    <div id="Alerts" style="position: absolute; right: 0; top: 0;">
+    </div>
     <form id="form">
         <div class="container">
 
@@ -225,6 +226,7 @@
     var alerts = document.getElementsByClassName("closebtn");
 
     function CreateAlert(str, type) {
+        $('#Alerts').empty();
         $('#Alerts').append('<div class="alert ' + type + '"><span class="closebtn">×</span><strong>' + str + '</strong></div>');
         alerts = document.getElementsByClassName("closebtn");
         console.log(alerts);
@@ -233,7 +235,9 @@
             div.style.opacity = "0";
             setTimeout(function () { div.style.display = "none"; }, 600);
         }
+        setTimeout(function () { $('#Alerts').empty(); }, 5000);
     };
+
 
     $('input#qSelect').on('click', function (e) {
         var $checkboxes = $('input#qSelect');
