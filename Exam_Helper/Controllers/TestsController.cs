@@ -63,7 +63,8 @@ namespace Exam_Helper.Controllers
 
             //лень было в БД заносить
             tests.Add(new Tests() { Name = "MultiTesting", Id = 3 });
-
+            //полностью согласен
+            tests.Add(new Tests() { Name = "wrong_text", Id = 4 });
 
             var models = new TestChoiceViewModel()
             {
@@ -84,6 +85,7 @@ namespace Exam_Helper.Controllers
                     case 1: return RedirectToAction(nameof(MissingWordsTest), new { Instruction = temp.ServiceInfo });
                     case 2: return RedirectToAction(nameof(PuzzleTest), new { Instruction = temp.ServiceInfo });
                     case 3: return RedirectToAction(nameof(MultiTesting), new { Instruction = temp.ServiceInfo });
+                    case 4: return RedirectToAction(nameof(TheWrongTextTest), new { Instruction = temp.ServiceInfo });
                     default:return RedirectToAction(nameof(Index));
                 }
             }
@@ -93,7 +95,7 @@ namespace Exam_Helper.Controllers
 
         // для подключения к библиотеки question нужно сюда в параметры передать question
         [HttpGet]
-        public IActionResult MissingWordsTest(string Instruction,bool isMulti=false)
+        public IActionResult MissingWordsTest(string Instruction, bool isMulti=false)
         {
              
             Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session,"question");
@@ -114,7 +116,7 @@ namespace Exam_Helper.Controllers
         }
 
         [HttpGet]
-        public IActionResult PuzzleTest(string Instruction,bool isMulti=false)
+        public IActionResult PuzzleTest(string Instruction, bool isMulti=false)
         {
 
             Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session, "question");
@@ -129,6 +131,26 @@ namespace Exam_Helper.Controllers
                 IsSuccessed = testPuzzle.IsSuccessed,
                 TestInstructions=Instruction,
                 isMulti=isMulti
+            };
+
+            return View(ts);
+        }
+
+        [HttpGet]
+        public IActionResult TheWrongTextTest(string Instruction, bool isMulti = false)
+        {
+
+            Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session, "question");
+            if (question == null) throw new Exception("question==null");
+
+            TestTheWrongText testTWT = new TestTheWrongText(question.Definition, Instruction);
+            TestInfoTheWrongText ts = new TestInfoTheWrongText()
+            {
+                Title = question.Title,
+                Text = testTWT.htmlText,
+                IsSuccessed = testTWT.IsSuccessed,
+                TestInstructions = Instruction,
+                isMulti = isMulti
             };
 
             return View(ts);

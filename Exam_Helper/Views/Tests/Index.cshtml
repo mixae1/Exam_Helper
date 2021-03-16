@@ -38,10 +38,13 @@
                               
                                                     <div class="puzzle">Воссоздание по частям</div>
                                                     <span class="tooltip puzzle_tootlip">Данный метод представляет из себя нечто вроде конструктора, из частей которого вам предстоит собрать правильную последовательность</span>
-                                     case "MultiTesting":
+                                                case "MultiTesting":
                                                     @:Конструктор тестов
                                                     break;
-                                            }
+
+                                                case "wrong_text":
+                                                    break;
+                                                }
                                         </div>
                                     </div>
                                     <button class="btn" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
@@ -106,14 +109,39 @@
                                     break;
 
                                 case "MultiTesting":
-                                <p>
-                                    Количество тестов "Воссоздание по частям":
-                                    <input type="range" min="1" max="5" value="3" id="mtParts_quantity">
-                                </p>
-                                <p>
-                                    Количество тестов "Вставка пропущенных слов":
-                                    <input type="range" min="1" max="5" value="3" id="mtMisWords_quantity">
-                                </p>
+                                    <p>
+                                        Количество тестов "Воссоздание по частям":
+                                        <input type="range" min="1" max="5" value="3" id="mtParts_quantity">
+                                    </p>
+                                    <p>
+                                        Количество тестов "Вставка пропущенных слов":
+                                        <input type="range" min="1" max="5" value="3" id="mtMisWords_quantity">
+                                    </p>
+                                    break;
+                                case "wrong_text":
+                                    <p>
+                                        Количество ошибок:
+                                        <input type="range" min="1" max="100" value="50" id="wt_quantity" disabled>
+                                    </p>
+                                    <p>
+                                        <span>
+                                            Убрать окончания у прилагательных:
+                                            <input type="checkbox" id="wt_hideEndings" disabled>
+                                        </span>
+                                        <br />
+                                        <span>
+                                            Делать ошибки в числах:
+                                            <input type="checkbox" id="wt_numbers" disabled>
+                                        </span>
+                                        <span>
+                                            Делать ошибки в знаках:
+                                            <input type="checkbox" id="wt_signs" disabled>
+                                        </span>
+                                        <span>
+                                            Делать ошибки в греческих буквах:
+                                            <input type="checkbox" id="wt_alpha" disabled>
+                                        </span>
+                                    </p>
                                     break;
                                 default: break;
                             }
@@ -138,9 +166,12 @@
 <script>
 
     const missed_words = $("#collapse_missed_words > div");
+    /**/
     const puzzle = $("#collapse_puzzle > div");
     /**/
     const multi = $("#collapse_MultiTesting > div");
+    /**/
+    const wrong_text = $("#collapse_wrong_text > div");
     /**/
 
     function MakeInstruction() {
@@ -170,6 +201,14 @@
                 instruction =
                     multi.find("input#mtParts_quantity").val().toString() + ";" +
                     multi.find("input#mtMisWords_quantity").val().toString();
+                break;
+            case "MultiTesting":
+                instruction =
+                    wrong_text.find("input#wt_quantity").val().toString() + ";" +
+                    wrong_text.find("input#wt_hideEndings").is(":checked").toString() + ";" +
+                    wrong_text.find("input#wt_numbers").is(":checked").toString() + ";" +
+                    wrong_text.find("input#wt_signs").is(":checked").toString() + ";" +
+                    wrong_text.find("input#wt_alpha").is(":checked").toString();
                 break;
         }
 
