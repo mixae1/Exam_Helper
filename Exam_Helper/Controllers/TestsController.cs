@@ -93,7 +93,7 @@ namespace Exam_Helper.Controllers
 
         // для подключения к библиотеки question нужно сюда в параметры передать question
         [HttpGet]
-        public IActionResult MissingWordsTest(string Instruction,bool isMulti=false)
+        public IActionResult MissingWordsTest(string Instruction,bool isMulti=false,string ControllerName="Tests")
         {
              
             Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session,"question");
@@ -107,14 +107,15 @@ namespace Exam_Helper.Controllers
                 Answers = testMissed.Answers,
                 IsSuccessed = testMissed.IsSuccessed,
                 TestInstructions=Instruction,
-                isMulti=isMulti
+                isMulti=isMulti,
+                ControllerName=ControllerName
             };
 
             return View(ts);
         }
 
         [HttpGet]
-        public IActionResult PuzzleTest(string Instruction,bool isMulti=false)
+        public IActionResult PuzzleTest(string Instruction,bool isMulti=false, string ControllerName = "Tests")
         {
 
             Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session, "question");
@@ -163,7 +164,7 @@ namespace Exam_Helper.Controllers
 
   
 
-            if (times[0] > 0 || times[1] > 0)
+            if (times[0] > 0 || times[1] > 0) 
             {
                 Random r = new Random();
                 int nextTestMethod = r.Next(0, times.Length);

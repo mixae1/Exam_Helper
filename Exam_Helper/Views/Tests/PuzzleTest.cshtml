@@ -52,7 +52,7 @@
     <div class="form-group mt-3">
         @{
             if (Temp_Model.isMulti)
-            @Html.ActionLink("следующее задание", "MultiTesting", "Tests", new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
+            @Html.ActionLink("следующее задание", "MultiTesting",(Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
                 else
             @Html.ActionLink("пройти еще раз", "PuzzleTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
         }
