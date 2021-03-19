@@ -161,7 +161,7 @@ namespace Exam_Helper.TestMethods
                 (int)(percent * MAX_OBJ_IN_BLOCK);
             //Counting blocks for [separatingIndex=0]
             blocks_amount =
-                objs.Count / obj_in_block;
+                (int)Math.Ceiling((double)objs.Count / obj_in_block);
                 //+ (objs.Count % obj_in_block == 0 ? 0 : 1);
 
             //Checking an ambit for [block_amount]

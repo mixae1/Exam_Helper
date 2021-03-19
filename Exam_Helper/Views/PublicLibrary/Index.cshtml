@@ -5,50 +5,9 @@
 }
 
 
-<style>
-    .alert {
-        padding: 20px;
-        background-color: #f44336;
-        color: white;
-        opacity: 1;
-        transition: opacity 0.6s;
-        margin-bottom: 15px;
-    }
-
-        .alert.success {
-            background-color: #4CAF50;
-        }
-
-        .alert.info {
-            background-color: #2196F3;
-        }
-
-        .alert.warning {
-            background-color: #ff9800;
-        }
-
-    .closebtn {
-        margin-left: 15px;
-        color: white;
-        font-weight: bold;
-        float: right;
-        font-size: 22px;
-        line-height: 20px;
-        cursor: pointer;
-        transition: 0.3s;
-    }
-
-        .closebtn:hover {
-            color: black;
-        }
-</style>
-
-<div id="Alerts" style="position: absolute; right: 0; top: 0;">
-</div>
-
 <main class="container" style="padding-top: 3vh;">
     <div class="container">
-
+        <div id="Alerts" style="position: absolute; right: 0; top: 0;"></div>
         <div id="modDialog" class="modal fade">
             <div id="dialogContent" class="modal-dialog"></div>
         </div>
@@ -100,22 +59,24 @@
                 <div class="accordion" id="accordionExample" data-fordisabling="dq@(item.Id)" data-id="@(item.Id)" data-type="question">
                     <div class="container card border border-info mt-2 shadow mb-4 bg-white rounded">
                         <div class="container card-header bg-white" id="headingOne">
-                            <div class="row">
-                                <div class="col col-sm-8">
-                                    <div class="align-content-center">
-                                        @{
-                                            if (_signInManager.IsSignedIn(User))
-                                            {
-                                                <input type="checkbox" id="qSelect" />
+                            <div class="row align-items-center">
+                                <div class="col col-sm col-md-8">
+                                    <div class="row row-cols-auto align-items-center">
+                                        <div>
+                                            @{
+                                                if (_signInManager.IsSignedIn(User))
+                                                {
+                                                    <input class="ml-2" type="checkbox" id="qSelect" />
+                                                }
                                             }
-                                        }
+                                        </div>
                                         <button class="btn text-center titleText" type="button" data-toggle="collapse" data-target="#q_collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="q_collapse_@item.Id.ToString()">
                                             <p class="h4" id="qTitle">@item.Title </p>
                                         </button>
                                     </div>
                                 </div>
-                                <div class="btn-group justify-content-center align-content-center actionButton col col-sm-4">
-                                    <button type="button" class="btn w-25 collapse btn-info dropdown-toggle action-button mt-3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="q_collapse_@item.Id.ToString()" data-parent="#accordionExample">
+                                <div class="btn-group justify-content-center align-items-center actionButton col col-sm col-md-4">
+                                    <button type="button" class="btn w-25 collapse btn-info dropdown-toggle action-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="q_collapse_@item.Id.ToString()" data-parent="#accordionExample">
                                         Действия
                                     </button>
                                     <div class="dropdown-menu actionDrop">
@@ -127,7 +88,7 @@
                                                 <a class="dropdown-item" id="@("q" + item.Id.ToString())" onclick="AddQuestion(this.id)" style="cursor: pointer;">Добавить</a>
                                             }
                                         }
-                                    </div>
+                                    </div>                                                                        
                                 </div>
                             </div>
                         </div>
@@ -445,7 +406,7 @@
     }
 
 
-    #button_Que:hover + .que_tootlip {
+/*    #button_Que:hover + .que_tootlip {
         display: block;
         opacity: 1;
     }
@@ -462,9 +423,48 @@
     .tooltip {
         width: 15%;
         margin-top: 10px;
-    }
+    }*/
 
     .card-body {
         margin:10px;
+    }
+    .alert {
+        padding: 20px;
+        background-color: #f44336;
+        color: white;
+        opacity: 1;
+        transition: opacity 0.6s;
+        margin-bottom: 15px;
+    }
+
+    .alert.success {
+        background-color: #4CAF50;
+    }
+
+    .alert.info {
+        background-color: #2196F3;
+    }
+
+    .alert.warning {
+        background-color: #ff9800;
+    }
+
+    .closebtn {
+        margin-left: 15px;
+        color: white;
+        font-weight: bold;
+        float: right;
+        font-size: 22px;
+        line-height: 20px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .closebtn:hover {
+        color: black;
+    }
+    #qSelect {
+        height:20px;
+        width:20px;
     }
 </style>
