@@ -89,6 +89,7 @@ namespace Exam_Helper.Controllers
                     default:return RedirectToAction(nameof(Index));
                 }
             }
+            //?????
             Console.WriteLine(ModelState.Values);
             return RedirectToAction(nameof(Index));
         }
@@ -97,9 +98,7 @@ namespace Exam_Helper.Controllers
         [HttpGet]
         public IActionResult MissingWordsTest(string Instruction,bool isMulti=false,string ControllerName="Tests")
         {
-             
-            Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session,"question");
-            if (question==null) throw new Exception("question==null");
+            _sessionWorker.GetQuestion("question", out Question question);
             
             TestMissedWords testMissed = new TestMissedWords(question.Definition, Instruction);
             TestInfoMissedWords ts = new TestInfoMissedWords()
@@ -120,8 +119,7 @@ namespace Exam_Helper.Controllers
         public IActionResult PuzzleTest(string Instruction,bool isMulti=false, string ControllerName = "Tests")
         {
 
-            Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session, "question");
-            if (question == null) throw new Exception("question==null");
+            _sessionWorker.GetQuestion("question", out Question question);
 
             TestPuzzle testPuzzle = new TestPuzzle(question.Definition, Instruction);
             TestInfoPuzzle ts = new TestInfoPuzzle()
@@ -131,7 +129,8 @@ namespace Exam_Helper.Controllers
                 RightIndexes = testPuzzle.RightIndexes,
                 IsSuccessed = testPuzzle.IsSuccessed,
                 TestInstructions=Instruction,
-                isMulti=isMulti
+                isMulti=isMulti,
+                ControllerName=ControllerName
             };
 
             return View(ts);
@@ -181,8 +180,8 @@ namespace Exam_Helper.Controllers
 
                 switch (nextTestMethod) 
                 {
-                    case 1:return RedirectToAction(nameof(MissingWordsTest),new { Instruction=MissedWordsInstructions, isMulti=true});
-                    case 0:return RedirectToAction(nameof(PuzzleTest), new { Instruction=PuzzleInstructions, isMulti = true });
+                    case 1:return RedirectToAction(nameof(MissingWordsTest),new { ControllerName = "Tests", Instruction=MissedWordsInstructions, isMulti=true});
+                    case 0:return RedirectToAction(nameof(PuzzleTest), new { ControllerName = "Tests", Instruction=PuzzleInstructions, isMulti = true });
                 }
 
             }

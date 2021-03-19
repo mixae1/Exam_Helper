@@ -15,9 +15,34 @@ using System.Text.Json;
 
 namespace Exam_Helper.Controllers
 {
+
+    /// <summary>
+    /// инкапсулируем методы для работы с сессией 
+    /// </summary>
     public interface ISessionWorker
-    {
+    {   
+        /// <summary>
+        /// удаляет ненужные ключи и данные из данных сессии.
+        /// Необходимо чтобы не было коллизии
+        /// </summary>
+        /// <param name="Keys"></param>
         public void RemoveDataSession(params string[] Keys);
+
+        /// <summary>
+        /// получение пака из сессии.Если такого ключа нет , выбрасывается исключение : "problem with pack in session data"
+        /// В дальнешем можно перебрасывать на индекс с уведомлением об ошибке 
+        /// </summary>
+        /// <param name="pack"></param>
+        public void GetPack(string key,out Pack pack);
+
+        /// <summary>
+        /// получение вопроса из сессии.Если такого ключа нет , выбрасывается исключение : "problem with question in session data"
+        /// В дальнешем можно перебрасывать на индекс с уведомлением об ошибке 
+        /// </summary>
+        /// <param name="pack"></param>
+
+        public void GetQuestion(string key,out Question question);
+
     }
 
     public class SessionWorker : ISessionWorker
@@ -37,6 +62,20 @@ namespace Exam_Helper.Controllers
                     _httpContextAccessor.HttpContext.Session.Remove(key);
             }
         }
+
+        public void GetPack(string key, out Pack pack)
+        {
+            pack = SessionHelper.GetObjectFromJson<Pack>(_httpContextAccessor.HttpContext.Session,key);
+            if (pack == null) throw new Exception("problem with pack in  session data");
+        }
+
+        public void GetQuestion(string key, out Question question)
+        {
+             question = SessionHelper.GetObjectFromJson<Question>(_httpContextAccessor.HttpContext.Session, "question");
+            if (question == null) throw new Exception("problem with question  in  session data");
+
+        }
+
     }  
 
 
@@ -101,8 +140,7 @@ namespace Exam_Helper.Controllers
         public async Task<IActionResult> TestNamesAndDescription(string Instruction)
         {
 
-            Pack pack = SessionHelper.GetObjectFromJson<Pack>(HttpContext.Session, "pack");
-            if (pack == null) throw new Exception("problem with session data");
+            _sessionWorker.GetPack("pack", out Pack pack);
 
             //отслеживать производительность
             var ques = await _dbContext.Question.Where(x => pack.QuestionSet.Contains(x.Id.ToString())).Select(x => new HelpStruct(x.Definition, x.Title)).ToListAsync();
@@ -123,8 +161,7 @@ namespace Exam_Helper.Controllers
          */
         public async Task<RedirectToActionResult> MultiTesting(string Instruction)
         {
-            Pack pack = SessionHelper.GetObjectFromJson<Pack>(HttpContext.Session, "pack");
-            if (pack == null) throw new Exception("problem with session data");
+            _sessionWorker.GetPack("pack", out Pack pack);
 
             var PackQuestionsIds = pack.QuestionSet.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToArray();
             Random r = new Random();
@@ -132,6 +169,7 @@ namespace Exam_Helper.Controllers
 
             if (string.IsNullOrEmpty(Instruction))
                 Instruction = "3";
+            
 
             int? times;
             times = HttpContext.Session.GetInt32("PackTestingTimes");
