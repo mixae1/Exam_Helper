@@ -12,5 +12,9 @@ namespace Exam_Helper.ViewsModel
       public string TestInstructions { get; set; }
         //флаг ,который определяет, метод запущен самостоятельно или в составе мульти 
       public bool isMulti { get; set; }
+
+        //имя контроллера , который инициировал многоразовое тестирование 
+      public string ControllerName { get; set; }
+
     }
 }
