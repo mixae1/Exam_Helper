@@ -132,6 +132,7 @@ namespace Exam_Helper.Controllers
 
             if (string.IsNullOrEmpty(Instruction))
                 Instruction = "3";
+            
 
             int? times;
             times = HttpContext.Session.GetInt32("PackTestingTimes");

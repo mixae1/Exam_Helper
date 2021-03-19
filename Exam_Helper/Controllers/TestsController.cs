@@ -131,7 +131,8 @@ namespace Exam_Helper.Controllers
                 RightIndexes = testPuzzle.RightIndexes,
                 IsSuccessed = testPuzzle.IsSuccessed,
                 TestInstructions=Instruction,
-                isMulti=isMulti
+                isMulti=isMulti,
+                ControllerName=ControllerName
             };
 
             return View(ts);
@@ -181,8 +182,8 @@ namespace Exam_Helper.Controllers
 
                 switch (nextTestMethod) 
                 {
-                    case 1:return RedirectToAction(nameof(MissingWordsTest),new { Instruction=MissedWordsInstructions, isMulti=true});
-                    case 0:return RedirectToAction(nameof(PuzzleTest), new { Instruction=PuzzleInstructions, isMulti = true });
+                    case 1:return RedirectToAction(nameof(MissingWordsTest),new { ControllerName = "Tests", Instruction=MissedWordsInstructions, isMulti=true});
+                    case 0:return RedirectToAction(nameof(PuzzleTest), new { ControllerName = "Tests", Instruction=PuzzleInstructions, isMulti = true });
                 }
 
             }
