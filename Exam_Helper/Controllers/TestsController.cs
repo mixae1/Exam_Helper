@@ -89,6 +89,7 @@ namespace Exam_Helper.Controllers
                     default:return RedirectToAction(nameof(Index));
                 }
             }
+            //?????
             Console.WriteLine(ModelState.Values);
             return RedirectToAction(nameof(Index));
         }
@@ -97,9 +98,7 @@ namespace Exam_Helper.Controllers
         [HttpGet]
         public IActionResult MissingWordsTest(string Instruction,bool isMulti=false,string ControllerName="Tests")
         {
-             
-            Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session,"question");
-            if (question==null) throw new Exception("question==null");
+            _sessionWorker.GetQuestion("question", out Question question);
             
             TestMissedWords testMissed = new TestMissedWords(question.Definition, Instruction);
             TestInfoMissedWords ts = new TestInfoMissedWords()
@@ -120,8 +119,7 @@ namespace Exam_Helper.Controllers
         public IActionResult PuzzleTest(string Instruction,bool isMulti=false, string ControllerName = "Tests")
         {
 
-            Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session, "question");
-            if (question == null) throw new Exception("question==null");
+            _sessionWorker.GetQuestion("question", out Question question);
 
             TestPuzzle testPuzzle = new TestPuzzle(question.Definition, Instruction);
             TestInfoPuzzle ts = new TestInfoPuzzle()
