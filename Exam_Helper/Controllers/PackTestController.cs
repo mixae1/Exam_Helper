@@ -12,16 +12,45 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 
 
+
 namespace Exam_Helper.Controllers
 {
+    public interface ISessionWorker
+    {
+        public void RemoveDataSession(params string[] Keys);
+    }
+
+    public class SessionWorker : ISessionWorker
+    {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public SessionWorker(IHttpContextAccessor httpContext)
+        {
+            _httpContextAccessor = httpContext;
+        }
+
+        public void RemoveDataSession(params string[] Keys)
+        {
+            foreach (var key in Keys)
+            {
+                if (!string.IsNullOrEmpty(key))
+                    _httpContextAccessor.HttpContext.Session.Remove(key);
+            }
+        }
+    }  
+
+
+
     public class PackTestController : Controller
     {
 
         private CommonDbContext _dbContext;
+        private ISessionWorker _sessionWorker;
 
-        public PackTestController(CommonDbContext db)
+        public PackTestController(CommonDbContext db,ISessionWorker session)
         {
             _dbContext = db;
+            _sessionWorker = session;
         }
 
         [HttpGet]
@@ -45,7 +74,7 @@ namespace Exam_Helper.Controllers
 
             var models = new TestChoiceViewModel()
             {
-                TestMethodsNames = new string[] { "сопоставить название и определение(Тест) ", "Конструктор тестов для паков", "Методы тестирования/заучивания" },
+                TestMethodsNames = new string[] { "NameAndDesc", "TestConstructor", "Dummy" },
                 TestsMethodsIds =new int[] { 1,2,3}
             };
             return View(models);
@@ -53,7 +82,8 @@ namespace Exam_Helper.Controllers
 
 
         [HttpPost]
-        public RedirectToActionResult Index([Bind("SelectedId")] TestChoiceViewModel temp)
+
+        public RedirectToActionResult Index([Bind("SelectedId, ServiceInfo")] TestChoiceViewModel temp)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +118,7 @@ namespace Exam_Helper.Controllers
         }
 
         /*
-         * Первая версия без настроек , без рефакторинга 
+         * Первая версия с простыми настройками , без рефакторинга 
          * 
          */
         public async Task<RedirectToActionResult> MultiTesting(string Instruction)
@@ -127,9 +157,7 @@ namespace Exam_Helper.Controllers
                 }
 
             }
-
-            HttpContext.Session.Remove("question");
-            HttpContext.Session.Remove("PackTestingTimes");
+            _sessionWorker.RemoveDataSession("question", "PackTestingTimes");
 
             return RedirectToAction(nameof(TestsController.UserStats), nameof(Tests));
 
@@ -137,4 +165,6 @@ namespace Exam_Helper.Controllers
 
 
     }
+    
+
 }

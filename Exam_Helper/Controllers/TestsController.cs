@@ -33,10 +33,12 @@ namespace Exam_Helper.Controllers
     {
 
         private CommonDbContext _dbContext;
+        private ISessionWorker _sessionWorker;
 
-        public TestsController(CommonDbContext db)
+        public TestsController(CommonDbContext db, ISessionWorker session)
         {
             _dbContext = db;
+            _sessionWorker = session;
         }
 
 
@@ -185,10 +187,7 @@ namespace Exam_Helper.Controllers
 
             }
 
-
-            HttpContext.Session.Remove("test_times");
-            HttpContext.Session.Remove("missed_words_inst");
-            HttpContext.Session.Remove("puzzle_inst");
+            _sessionWorker.RemoveDataSession("test_times", "missed_words_inst", "puzzle_inst");
 
             return RedirectToAction(nameof(UserStats));
           
