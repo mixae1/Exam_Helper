@@ -22,7 +22,21 @@
                                     </div>
                                     <button class="btn btn-light border" style="background-color: #e9ecef; border-color:#e9ecef;" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
                                         <span asp-for="@Model.TestsMethodsIds[i]">
-                                           @Model.TestMethodsNames[i]
+                                            @switch (Model.TestMethodsNames[i])
+                                            {
+                                                case "TestConstructor":@:Конструктор тестов
+                                                    break;
+
+                                                case "NameAndDesc": @:сопоставить название и определение
+                                                    break;
+
+                                                case "Dummy": @:Методы тестирования/заучивания
+                                                    break;
+
+                                                default:
+                                                    @Model.TestMethodsNames[i]
+                                                    break;
+                                            }
                                         </span>
                                     </button>
                                 </div>
@@ -31,7 +45,22 @@
                     </div>
                     <div id="collapse_@Model.TestMethodsNames[i]" class="panel-collapse collapse in">
                         <div class="panel-body">
-                           <!-- код для пользовательских настроек -->
+                            @switch (Model.TestMethodsNames[i])
+                                            {
+                                case "TestConstructor":
+                                    <p>
+                                        Общее количество тестов:
+                                        <input type="range" min="1" max="5" value="3" id="mtTestConstructor_quantity" onchange="displayValue(this,'mtTestConstructor-input')">
+                                        <span id="mtTestConstructor-input">3</span>
+                                    </p>
+                                    break;
+                                default:
+                                    <p>
+                                        Для данного вида тестирования пользовательские настройки не предусмотрены. 
+                                    </p>
+                                    break;
+
+                            }
                         </div>
                     </div>
                 </div>
@@ -39,7 +68,7 @@
             </div>
         }
         <div class="form-group">
-            <input type="submit" value="Сделать выбор" class="btn btn-primary" id="sumbit" onclick="MakeInstruction()" />
+           <input type="submit" value="Сделать выбор" class="btn btn-primary" id="sumbit" onclick="MakeInstruction()" />
         </div>
         <a asp-controller="PublicLibrary" asp-action="Index">
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
@@ -49,3 +78,39 @@
 
 </main>
 
+<script>
+    const multitesting_pack = $("#collapse_TestConstructor > div");
+
+
+    function MakeInstruction() {
+        var curr_method;
+        $("input#method").each(function () {
+            if ($(this).is(":checked")) {
+                curr_method = $(this).attr("method-type");
+            }
+        });
+
+        console.log(multitesting_pack.innerHTML);
+
+        var instruction;
+        var multitest_instruction;
+        switch (curr_method) {
+            case "TestConstructor":
+                instruction =
+                    multitesting_pack.find("input#mtTestConstructor_quantity").val().toString();
+                break;
+        }
+
+      
+        $("input#ServiceInfo").val(instruction);
+        $("input#InfoTest").val(multitest_instruction);
+    };
+
+
+
+    function displayValue(obj, id) {
+      var inputSpan = document.getElementById(id);
+      inputSpan.innerHTML = obj.value;
+    }
+
+</script>

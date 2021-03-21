@@ -33,10 +33,12 @@ namespace Exam_Helper.Controllers
     {
 
         private CommonDbContext _dbContext;
+        private ISessionWorker _sessionWorker;
 
-        public TestsController(CommonDbContext db)
+        public TestsController(CommonDbContext db, ISessionWorker session)
         {
             _dbContext = db;
+            _sessionWorker = session;
         }
 
 
@@ -87,17 +89,16 @@ namespace Exam_Helper.Controllers
                     default:return RedirectToAction(nameof(Index));
                 }
             }
+            //?????
             Console.WriteLine(ModelState.Values);
             return RedirectToAction(nameof(Index));
         }
 
         // для подключения к библиотеки question нужно сюда в параметры передать question
         [HttpGet]
-        public IActionResult MissingWordsTest(string Instruction,bool isMulti=false)
+        public IActionResult MissingWordsTest(string Instruction,bool isMulti=false,string ControllerName="Tests")
         {
-             
-            Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session,"question");
-            if (question==null) throw new Exception("question==null");
+            _sessionWorker.GetQuestion("question", out Question question);
             
             TestMissedWords testMissed = new TestMissedWords(question.Definition, Instruction);
             TestInfoMissedWords ts = new TestInfoMissedWords()
@@ -107,18 +108,18 @@ namespace Exam_Helper.Controllers
                 Answers = testMissed.Answers,
                 IsSuccessed = testMissed.IsSuccessed,
                 TestInstructions=Instruction,
-                isMulti=isMulti
+                isMulti=isMulti,
+                ControllerName=ControllerName
             };
 
             return View(ts);
         }
 
         [HttpGet]
-        public IActionResult PuzzleTest(string Instruction,bool isMulti=false)
+        public IActionResult PuzzleTest(string Instruction,bool isMulti=false, string ControllerName = "Tests")
         {
 
-            Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session, "question");
-            if (question == null) throw new Exception("question==null");
+            _sessionWorker.GetQuestion("question", out Question question);
 
             TestPuzzle testPuzzle = new TestPuzzle(question.Definition, Instruction);
             TestInfoPuzzle ts = new TestInfoPuzzle()
@@ -128,7 +129,8 @@ namespace Exam_Helper.Controllers
                 RightIndexes = testPuzzle.RightIndexes,
                 IsSuccessed = testPuzzle.IsSuccessed,
                 TestInstructions=Instruction,
-                isMulti=isMulti
+                isMulti=isMulti,
+                ControllerName=ControllerName
             };
 
             return View(ts);
@@ -144,7 +146,7 @@ namespace Exam_Helper.Controllers
              * нужный ключ , поэтому когда идет очередной вызов этого метода , настройки достаются из сессии , и че там лежит в Instruction
              * - нам без разницы
              * 
-             * В дальнейшем структура Instruction изментится - появится возможность указывать настройки для методов тестирования
+             * 
              
              */
             if (string.IsNullOrEmpty(Instruction)) Instruction = "1;1";
@@ -161,9 +163,9 @@ namespace Exam_Helper.Controllers
             var PuzzleInstructions = HttpContext.Session.GetString("puzzle_inst");
             if (PuzzleInstructions == null) PuzzleInstructions = instructions[1];
 
-            //TODO внедрить инструкции методов тестов - в представлениях все добавлено ,осталось - закинуть в данные сессии и правильно распарсить
+  
 
-            if (times[0] > 0 || times[1] > 0)
+            if (times[0] > 0 || times[1] > 0) 
             {
                 Random r = new Random();
                 int nextTestMethod = r.Next(0, times.Length);
@@ -178,16 +180,13 @@ namespace Exam_Helper.Controllers
 
                 switch (nextTestMethod) 
                 {
-                    case 1:return RedirectToAction(nameof(MissingWordsTest),new { Instruction=MissedWordsInstructions, isMulti=true});
-                    case 0:return RedirectToAction(nameof(PuzzleTest), new { Instruction=PuzzleInstructions, isMulti = true });
+                    case 1:return RedirectToAction(nameof(MissingWordsTest),new { ControllerName = "Tests", Instruction=MissedWordsInstructions, isMulti=true});
+                    case 0:return RedirectToAction(nameof(PuzzleTest), new { ControllerName = "Tests", Instruction=PuzzleInstructions, isMulti = true });
                 }
 
             }
 
-
-            HttpContext.Session.Remove("test_times");
-            HttpContext.Session.Remove("missed_words_inst");
-            HttpContext.Session.Remove("puzzle_inst");
+            _sessionWorker.RemoveDataSession("test_times", "missed_words_inst", "puzzle_inst");
 
             return RedirectToAction(nameof(UserStats));
           

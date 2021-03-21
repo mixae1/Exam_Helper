@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using System;
+using Exam_Helper.Controllers;
 namespace Exam_Helper
 {
     public class Startup
@@ -23,7 +24,11 @@ namespace Exam_Helper
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddSessionStateTempDataProvider();
-            
+
+            services.AddHttpContextAccessor();
+            services.AddTransient<ISessionWorker, SessionWorker>();
+
+
             var temp = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<CommonDbContext>(opt=>opt.UseNpgsql(temp));
 
