@@ -49,6 +49,12 @@ html {
     html {
         font-size: 16px;
     }
+    #qTitle, .titleText {
+        font-size: 20px;
+    }
+    .cardText{
+        font-size: 15px;
+    }
 }
 
 
