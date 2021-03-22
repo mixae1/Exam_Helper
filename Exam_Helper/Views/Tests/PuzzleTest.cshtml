@@ -18,7 +18,7 @@
 
             @foreach (var block in Temp_Model.TestStrings)
             {
-                <div class="main-blocks" id="@("droppable" + num_ans.ToString())">
+                <div class="main-blocks h5" id="@("droppable" + num_ans.ToString())">
                 </div>
                 num_ans++;
             }
@@ -28,7 +28,7 @@
             @foreach (var block in Temp_Model.TestStrings)
             {
                 <div class="mt-auto">
-                    <div class="block text-center" id="@("draggable" + @num.ToString())">
+                    <div class="block text-center h5" id="@("draggable" + @num.ToString())">
                         <p>@block</p>
                     </div>
                 </div>
@@ -52,9 +52,9 @@
     <div class="form-group mt-3">
         @{
             if (Temp_Model.isMulti)
-            @Html.ActionLink("следующее задание", "MultiTesting", "Tests", new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
-                else
-            @Html.ActionLink("пройти еще раз", "PuzzleTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
+                @Html.ActionLink("Следующее задание", "MultiTesting", "Tests", new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
+            else
+                @Html.ActionLink("Пройти еще раз", "PuzzleTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
         }
     </div>
     

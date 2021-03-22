@@ -35,9 +35,9 @@
         </a>
         @{
             if (Temp_Model.isMulti)
-                @Html.ActionLink("следующее задание", "MultiTesting", "Tests", new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
-                else
-                    @Html.ActionLink("пройти еще раз", "MissingWordsTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
+                @Html.ActionLink("Следующее задание", "MultiTesting", "Tests", new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
+            else
+                @Html.ActionLink("Пройти еще раз", "TheWrongTextTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
         }
 
     </div>
