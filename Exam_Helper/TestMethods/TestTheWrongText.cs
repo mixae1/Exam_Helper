@@ -28,7 +28,7 @@ namespace Exam_Helper.TestMethods
         public TestTheWrongText(string Text, string Instruction = "")
         {
             //text -> parts[]
-            parts = Regex.Replace(Text, @"(,|\.|:|\?|\&|!|\(|\)|\{|\}|\-|=|<|>|\r\n)", " " + "$1" + " ").Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(x => x.Trim()).ToList();
+            parts = Regex.Replace(Text, @"(,|\.|:|\?|\&|!|\(|\)|\{|\}|\-|=|<|>|\r\n)", " " + "$1" + " ").Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
             parts_amount = parts.Count();
 
             //parts[] -> adjs[]
