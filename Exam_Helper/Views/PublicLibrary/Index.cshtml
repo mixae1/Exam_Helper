@@ -49,7 +49,7 @@
             @foreach (var item in Model.questions.Where(x => x.question.IsPrivate == false && x.IsSearched).Select(x => x.question))
             {
                 <div class="accordion" id="accordionExample" data-fordisabling="dq@(item.Id)" data-id="@(item.Id)" data-type="question">
-                    <div class="container card border border-info mt-2 shadow mb-4 bg-white rounded">
+                    <div class="container card mt-2 shadow mb-4 bg-white rounded">
                         <div class="container card-header bg-white" id="headingOne">
                             <div class="row row-cols-auto justify-content-between">
                                 <div class="row row-cols-auto justify-content-start">

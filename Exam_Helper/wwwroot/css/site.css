@@ -140,3 +140,42 @@ body {
     opacity: 0;
     transition: all 0.5s ease;
 }
+
+.change-color{
+    width: 25px;
+    height: 25px;
+}
+.change-color-black {
+    background-color: black;
+}
+.change-color-blue {
+    background-color: blue;
+}
+.change-color-green {
+    background-color: green;
+}
+.change-color-info {
+    background-color: #17a2b8;
+}
+.change-color-orange {
+    background-color: orange;
+}
+.change-color-pink {
+    background-color: pink;
+}
+.change-color-purple {
+    background-color: purple;
+}
+.change-color-red {
+    background-color: red;
+}
+.change-color-yellow {
+    background-color: yellow;
+}
+
+.card{
+    border: 2px solid #17a2b8;
+}
+.accordion > .card:first-of-type{
+    border: 2px solid #17a2b8;
+}
