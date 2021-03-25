@@ -162,7 +162,11 @@ namespace Exam_Helper.TestMethods
             //Counting blocks for [separatingIndex=0]
             blocks_amount =
                 (int)Math.Ceiling((double)objs.Count / obj_in_block);
-                //+ (objs.Count % obj_in_block == 0 ? 0 : 1);
+            //+ (objs.Count % obj_in_block == 0 ? 0 : 1);
+
+            //костыль
+            if (isDiffLenghtOfBlocks && blocks_amount * MIN_OBJ_IN_BLOCK > objs.Count)
+                blocks_amount = objs.Count / MIN_OBJ_IN_BLOCK;
 
             //Checking an ambit for [block_amount]
             if (blocks_amount < MIN_BLOCKS) blocks_amount = MIN_BLOCKS;
@@ -177,10 +181,11 @@ namespace Exam_Helper.TestMethods
             //Setting blocks_amount for [isDiffLenghtOfBlocks]
             if (isDiffLenghtOfBlocks)
             {
+
                 //Amount obj in every block
                 int[] temp = new int[blocks_amount];
                 int amount_used_obj = 0;
-                for(int i = 0; i< blocks_amount; i++)
+                for(int i = 0; i < blocks_amount; i++)
                 {
                     //[+1; -1]
                     temp[i] = rnd.Next(Math.Max(obj_in_block - 1, MIN_OBJ_IN_BLOCK), Math.Min(obj_in_block + 2, MAX_OBJ_IN_BLOCK));
