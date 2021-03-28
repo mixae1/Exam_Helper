@@ -74,9 +74,13 @@
                                             <div class="card-check">
                                                 <input type="checkbox" style="margin:auto;" id="qSelect"/>
                                             </div>
-                                            <button class="btn titleText" type="button" data-toggle="collapse" data-target="#q_collapse_@item.question.Id.ToString()" aria-expanded="false" aria-controls="q_collapse_@item.question.Id.ToString()">
-                                                <p class="h4" id="qTitle">@item.question.Title </p>
-                                            </button>
+
+                                         
+                                                <button class="btn text-center titleText" type="button" data-toggle="collapse" data-target="#q_collapse_@item.question.Id.ToString()" aria-expanded="false" aria-controls="q_collapse_@item.question.Id.ToString()">
+                                                    <span class="h4" id="qTitle">@Html.DisplayFor(modelItem=>item.question.Title) </span> 
+                                                </button>
+                                           
+
                                         </div>
                                         <div class="btn-group justify-content-center align-items-center actionButton pr-5">
                                             <button type="button" class="btn collapse btn-info dropdown-toggle action-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="q_collapse_@item.question.Id.ToString()" data-parent="#accordionExample">
@@ -109,7 +113,7 @@
                                                     }
                                                 }
                                         </div>
-                                        <span class="h5 pt-2" style="white-space: pre-wrap; margin-bottom: 0rem!important;" id="qDefinition">@item.question.Definition</span>
+                                        <span class="h5 pt-2" style="white-space: pre-wrap; margin-bottom: 0rem!important;" id="qDefinition">@Html.DisplayFor(model=>item.question.Definition)</span>
                                     </div>
                                 </div>
                             </div>
