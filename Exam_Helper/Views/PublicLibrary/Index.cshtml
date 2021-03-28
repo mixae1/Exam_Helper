@@ -7,7 +7,7 @@
 
 <main class="container" style="padding-top: 3vh;">
     <div class="container">
-        <div id="Alerts" style="position: absolute; right: 0; top: 0;"></div>
+        <div id="Alerts" style="position: fixed; right: 0; top: 0;"></div>
         <div id="modDialog" class="modal fade">
             <div id="dialogContent" class="modal-dialog"></div>
         </div>
@@ -350,10 +350,11 @@
                 data: { ques_id: id },
                 url: '@Url.Action("AddQuestionToMyLib", "PublicLibrary")',
                 success: function (msg) {
-                          a.innerHTML = "Добавлено!";
+                    a.innerHTML = "Добавлено.";
+                    CreateAlert("Добавлено.", "info");
                       },
                 error: function (msg) {
-                    alert("Error:224");
+                    CreateAlert("что-то пошло не так","warning");
                       }
                   })
 
