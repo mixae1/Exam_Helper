@@ -70,15 +70,17 @@
                             <div class="container card mt-2 shadow mb-4 bg-white rounded">
                                 <div class="container card-header bg-white" id="headingOne">
                                     <div class="row row-cols-auto justify-content-between">
-                                        <div class="row row-cols-auto justify-content-start">
-                                            <div class="d-flex align-items-center">
+                                        <div class="d-flex align-items-center">
+                                            <div class="card-check">
                                                 <input type="checkbox" style="margin:auto;" id="qSelect"/>
                                             </div>
-                                            <div class="row row-cols-auto align-items-center ml-3">
+
+                                         
                                                 <button class="btn text-center titleText" type="button" data-toggle="collapse" data-target="#q_collapse_@item.question.Id.ToString()" aria-expanded="false" aria-controls="q_collapse_@item.question.Id.ToString()">
                                                     <span class="h4" id="qTitle">@Html.DisplayFor(modelItem=>item.question.Title) </span> 
                                                 </button>
-                                            </div>
+                                           
+
                                         </div>
                                         <div class="btn-group justify-content-center align-items-center actionButton pr-5">
                                             <button type="button" class="btn collapse btn-info dropdown-toggle action-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="q_collapse_@item.question.Id.ToString()" data-parent="#accordionExample">
@@ -429,6 +431,9 @@
         opacity: 1;
         transition: opacity 0.6s;
         margin-bottom: 15px;
+    }
+    .card-check{
+        width: 30px;
     }
 
     .alert.success {

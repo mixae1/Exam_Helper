@@ -12,11 +12,12 @@
     
         @if (Temp_Model.IsSuccessed)
         {
-            <div class="container droppable-elems">
-                <div class="row row-cols-auto justify-content-between">
+            <div class="container droppable-elems justify-content-start">
+                <div class="row row-cols-auto">
                     @foreach (var block in Temp_Model.TestStrings)
                         {
                             <div class="main-blocks" id="@("droppable" + num_ans.ToString())">
+                                <p class="mt-2"></p>
                             </div>
                             num_ans++;
                         }
@@ -24,10 +25,10 @@
             </div>
     
             <div class="container draggable-elems">
-                <div class="row row-cols-auto justify-content-start">
+                <div class="row row-cols-auto ">
                     @foreach (var block in Temp_Model.TestStrings)
                         {
-                            <div class="mt-auto m-1">
+                            <div class="mt-auto">
                                 <div class="block text-center" id="@("draggable" + @num.ToString())">
                                     <p>@block</p>
                                 </div>
@@ -112,7 +113,12 @@
                       $(this).css('width', ui.draggable.css('width'));
                       ui.draggable.css('height', $(this).css('height'));
                     //ui.draggable.css('width', $(this).css('width'));
+                    let text = $(ui.draggable).children().text();
+                    console.log(text);
+                    $(this).children().text(text);
+                    $(ui.draggable).css('visibility','hidden');
                     $(this).append(ui.draggable);
+                    // $(this).css('border-width','0px');
                     $(this).removeClass('hover');
                 }
 
@@ -134,6 +140,8 @@
             border: 2px solid black;
             border-radius: 5px;
             padding: 15px;
+            margin: 10px;
+            margin-left: 0px;
         }
 
         .right {

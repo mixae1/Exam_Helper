@@ -28,6 +28,9 @@
         <a asp-controller="PublicLibrary" asp-action="Index">
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
         </a>
+        @{
+            @Html.ActionLink("Пройти еще раз", "TestNamesAndDescription", "PackTest", new { Instruction = Model.Instruction }, new { @type = "button", @class = "btn btn-primary" })
+        }
     </div>
 </main>
 
