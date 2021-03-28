@@ -58,6 +58,9 @@ html {
     .titleText {
         white-space: normal;
     }
+    .card-check{
+        width: 10px;
+    }
 }
 
 
@@ -76,6 +79,9 @@ html {
     }
     .titleText {
         white-space: nowrap ;
+    }
+    .card-check{
+        width: 20px;
     }
     
 }

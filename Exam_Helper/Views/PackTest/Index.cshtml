@@ -1,6 +1,6 @@
 ﻿@model Exam_Helper.ViewsModel.TestChoiceViewModel
 
-<main style="height: 75vh;" class="d-flex align-items-center justify-content-center">
+<main style="height: 75vh;" class="container d-flex align-items-center justify-content-center">
     <form asp-action="Index" method="post">
         <h2>
             Выберете метод тестирования:
@@ -9,18 +9,18 @@
         @for (int i = 0; i < Model.TestMethodsNames.Length; i++)
         {
             <div class="panel-group" id="accordion">
-                <div class="panel panel-default">
+                <div class="panel">
                     <div class="panel-heading">
                         <div class="d-flex justify-content-between pt-3 pb-2">
                             <div class="input-group">
-                                <div class="input-group-prepend bg-white mr-3">
+                                <div class="input-group-prepend bg-white mr-3 test-card">
                                     <div class="input-group-text">
                                         <input asp-for="@Model.SelectedId" value="@Model.TestsMethodsIds[i]" type="radio" id="method" method-type="@Model.TestMethodsNames[i]" />
                                         <input asp-for="@Model.TestsMethodsIds[i]" type="hidden" />
                                         <input asp-for="@Model.ServiceInfo" type="hidden" id="ServiceInfo" />
                                         <span asp-validation-for="@Model.SelectedId" hidden></span>
                                     </div>
-                                    <button class="btn btn-light border" style="background-color: #e9ecef; border-color:#e9ecef;" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
+                                    <div class="d-flex align-items-center">
                                         <span asp-for="@Model.TestsMethodsIds[i]">
                                             @switch (Model.TestMethodsNames[i])
                                             {
@@ -38,6 +38,9 @@
                                                     break;
                                             }
                                         </span>
+                                    </div>
+                                    <button class="btn" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
+                                        <img class="setting-btn" src="./sett_icon.png" />
                                     </button>
                                 </div>
                             </div>
@@ -114,3 +117,24 @@
     }
 
 </script>
+<style>
+    .input-group-text{
+            border: 0px solid black;
+            background-color: white;
+        }
+    .test-card{
+        border: 2px solid black;
+        border-radius: 5px;
+    }
+    .setting-btn {
+        width: 50%;
+    }
+    .panel-body {
+        padding: 5px;
+        max-height:175px;
+        overflow-y: scroll
+    }
+    .test-card {
+        height:70px;
+    }
+</style>
