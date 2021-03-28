@@ -76,7 +76,7 @@
                                             </div>
                                             <div class="row row-cols-auto align-items-center ml-3">
                                                 <button class="btn text-center titleText" type="button" data-toggle="collapse" data-target="#q_collapse_@item.question.Id.ToString()" aria-expanded="false" aria-controls="q_collapse_@item.question.Id.ToString()">
-                                                    <p class="h4" id="qTitle">@item.question.Title </p>
+                                                    <span class="h4" id="qTitle">@Html.DisplayFor(modelItem=>item.question.Title) </span> 
                                                 </button>
                                             </div>
                                         </div>
@@ -111,7 +111,7 @@
                                                     }
                                                 }
                                         </div>
-                                        <span class="h5 pt-2" style="white-space: pre-wrap; margin-bottom: 0rem!important;" id="qDefinition">@item.question.Definition</span>
+                                        <span class="h5 pt-2" style="white-space: pre-wrap; margin-bottom: 0rem!important;" id="qDefinition">@Html.DisplayFor(model=>item.question.Definition)</span>
                                     </div>
                                 </div>
                             </div>
