@@ -72,7 +72,7 @@ namespace Exam_Helper.TestMethods
                     }
                     else
                     {
-                        stringUnioner[stringUnioner.Count - 1] = "<input size=\"5\" class=\"test\" />";
+                        stringUnioner[stringUnioner.Count - 1] = "<input size=\"5\" class=\"editablesection test\" maxlength=\"" + answers[curr_word].Length + "\" style=\"width: " + answers[curr_word].Length * 10 + "px;\" />";
                     }
                     if (curr_word != words.Length - 1) stringUnioner.Add("");
                     else return stringUnioner.ToArray();
