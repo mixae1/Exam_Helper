@@ -5,61 +5,62 @@
     var Temp_Model = Model as TestInfoPuzzle;
 }
 
-
-<h2>@Temp_Model.Title</h2>
-
+<main>
     <div class="main d-flex flex-column">
-
-    @{int num_ans = 0; int num = 0; }
-
-    @if (Temp_Model.IsSuccessed)
-    {
-        <div class="droppable-elems">
-
-            @foreach (var block in Temp_Model.TestStrings)
-            {
-                <div class="main-blocks" id="@("droppable" + num_ans.ToString())">
-                </div>
-                num_ans++;
-            }
-        </div>
-
-        <div class="draggable-elems">
-            @foreach (var block in Temp_Model.TestStrings)
-            {
-                <div class="mt-auto">
-                    <div class="block text-center" id="@("draggable" + @num.ToString())">
-                        <p>@block</p>
-                    </div>
-                </div>
-
-                num++;
-            }
-        </div>
-
-        <div class="form-group mt-3">
-            <input type="submit" value="Проверить ответ" class="btn btn-primary" id="CheckAnswers" />
-        </div>
-    }
-    else
-    {
-        <p>Мы не можем создать данный тест для этого вопроса.</p>
-    }
-    <a asp-controller="PublicLibrary" asp-action="Index">
-        <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
-    </a>
-
-    <div class="form-group mt-3">
-        @{
-            if (Temp_Model.isMulti)
-            @Html.ActionLink("следующее задание", "MultiTesting",(Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
-                else
-            @Html.ActionLink("пройти еще раз", "PuzzleTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
-        }
-    </div>
+        <h2 class="container">@Temp_Model.Title</h2>
+        @{int num_ans = 0; int num = 0; }
     
+        @if (Temp_Model.IsSuccessed)
+        {
+            <div class="container droppable-elems">
+                <div class="row row-cols-auto justify-content-between">
+                    @foreach (var block in Temp_Model.TestStrings)
+                        {
+                            <div class="main-blocks" id="@("droppable" + num_ans.ToString())">
+                            </div>
+                            num_ans++;
+                        }
+                </div>
+            </div>
+    
+            <div class="container draggable-elems">
+                <div class="row row-cols-auto justify-content-start">
+                    @foreach (var block in Temp_Model.TestStrings)
+                        {
+                            <div class="mt-auto m-1">
+                                <div class="block text-center" id="@("draggable" + @num.ToString())">
+                                    <p>@block</p>
+                                </div>
+                            </div>
+    
+                            num++;
+                        }
+                </div>
+            </div>
+    
+            <div class="container form-group mt-3">
+                <input type="submit" value="Проверить ответ" class="btn btn-primary" id="CheckAnswers" />
+            </div>
+        }
+        else
+        {
+            <p>Мы не можем создать данный тест для этого вопроса.</p>
+        }
+        <a asp-controller="PublicLibrary" asp-action="Index" class="container">
+            <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
+        </a>
+    
+        <div class="container form-group mt-3">
+            @{
+                if (Temp_Model.isMulti)
+                @Html.ActionLink("следующее задание", "MultiTesting",(Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
+                    else
+                @Html.ActionLink("пройти еще раз", "PuzzleTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
+            }
+        </div>
+        </div>
+</main>
 
-</div>
 
   
 
@@ -125,10 +126,9 @@
     </script>
 
     <style>
-        .main {
-            margin-top: 10%;
+        main {
+            margin-top: 5%;
         }
-
         .block {
             display: inline-block;
             border: 2px solid black;
