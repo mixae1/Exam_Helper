@@ -153,7 +153,7 @@ namespace Exam_Helper.Controllers
                 return View(model);
             }
             var user = await _userManager.FindByEmailAsync(HttpContext.Session.GetString("email"));
-            HttpContext.Session.Remove("email");
+           
             if (user == null)
             {
                 return View("ResetPasswordConfirmation");
@@ -161,10 +161,12 @@ namespace Exam_Helper.Controllers
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
             if (result.Succeeded)
             {
+                HttpContext.Session.Remove("email");
                 return View("ResetPasswordConfirmation");
             }
             foreach (var error in result.Errors)
-            {
+            {    
+
                 ModelState.AddModelError(string.Empty, error.Description);
             }
             return View(model);
