@@ -38,6 +38,8 @@ namespace Exam_Helper.Controllers
                 {
                     UserName = user.UserName,
                     Email=user.Login,
+                    PackSet="",
+                    QuestionSet=""
                 };
                 
                 var res = await _userManager.CreateAsync(new_user, user.Password);
@@ -93,6 +95,7 @@ namespace Exam_Helper.Controllers
                     }
 
                 }
+                else ModelState.AddModelError(string.Empty, "Неверная почта или пароль");
             }
             return View();
         }
