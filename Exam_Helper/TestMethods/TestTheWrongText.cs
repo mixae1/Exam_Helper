@@ -113,10 +113,7 @@ namespace Exam_Helper.TestMethods
 
             var responseString = await response.Content.ReadAsStringAsync();
 
-            //Regex.Match(word, @"");
-
-            //Console.WriteLine(responseString);
-            return "";
+            return Regex.Match(responseString, "<h1 class=\"text-center\">" + word + @" - (\w+)</h1>").Groups[1].Value;
         }
 
         private static async Task<string> bestlang(string word)
@@ -134,16 +131,22 @@ namespace Exam_Helper.TestMethods
 
             var responseString = await response.Content.ReadAsStringAsync();
 
-            //Regex.Match(word, @"");
-
-            //Console.WriteLine(responseString);
-            return "";
+            return Regex.Match(responseString, "<h1 class=\"text-center\">" + word + @" - (\w+)</h1>").Groups[1].Value;
         }
 
         private static bool isAdjective(string s)
         {
             if (s.Length >= 5 && Regex.IsMatch(s, @"(ой|ий|ый|ая|ое|ее|ье|ья|ые|ьи|ого|его|ей|ых|их|ому|ему|ым|им|ую|ью|ыми|ими|ем|ом)\b"))
                 return true;//ие
+            return false;
+        }
+
+        private static bool isAdjectiveDoubleCheck(string s)
+        {
+            if (s.Length >= 5 && Regex.IsMatch(s, @"(ой|ий|ый|ая|ое|ее|ье|ья|ые|ьи|ого|его|ей|ых|их|ому|ему|ым|им|ую|ью|ыми|ими|ем|ом|ие)\b"))
+            {
+                return true;
+            }
             return false;
         }
 
