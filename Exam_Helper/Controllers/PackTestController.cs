@@ -20,7 +20,7 @@ namespace Exam_Helper.Controllers
     /// инкапсулируем методы для работы с сессией 
     /// </summary>
     public interface ISessionWorker
-    {   
+    {
         /// <summary>
         /// удаляет ненужные ключи и данные из данных сессии.
         /// Необходимо чтобы не было коллизии
@@ -33,7 +33,7 @@ namespace Exam_Helper.Controllers
         /// В дальнешем можно перебрасывать на индекс с уведомлением об ошибке 
         /// </summary>
         /// <param name="pack"></param>
-        public void GetPack(string key,out Pack pack);
+        public void GetPack(string key, out Pack pack);
 
         /// <summary>
         /// получение вопроса из сессии.Если такого ключа нет , выбрасывается исключение : "problem with question in session data"
@@ -41,7 +41,7 @@ namespace Exam_Helper.Controllers
         /// </summary>
         /// <param name="pack"></param>
 
-        public void GetQuestion(string key,out Question question);
+        public void GetQuestion(string key, out Question question);
 
     }
 
@@ -65,18 +65,18 @@ namespace Exam_Helper.Controllers
 
         public void GetPack(string key, out Pack pack)
         {
-            pack = SessionHelper.GetObjectFromJson<Pack>(_httpContextAccessor.HttpContext.Session,key);
+            pack = SessionHelper.GetObjectFromJson<Pack>(_httpContextAccessor.HttpContext.Session, key);
             if (pack == null) throw new Exception("problem with pack in  session data");
         }
 
         public void GetQuestion(string key, out Question question)
         {
-             question = SessionHelper.GetObjectFromJson<Question>(_httpContextAccessor.HttpContext.Session, "question");
+            question = SessionHelper.GetObjectFromJson<Question>(_httpContextAccessor.HttpContext.Session, "question");
             if (question == null) throw new Exception("problem with question  in  session data");
 
         }
 
-    }  
+    }
 
 
 
@@ -86,7 +86,7 @@ namespace Exam_Helper.Controllers
         private CommonDbContext _dbContext;
         private ISessionWorker _sessionWorker;
 
-        public PackTestController(CommonDbContext db,ISessionWorker session)
+        public PackTestController(CommonDbContext db, ISessionWorker session)
         {
             _dbContext = db;
             _sessionWorker = session;
@@ -114,7 +114,7 @@ namespace Exam_Helper.Controllers
             var models = new TestChoiceViewModel()
             {
                 TestMethodsNames = new string[] { "NameAndDesc", "TestConstructor", "Dummy" },
-                TestsMethodsIds =new int[] { 1,2,3}
+                TestsMethodsIds = new int[] { 1, 2, 3 }
             };
             return View(models);
         }
@@ -129,7 +129,7 @@ namespace Exam_Helper.Controllers
                 switch (temp.SelectedId)
                 {
                     case 1: return RedirectToAction(nameof(TestNamesAndDescription));
-                    case 2: return RedirectToAction(nameof(MultiTesting),new {Instruction=temp.ServiceInfo});
+                    case 2: return RedirectToAction(nameof(MultiTesting), new { Instruction = temp.ServiceInfo });
                     default: return RedirectToAction(nameof(Index));
                 }
             }
@@ -150,7 +150,8 @@ namespace Exam_Helper.Controllers
             {
                 Names = testNamesAndDescription.FinalNames,
                 Description = testNamesAndDescription.Description,
-                AnswerID = testNamesAndDescription.AnswerId
+                AnswerID = testNamesAndDescription.AnswerId,
+                Instruction = Instruction
             };
             return View(ts);
         }
@@ -169,13 +170,13 @@ namespace Exam_Helper.Controllers
 
             if (string.IsNullOrEmpty(Instruction))
                 Instruction = "3";
-            
+
 
             int? times;
             times = HttpContext.Session.GetInt32("PackTestingTimes");
 
-            if(times==null)
-            times = int.Parse(Instruction);
+            if (times == null)
+                times = int.Parse(Instruction);
 
             if (times.Value > 0)
             {
@@ -190,8 +191,8 @@ namespace Exam_Helper.Controllers
 
                 switch (TestMethodId)
                 {
-                   case 1:return RedirectToAction(nameof(TestsController.MissingWordsTest),nameof(Tests), new {ControllerName = "PackTest", isMulti = true });
-                  case 0: return RedirectToAction(nameof(TestsController.PuzzleTest),nameof(Tests) ,new { ControllerName = "PackTest", isMulti = true });
+                    case 1: return RedirectToAction(nameof(TestsController.MissingWordsTest), nameof(Tests), new { ControllerName = "PackTest", isMulti = true });
+                    case 0: return RedirectToAction(nameof(TestsController.PuzzleTest), nameof(Tests), new { ControllerName = "PackTest", isMulti = true });
                 }
 
             }
@@ -203,6 +204,6 @@ namespace Exam_Helper.Controllers
 
 
     }
-    
+
 
 }

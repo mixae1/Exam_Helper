@@ -13,6 +13,8 @@ namespace Exam_Helper.ViewsModel
 
         public int AnswerID { get; set; }
 
+        public string Instruction { get; set; }
+
         public TestInfoNamesAndDescription()
         {
 

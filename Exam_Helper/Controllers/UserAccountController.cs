@@ -9,6 +9,7 @@ using Exam_Helper.Models;
 using Microsoft.AspNetCore.Authorization;
 using Exam_Helper.Services;
 using Microsoft.AspNetCore.Http;
+using System.Text.RegularExpressions;
 
 namespace Exam_Helper.Controllers
 {
@@ -38,6 +39,8 @@ namespace Exam_Helper.Controllers
                 {
                     UserName = user.UserName,
                     Email=user.Login,
+                    PackSet="",
+                    QuestionSet=""
                 };
                 
                 var res = await _userManager.CreateAsync(new_user, user.Password);
@@ -93,6 +96,7 @@ namespace Exam_Helper.Controllers
                     }
 
                 }
+                else ModelState.AddModelError(string.Empty, "Неверная почта или пароль");
             }
             return View();
         }
@@ -153,7 +157,7 @@ namespace Exam_Helper.Controllers
                 return View(model);
             }
             var user = await _userManager.FindByEmailAsync(HttpContext.Session.GetString("email"));
-            HttpContext.Session.Remove("email");
+           
             if (user == null)
             {
                 return View("ResetPasswordConfirmation");
@@ -161,14 +165,45 @@ namespace Exam_Helper.Controllers
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
             if (result.Succeeded)
             {
+                HttpContext.Session.Remove("email");
                 return View("ResetPasswordConfirmation");
             }
             foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
+            {    
+
+                ModelState.AddModelError(string.Empty, ErrorTranslater.Translate(error.Description));
             }
             return View(model);
         }
 
     }
+
+    /// <summary>
+    /// костыль для вывода сообщений на русском 
+    /// TODO : вместо него нужно создать класс валидации  реализующий IIdentityValidate
+    /// </summary>
+    public static class ErrorTranslater
+    {
+        public static string Translate(string input)
+        {
+            
+                
+                if(Regex.IsMatch(input,@"\d+ characters"))
+                return  "Пароль должен содержать как минимум " + Regex.Match(input, @"\d+").Value + " символов";
+
+                if(input.Contains("digit"))
+                return "Пароль должен содержать как минимум одну цифру ('0'-'9')";
+
+                if(input.Contains("uppercase"))
+                return "Пароль должен содержать как минимум один символ верхнего регистра ('A'-'Z')";
+
+                if (input.Contains("lowercase"))
+                return "Пароль должен содержать как минимум один символ нижнего регистра ('a'-'z')";
+
+
+            return input;
+        }
+    }
+
+
 }
