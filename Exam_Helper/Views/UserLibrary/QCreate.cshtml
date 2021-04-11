@@ -3,70 +3,72 @@
 @{
     ViewData["Title"] = "Create";
 }
-
-<h1>Создание</h1>
-<h4>Вопрос</h4>
-
-<hr color="brown" />
-
-<div class="instruction">
-    <span>Поля, помеченные (<span class="colortext" style="color:red">*</span>), обязательны для заполнения:</span>
-</div>
-<form asp-action="QCreate">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="d-flex justify-content-between pt-3 pb-3">
-        <span>
-            <b>@Html.DisplayNameFor(model => model.Title)<span class="colortext" style="color:red">*</span>:</b>
-            <br />
-            <input asp-for="@Model.Title" type="text" class="form-control w-100">
-            <span asp-validation-for="@Model.Title" class="text-danger"></span>
-        </span>
+<main class="container p-2">
+    <h1>Создание</h1>
+    <h4>Вопрос</h4>
+    
+    <hr color="brown" />
+    
+    <div class="instruction">
+        <span>Поля, помеченные (<span class="colortext" style="color:red">*</span>), обязательны для заполнения:</span>
     </div>
+    <form asp-action="QCreate">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="d-flex justify-content-between pt-3 pb-3">
+            <span>
+                <b>@Html.DisplayNameFor(model => model.Title)<span class="colortext" style="color:red">*</span>:</b>
+                <br />
+                <input asp-for="@Model.Title" type="text" class="form-control w-100">
+                <span asp-validation-for="@Model.Title" class="text-danger"></span>
+            </span>
+        </div>
+    
+        <div class="d-flex justify-content-between pt-3 pb-3">
+            <span>
+                <b>@Html.DisplayNameFor(model => model.Definition)<span class="colortext" style="color:red">*</span>:</b>
+                <br />
+                <textarea asp-for="@Model.Definition" id="textarea" style="width:750px;min-width:100px;margin-top:2vh;" rows="3"></textarea>
+                <br />
+                <span asp-validation-for="@Model.Definition" class="text-danger"></span>
+            </span>
+        </div>
+    
+        <div class="d-flex justify-content-between pt-3 pb-3">
+            <span>
+                <b>@Html.DisplayNameFor(model => model.Proof):</b>
+                <br />
+                <textarea asp-for="@Model.Proof" id="textarea" style="width:750px;min-width:100px;margin-top:2vh;" rows="10"></textarea>
+            </span>
+        </div>
+    
+        <div class="form-group">
+            <label asp-for="@Model.tags" class="control-label"></label>
+            <ul class="list-group" id="tags" style="height: 288px; overflow-y: scroll; width: 284px;">
+                <input class="form-control" id="tInput" type="text" placeholder="Поиск..">
+                @for (int i = 0; i < Model.tags.Count; i++)
+                {
+                    <li class="list-group-item">
+                        <input type="checkbox" asp-for="@Model.tags[i].IsSelected" />
+                        <label asp-for="@Model.tags[i].IsSelected" id="tName"> @Model.tags[i].Name</label>
+                        <input type="hidden" asp-for="@Model.tags[i].Id" />
+                        <input type="hidden" asp-for="@Model.tags[i].Name" />
+                    </li>
+                }
+            </ul>
+            <span asp-validation-for="@Model.tags" class="text-danger"></span>
+        </div>
+    
+    
+        <div class="form-group">
+            <input type="submit" value="Создать" class="btn btn-success" />
+            <a asp-action="Index">
+                <button type="button" class="btn btn-secondary">Обратно к списку</button>
+            </a>
+        </div>
+    
+    </form>
+</main>
 
-    <div class="d-flex justify-content-between pt-3 pb-3">
-        <span>
-            <b>@Html.DisplayNameFor(model => model.Definition)<span class="colortext" style="color:red">*</span>:</b>
-            <br />
-            <textarea asp-for="@Model.Definition" id="textarea" style="width:70vh;margin-top:2vh;" rows="3"></textarea>
-            <br />
-            <span asp-validation-for="@Model.Definition" class="text-danger"></span>
-        </span>
-    </div>
-
-    <div class="d-flex justify-content-between pt-3 pb-3">
-        <span>
-            <b>@Html.DisplayNameFor(model => model.Proof):</b>
-            <br />
-            <textarea asp-for="@Model.Proof" id="textarea" style="width:120vh;margin-top:2vh;" rows="10"></textarea>
-        </span>
-    </div>
-
-    <div class="form-group">
-        <label asp-for="@Model.tags" class="control-label"></label>
-        <ul class="list-group" id="tags" style="height: 288px; overflow-y: scroll; width: 284px;">
-            <input class="form-control" id="tInput" type="text" placeholder="Поиск..">
-            @for (int i = 0; i < Model.tags.Count; i++)
-            {
-                <li class="list-group-item">
-                    <input type="checkbox" asp-for="@Model.tags[i].IsSelected" />
-                    <label asp-for="@Model.tags[i].IsSelected" id="tName"> @Model.tags[i].Name</label>
-                    <input type="hidden" asp-for="@Model.tags[i].Id" />
-                    <input type="hidden" asp-for="@Model.tags[i].Name" />
-                </li>
-            }
-        </ul>
-        <span asp-validation-for="@Model.tags" class="text-danger"></span>
-    </div>
-
-
-    <div class="form-group">
-        <input type="submit" value="Создать" class="btn btn-success" />
-        <a asp-action="Index">
-            <button type="button" class="btn btn-secondary">Обратно к списку</button>
-        </a>
-    </div>
-
-</form>
 
 <script>
     $(document).ready(function () {
