@@ -3,7 +3,7 @@
 <main style="height: 75vh;" class="container d-flex align-items-center justify-content-center">
     <form asp-action="Index" method="post">
         <h2>
-            Выберете метод тестирования:
+            Выберите метод тестирования:
         </h2>
         <div asp-validation-summary="All" class="text-danger"></div>
         @for (int i = 0; i < Model.TestMethodsNames.Length; i++)

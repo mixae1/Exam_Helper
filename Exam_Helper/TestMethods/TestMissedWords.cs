@@ -180,7 +180,7 @@ namespace Exam_Helper.TestMethods
             if (missedwords == 0) missedwords++;
 
             if (missedwords == temp.Count)
-                throw new Exception("!");
+                return false;
             
 
             while (answers.Count != missedwords)
