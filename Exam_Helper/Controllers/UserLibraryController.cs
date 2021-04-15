@@ -257,7 +257,9 @@ namespace Exam_Helper.Controllers
 
             if (ModelState.IsValid)
             {  
-                var pqTemp = obj.packs.Where(x => x.IsSelected).Select(x => x.Id);
+                var pqTemp = obj.packs?.Where(x => x.IsSelected).Select(x => x.Id);
+                if (pqTemp == null)
+                    pqTemp = new List<int>();
 
                 HashSet<int> ques_from_packs = new HashSet<int>();
 
@@ -282,16 +284,18 @@ namespace Exam_Helper.Controllers
 
                 var tags = obj.tags.Where(x => x.IsSelected).Select(x => x.Id);
 
-                /* 
-                 * Пока разрешим создание без тегов
+                
+                 /* Пока разрешим создание без тегов
                 if (tags.Count() == 0)
                     ModelState.AddModelError(string.Empty, "Вы должны указать как минимум один тег");
                 */
-                /*if (ques.Count() == 0)
-                {
-                    ModelState.AddModelError(string.Empty, "Вы должны выбрать как минимум 1 вопрос");
+                 //если нет вопросов , но были указаны паки из которых берем вопросы ,то все ок идем дальше
+                if (ques.Count() == 0 && pqTemp.Count()==0)
+                {   
+                    //исправить нейминг
+                    ModelState.AddModelError(string.Empty, "Вы должны выбрать как минимум 1 вопрос или пак");
                     return View(obj);
-                }*/
+                }
 
                 var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
 
