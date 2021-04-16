@@ -7,7 +7,7 @@
 
 <main>
     <div class="main d-flex flex-column">
-        <h2 class="container">@Temp_Model.Title</h2>
+      
         @{int num_ans = 0; int num = 0; }
     
         @if (Temp_Model.IsSuccessed)
@@ -54,9 +54,9 @@
         <div class="container form-group mt-3">
             @{
                 if (Temp_Model.isMulti)
-                @Html.ActionLink("следующее задание", "MultiTesting",(Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
+                @Html.ActionLink("Следующее задание", "MultiTesting",(Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
                     else
-                @Html.ActionLink("пройти еще раз", "PuzzleTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
+                @Html.ActionLink("Пройти еще раз", "PuzzleTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
             }
         </div>
         </div>

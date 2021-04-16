@@ -6,7 +6,7 @@
 <main class="container d-flex align-items-center justify-content-center">
     <form asp-action="Index" method="post">
         <h2>
-            Выберете метод тестирования:
+            Выберите метод тестирования:
         </h2>
         <div asp-validation-summary="All" class="text-danger"></div>
         <div>
@@ -41,6 +41,9 @@
                                                     @*<span class="tooltip puzzle_tootlip">Данный метод представляет из себя нечто вроде конструктора, из частей которого вам предстоит собрать правильную последовательность</span>*@
                                                     case "MultiTesting":
                                                         @:Конструктор тестов
+                                                        break;
+                                                    case "wrong_text":
+                                                        @:Исправление ошибок
                                                         break;
                                                 }
                                             </div>
@@ -192,6 +195,33 @@
                                             </button>
                                         </div>
                                         break;
+                                case "wrong_text":
+                                    <p>
+                                        Количество ошибок:
+                                        <input type="range" min="1" max="100" value="50" id="wt_quantity">
+                                    </p>
+                                    <p>
+                                        <span>
+                                            Убрать окончания у прилагательных:
+                                            <input type="checkbox" id="wt_hideEndings" checked disabled>
+                                        </span>
+                                        <br />
+                                        <span>
+                                            Делать ошибки в числах:
+                                            <input type="checkbox" id="wt_numbers">
+                                        </span>
+                                        <br />
+                                        <span>
+                                            Делать ошибки в знаках:
+                                            <input type="checkbox" id="wt_signs">
+                                        </span>
+                                        <br />
+                                        <span>
+                                            Делать ошибки в греческих буквах:
+                                            <input type="checkbox" id="wt_alpha">
+                                        </span>
+                                    </p>
+                                    break;
                                     default: break;
                                 }
                             </div>
@@ -215,12 +245,15 @@
 <script>
 
     const missed_words = $("#collapse_missed_words > div");
+    /**/
     const puzzle = $("#collapse_puzzle > div");
     /**/
     const multi = $("#collapse_MultiTesting > div");
 
     const multi_missed = $("#collapse_MultiTesting_MissedWords > div");
     const multi_puzzle = $("#collapse_MultiTesting_Puzzle > div");
+    /**/
+    const wrong_text = $("#collapse_wrong_text > div");
     /**/
 
     function MakeInstruction() {
@@ -259,6 +292,14 @@
                     multi_puzzle.find("input#MultiTesting_p_defaultBlocks").is(":checked").toString() + ";" +
                     multi_puzzle.find("input#MultiTesting_p_sep").val().toString() + ";";
                 
+                break;
+            case "wrong_text":
+                instruction =
+                    wrong_text.find("input#wt_quantity").val().toString() + ";" +
+                    wrong_text.find("input#wt_hideEndings").is(":checked").toString() + ";" +
+                    wrong_text.find("input#wt_numbers").is(":checked").toString() + ";" +
+                    wrong_text.find("input#wt_signs").is(":checked").toString() + ";" +
+                    wrong_text.find("input#wt_alpha").is(":checked").toString();
                 break;
         }
 

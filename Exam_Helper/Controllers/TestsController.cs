@@ -65,7 +65,8 @@ namespace Exam_Helper.Controllers
 
             //лень было в БД заносить
             tests.Add(new Tests() { Name = "MultiTesting", Id = 3 });
-
+            //полностью согласен
+            tests.Add(new Tests() { Name = "wrong_text", Id = 4 });
 
             var models = new TestChoiceViewModel()
             {
@@ -85,7 +86,8 @@ namespace Exam_Helper.Controllers
                 {
                     case 1: return RedirectToAction(nameof(MissingWordsTest), new { Instruction = temp.ServiceInfo });
                     case 2: return RedirectToAction(nameof(PuzzleTest), new { Instruction = temp.ServiceInfo });
-                    case 3: return RedirectToAction(nameof(MultiTesting), new { Instruction = temp.ServiceInfo,TestMethodsInstruction=temp.MultiTestingInfoTests });
+                    case 3: return RedirectToAction(nameof(MultiTesting), new { Instruction = temp.ServiceInfo, TestMethodsInstruction = temp.MultiTestingInfoTests });
+                    case 4: return RedirectToAction(nameof(TheWrongTextTest), new { Instruction = temp.ServiceInfo });
                     default:return RedirectToAction(nameof(Index));
                 }
             }
@@ -135,6 +137,41 @@ namespace Exam_Helper.Controllers
 
             return View(ts);
         }
+
+        [HttpGet]
+        public IActionResult TheWrongTextTest(string Instruction, bool isMulti = false)
+        {
+
+            Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session, "question");
+            if (question == null) throw new Exception("question==null");
+
+            TestTheWrongText testTWT = new TestTheWrongText(question.Definition, Instruction);
+            TestInfoTheWrongText ts = new TestInfoTheWrongText()
+            {
+                Title = question.Title,
+                Text = testTWT.htmlText,
+                IsSuccessed = testTWT.IsSuccessed,
+                TestInstructions = Instruction,
+                isMulti = isMulti
+            };
+
+            return View(ts);
+        }
+
+        /*
+        [HttpPost]
+        public string  CheckAnswerForMissingTest(string answers)
+        {
+            var jsdata = JsonSerializer.Deserialize<Dictionary<string,string>>(answers);
+      
+            List<bool> Is_Right = new List<bool>();
+            foreach (var x in jsdata)
+               Is_Right.Add(x.Key.Trim().GetHashCode() == int.Parse(x.Value));
+           
+            return JsonSerializer.Serialize(Is_Right);
+            
+        }
+        */
 
         [HttpGet]
         public RedirectToActionResult MultiTesting(string Instruction,string TestMethodsInstruction)
