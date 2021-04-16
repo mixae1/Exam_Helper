@@ -59,6 +59,8 @@ namespace Exam_Helper.TestMethods
 
         private bool CreateTest(WrongWordsInstruction instructions)
         {
+            bool anyChanges = false;
+
             List<int> positions_of_adjs_in_parts; //Содержит позиции прилагательных в parts
             int number_of_adjs;
 
@@ -70,6 +72,8 @@ namespace Exam_Helper.TestMethods
                 positions_of_adjs_in_parts = parts.Select((x, ind) => (x, ind)).Where(x => isAdjective(x.x)).Select(x => x.ind).ToList();
                 number_of_adjs = positions_of_adjs_in_parts.Count;
 
+                if (number_of_adjs < 2) goto Label1;
+                
                 //перемешиваю индексы
                 Shuffle(positions_of_adjs_in_parts);
 
@@ -77,7 +81,7 @@ namespace Exam_Helper.TestMethods
                 if (instructions.isEndingsHided)
                 {
                     //собираем список прилагательных
-                    List<int> buf = new List<int>(4);
+                    List<int> buf = new List<int>(5);
                     for(int i = 0; i < number_of_adjs && buf.Count < 4; ++i)
                     {
                         if(!CustomContains(buf, positions_of_adjs_in_parts[i]))
@@ -109,8 +113,10 @@ namespace Exam_Helper.TestMethods
                 {
                     //...
                 }
-
+                anyChanges = true;
             }
+
+            Label1:
 
             if (instructions.isEndingsHided)
             {
@@ -128,17 +134,22 @@ namespace Exam_Helper.TestMethods
             if (instructions.isDigit)
             {
 
+                //anyChanges = true;
             }
 
             if (instructions.isSignes)
             {
 
+                //anyChanges = true;
             }
 
             if (instructions.isLatin)
             {
 
+                //anyChanges = true;
             }
+
+            if (!anyChanges) return false; 
 
             createHtmlText();
 

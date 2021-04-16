@@ -122,12 +122,12 @@
                                 case "wrong_text":
                                     <p>
                                         Количество ошибок:
-                                        <input type="range" min="1" max="100" value="50" id="wt_quantity" disabled>
+                                        <input type="range" min="1" max="100" value="50" id="wt_quantity">
                                     </p>
                                     <p>
                                         <span>
                                             Убрать окончания у прилагательных:
-                                            <input type="checkbox" id="wt_hideEndings" disabled>
+                                            <input type="checkbox" id="wt_hideEndings" checked disabled>
                                         </span>
                                         <br />
                                         <span>
@@ -205,7 +205,7 @@
                     multi.find("input#mtParts_quantity").val().toString() + ";" +
                     multi.find("input#mtMisWords_quantity").val().toString();
                 break;
-            case "MultiTesting":
+            case "wrong_text":
                 instruction =
                     wrong_text.find("input#wt_quantity").val().toString() + ";" +
                     wrong_text.find("input#wt_hideEndings").is(":checked").toString() + ";" +
