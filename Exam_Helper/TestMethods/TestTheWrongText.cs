@@ -16,9 +16,9 @@ namespace Exam_Helper.TestMethods
         private List<string> parts;
         private int number_of_parts;
 
-        private float percent;
-        //static readonly string alphabet = "ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσΤτΥυΦφΧχΨψΩω";
-        
+        static readonly string alphabet = "ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσΤτΥυΦφΧχΨψΩω";
+        static readonly string signes = "∧∨∀∃=><⩽≤⩾≥-+*^∈∉⊆⊂⊇⊃⊊⊋∪⋂∑∏";
+
         private static readonly HttpClient client = new HttpClient();
         private static Random rand = new Random();
         
@@ -44,13 +44,74 @@ namespace Exam_Helper.TestMethods
             return false;
         }
 
+        private int RandIntAtRange(int val)
+        {
+            if (val < 0) val = -val;
+            int buf;
+            while((buf = rand.Next(-val, val)) == 0);
+            return buf;
+        }
+
+        private char RandSign(char s)
+        {
+            char buf;
+            switch(s) //∧∨→¬∀∃=><⩽≤⩾≥-+*^∈∉⊆⊂⊇⊃⊊⊋∪⋂∑∏
+            {
+                case '∀': return '∃';
+                case '∃': return '∀';
+                case '∉': return '∈';
+                case '∈': return '∉';
+                case '∪': return '⋂';
+                case '⋂': return '∪';
+                case '∑': return '∏';
+                case '∏': return '∑';
+                case '∧':
+                case '∨':
+                    while ((buf = "∧∨→"[rand.Next(3)]) == s) ;
+                    return buf;
+                case '=':
+                case '>':
+                case '<':
+                    while ((buf = "=><≤≥"[rand.Next(5)]) == s) ;
+                    return buf;
+                case '⩽':
+                case '≤':
+                    return "=><≥"[rand.Next(4)];
+                case '⩾':
+                case '≥':
+                    return "=><≤"[rand.Next(4)];
+                case '-':
+                case '+':
+                case '*':
+                case '^':
+                    while ((buf = "-+*^"[rand.Next(4)]) == s) ;
+                    return buf;
+                case '⊆':
+                case '⊂':
+                case '⊇':
+                case '⊃':
+                case '⊊':
+                case '⊋':
+                    while ((buf = "⊆⊂⊇⊃⊊⊋"[rand.Next(6)]) == s) ;
+                    return buf;
+                default: return s;
+            }
+        }
+
+        private char RandLatin(char s, List<char> poses_of_latin)
+        {
+            char buf;
+            while ((buf = poses_of_latin[rand.Next(poses_of_latin.Count)]) == s) ;
+            return buf;
+        }
+
         public TestTheWrongText(string Text, string Instruction)
         {
             if (string.IsNullOrEmpty(Instruction)) Instruction = "50;true;false;false;false";
             var instructions = new WrongWordsInstruction(Instruction);
 
             //text -> parts[]
-            parts = Regex.Replace(Text, @"(,|\.|:|\?|\&|!|\(|\)|\{|\}|\-|=|<|>|\r\n)", " " + "$1" + " ").Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            parts = Regex.Replace(Text, @"([,\.:\?\&!\(\)\{\}\-¬→∧∨∀∃=><⩽≤⩾≥\+\*\^∈∉⊆⊂⊇⊃⊊⊋∪⋂∑∏]|\r\n)", " " + "$1" + " ").Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
             number_of_parts = parts.Count;
             htmlParts = new string[number_of_parts];
 
@@ -131,23 +192,69 @@ namespace Exam_Helper.TestMethods
                 }
             }
 
-            if (instructions.isDigit)
+            if (instructions.isNumber)
             {
+                List<int> positions_of_numbers_in_parts = parts.Select((x, ind) => (x, ind)).Where(x => isNumber(x.x)).Select(x => x.ind).ToList();
+                int number_of_numbers = positions_of_numbers_in_parts.Count;
 
-                //anyChanges = true;
+                if (number_of_numbers * instructions.percent < 1) goto Label2;
+
+                Shuffle(positions_of_numbers_in_parts);
+
+                for(int i = 0; i < number_of_numbers * instructions.percent; i++)
+                {
+                    htmlParts[positions_of_numbers_in_parts[i]] = 
+                        "<label id=\"wr\">" + (int.Parse(parts[positions_of_numbers_in_parts[i]]) + RandIntAtRange(3)).ToString() + "</label>";
+                }
+                
+                anyChanges = true;
             }
+
+            Label2:
 
             if (instructions.isSignes)
             {
+                List<int> positions_of_signes_in_parts = parts.Select((x, ind) => (x, ind)).Where(x => isSign(x.x)).Select(x => x.ind).ToList();
+                int number_of_signes = positions_of_signes_in_parts.Count;
 
-                //anyChanges = true;
+                if (number_of_signes * instructions.percent < 1) goto Label3;
+
+                Shuffle(positions_of_signes_in_parts);
+
+                for (int i = 0; i < number_of_signes * instructions.percent; i++)
+                {
+                    htmlParts[positions_of_signes_in_parts[i]] =
+                        "<label id=\"wr\">" + RandSign(parts[positions_of_signes_in_parts[i]][0]) + "</label>";
+                }
+
+                anyChanges = true;
             }
+
+            Label3:
 
             if (instructions.isLatin)
             {
 
-                //anyChanges = true;
+                List<int> positions_of_latin_in_parts = parts.Select((x, ind) => (x, ind)).Where(x => isLatin(x.x)).Select(x => x.ind).ToList();
+                int number_of_latin = positions_of_latin_in_parts.Count;
+
+                HashSet<char> set_of_latin = new HashSet<char>();
+                foreach (int ind in positions_of_latin_in_parts) set_of_latin.Add(parts[ind][0]);
+
+                if (number_of_latin * instructions.percent < 2 || set_of_latin.Count < 2) goto Label4;
+
+                Shuffle(positions_of_latin_in_parts);
+
+                for (int i = 0; i < number_of_latin * instructions.percent; i++)
+                {
+                    htmlParts[positions_of_latin_in_parts[i]] =
+                        "<label id=\"wr\">" + RandLatin(parts[positions_of_latin_in_parts[i]][0], set_of_latin.ToList()) + "</label>";
+                }
+
+                anyChanges = true;
             }
+
+            Label4:
 
             if (!anyChanges) return false; 
 
@@ -201,7 +308,22 @@ namespace Exam_Helper.TestMethods
             return false;
         }
 
-        
+        private static bool isNumber(string s)
+        {
+            foreach (var c in s) if (!Char.IsDigit(c)) return false;
+            return true;
+        }
+
+        private static bool isSign(string s)
+        {
+            return s.Length == 1 && signes.Contains(s);
+        }
+
+        private static bool isLatin(string s)
+        {
+            return s.Length == 1 && alphabet.Contains(s);
+        }
+
         private void createHtmlText()
         {
             for(int i = 0; i < parts.Count; i++)
@@ -412,7 +534,7 @@ namespace Exam_Helper.TestMethods
         {
             public float percent;
             public bool isEndingsHided;
-            public bool isDigit;
+            public bool isNumber;
             public bool isSignes;
             public bool isLatin;
 
@@ -429,9 +551,11 @@ namespace Exam_Helper.TestMethods
 
                 if (!float.TryParse(instructions[0], out percent)) percent = PERCENT;
 
+                percent /= 100;
+
                 if (!bool.TryParse(instructions[1], out isEndingsHided)) isEndingsHided = IS_ENDINGS_HIDED;
                 
-                if (!bool.TryParse(instructions[2], out isDigit)) isDigit = IS_DIGIT;
+                if (!bool.TryParse(instructions[2], out isNumber)) isNumber = IS_DIGIT;
 
                 if (!bool.TryParse(instructions[3], out isSignes)) isSignes = IS_SIGNES;
                 
@@ -439,7 +563,7 @@ namespace Exam_Helper.TestMethods
 
                 if (percent < 1 || percent > 100)
                     //throw new Exception("incorrect percent");
-                    percent = PERCENT;
+                    percent = PERCENT / 100;
             }
         }
 
