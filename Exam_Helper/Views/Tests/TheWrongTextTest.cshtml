@@ -1,0 +1,80 @@
+﻿@using Exam_Helper.ViewsModel
+@model Exam_Helper.ViewsModel.TestParent;
+@{
+    ViewData["Title"] = "View";
+    var Temp_Model = Model as TestInfoTheWrongText;
+}
+
+<head>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+</head>
+
+
+
+<main style="height: 85vh;" class="d-flex align-items-center">
+    <div>
+        @if (Temp_Model.IsSuccessed)
+        {
+            <h2>@Temp_Model.Title</h2>
+
+            <span>Α α Β β Γ γ Δ δ Ε ε Ζ ζ Η η Θ θ Ι ι Κ κ Λ λ Μ μ Ν ν Ξ ξ Ο ο Π π Ρ ρ Σ σ Τ τ Υ υ Φ φ Χ χ Ψ ψ Ω ω</span>
+
+            <div class="pt-3" style="white-space:pre-wrap; background-color: #f1f1f1;">
+                <span style="white-space:pre-wrap;">@Html.Raw(Temp_Model.Text)</span>
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Проверить ответ" class="btn btn-primary" id="CheckAnswers" />
+            </div>
+        }
+        else
+        {
+            <p>Мы не можем создать данный тест для этого вопроса.</p>
+        }
+        <a asp-controller="PublicLibrary" asp-action="Index">
+            <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
+        </a>
+        @{
+            if (Temp_Model.isMulti)
+                @Html.ActionLink("Следующее задание", "MultiTesting", "Tests", new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
+            else
+                @Html.ActionLink("Пройти еще раз", "TheWrongTextTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
+        }
+
+    </div>
+</main>
+
+<script>
+
+    $("#CheckAnswers").click(function CheckAnswers() {
+       
+       });
+
+</script>
+
+<style>
+
+    .right {
+        border-color: green;
+    }
+
+    .wrong {
+        border-color: red;
+    }
+
+    .editablesection {
+        background-color: #ffffff;
+        display: inline-block;
+        padding: 0;
+        outline-offset: 0;
+        height: 1.2em;
+        font: inherit;
+        margin: 0;
+        box-sizing: inherit;
+    }
+</style>
+
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
