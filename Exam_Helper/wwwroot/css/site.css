@@ -61,6 +61,13 @@ html {
     .card-check{
         width: 10px;
     }
+    h1{
+        font-size: 17px;
+    }
+    .log{
+        margin-top: 5px;
+        margin-left: 15px;
+    }
 }
 
 

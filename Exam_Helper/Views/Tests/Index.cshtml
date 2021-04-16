@@ -52,62 +52,65 @@
                             </div>
                         </div>
                         <div id="collapse_@Model.TestMethodsNames[i]" class="panel-collapse collapse in">
-                            <div class="panel-body">
                                 @switch (Model.TestMethodsNames[i])
                                 {
                                     case "missed_words":
-                                        <p>
-                                            Количество пропущенных слов:
-                                            <input type="range" min="1" max="100" value="50" id="mw_quantity">
-                                        </p>
-                                        <p>
-                                            <span>
-                                                Прилагательные:
-                                                <input type="checkbox" id="mw_isPrill">
-                                            </span>
-                                            <br />
-                                            <span>
-                                                Знаки:
-                                                <input type="checkbox" id="mw_isLetter" disabled>
-                                            </span>
-                                            <br />
-                                            <span>
-                                                Спец. символы:
-                                                <input type="checkbox" id="mw_isSign" disabled>
-                                            </span>
-                                        </p>
-                                        break;
+                                        <div class="panel-body">
+                                            <p>
+                                                Количество пропущенных слов:
+                                                <input type="range" min="1" max="100" value="50" id="mw_quantity">
+                                            </p>
+                                            <p>
+                                                <span>
+                                                    Прилагательные:
+                                                    <input type="checkbox" id="mw_isPrill">
+                                                </span>
+                                                <br />
+                                                <span>
+                                                    Знаки:
+                                                    <input type="checkbox" id="mw_isLetter" disabled>
+                                                </span>
+                                                <br />
+                                                <span>
+                                                    Спец. символы:
+                                                    <input type="checkbox" id="mw_isSign" disabled>
+                                                </span>
+                                            </p>
+                                        </div>
+                                            break;
                                     case "puzzle":
-                                        <p>
-                                            Количество частей:
-                                            <input type="range" min="1" max="100" value="50" id="p_quantity">
-                                        </p>
+                                        <div class="panel-body">
+                                            <p>
+                                                Количество частей:
+                                                <input type="range" min="1" max="100" value="50" id="p_quantity">
+                                            </p>
 
-                                        <p>
-                                            <span>
-                                                Различная длина частей:
-                                                <input type="checkbox" id="p_diffLenghtOfBlock">
-                                            </span>
-                                            <br />
-                                            <span>
-                                                Части по умолчанию:
-                                                <input type="checkbox" id="p_defaultBlocks" disabled>
-                                            </span>
-                                        </p>
+                                            <p>
+                                                <span>
+                                                    Различная длина частей:
+                                                    <input type="checkbox" id="p_diffLenghtOfBlock">
+                                                </span>
+                                                <br />
+                                                <span>
+                                                    Части по умолчанию:
+                                                    <input type="checkbox" id="p_defaultBlocks" disabled>
+                                                </span>
+                                            </p>
 
-                                        <p>
+                                            <p>
 
-                                            <span>
-                                                Тип разделения:
-                                                <input type="range" min="0" max="2" step="1" value="0" id="p_sep" onchange="UpdateSepName()" />
-                                                <span id="sepLog">sepIndulge</span>
-                                            </span>
+                                                <span>
+                                                    Тип разделения:
+                                                    <input type="range" min="0" max="2" step="1" value="0" id="p_sep" onchange="UpdateSepName()" />
+                                                    <span id="sepLog">sepIndulge</span>
+                                                </span>
 
-                                        </p>
+                                            </p>
+                                        </div>
                                         break;
 
                                     case "MultiTesting":
-
+                                        <div class="panel-body-multi">
                                         <p>
                                             Количество тестов "Воссоздание по частям":
                                             <input type="range" min="1" max="5" value="3" id="mtParts_quantity" onchange="displayValue(this,'mtPuzzle-input')">
@@ -117,7 +120,7 @@
                                             Настройка для метода "Воссоздание по частям"
                                         </p>
                                         <div id="collapse_MultiTesting_Puzzle" class="panel-collapse collapse in">
-                                            <div class="panel-body">
+                                            <div class="panel-body-multi-mini">
                                                 <p>
                                                     Количество частей:
                                                     <input type="range" min="1" max="100" value="50" id="MultiTesting_p_quantity">
@@ -145,56 +148,55 @@
                                                 </p>
                                             </div>
                                         </div>
-                                        <button class="btn" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_MultiTesting_Puzzle">
-                                            <img class="setting-btn" src="./sett_icon.png" />
-                                        </button>
+                                            <button class="btn" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_MultiTesting_Puzzle">
+                                                <img class="setting-btn" src="./sett_icon.png" />
+                                            </button>
 
 
-                                        <p>
-                                            Количество тестов "Вставка пропущенных слов":
-                                            <input type="range" min="1" max="5" value="3" id="mtMisWords_quantity" onchange="displayValue(this,'mtMisWords-input')">
-                                            <span id="mtMisWords-input">3</span>
-                                        </p>
+                                            <p>
+                                                Количество тестов "Вставка пропущенных слов":
+                                                <input type="range" min="1" max="5" value="3" id="mtMisWords_quantity" onchange="displayValue(this,'mtMisWords-input')">
+                                                <span id="mtMisWords-input">3</span>
+                                            </p>
 
-                                        <p>
-                                            Настройка для метода "Вставка пропущенных слов"
-                                        </p>
+                                            <p>
+                                                Настройка для метода "Вставка пропущенных слов"
+                                            </p>
 
-                                        <div id="collapse_MultiTesting_MissedWords" class="panel-collapse collapse in">
-                                            <div class="panel-body">
-                                                <p>
-                                                    Количество пропущенных слов:
-                                                    <input type="range" min="1" max="100" value="50" id="MultiTesting_mw_quantity">
-                                                </p>
-                                                <p>
-                                                    <span>
-                                                        Прилагательные:
-                                                        <input type="checkbox" id="MultiTesting_mw_isPrill">
-                                                    </span>
-                                                    <br />
-                                                    <span>
-                                                        Знаки:
-                                                        <input type="checkbox" id="MultiTesting_mw_isLetter" disabled>
-                                                    </span>
-                                                    <br />
-                                                    <span>
-                                                        Спец. символы:
-                                                        <input type="checkbox" id="MultiTesting_mw_isSign" disabled>
-                                                    </span>
-                                                </p>
+                                            <div id="collapse_MultiTesting_MissedWords" class="panel-collapse collapse in">
+                                                <div class="panel-body-multi-mini">
+                                                    <p>
+                                                        Количество пропущенных слов:
+                                                        <input type="range" min="1" max="100" value="50" id="MultiTesting_mw_quantity">
+                                                    </p>
+                                                    <p>
+                                                        <span>
+                                                            Прилагательные:
+                                                            <input type="checkbox" id="MultiTesting_mw_isPrill">
+                                                        </span>
+                                                        <br />
+                                                        <span>
+                                                            Знаки:
+                                                            <input type="checkbox" id="MultiTesting_mw_isLetter" disabled>
+                                                        </span>
+                                                        <br />
+                                                        <span>
+                                                            Спец. символы:
+                                                            <input type="checkbox" id="MultiTesting_mw_isSign" disabled>
+                                                        </span>
+                                                    </p>
+                                                </div>
                                             </div>
+                                            <button class="btn" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_MultiTesting_MissedWords">
+                                                <img class="setting-btn" src="./sett_icon.png" />
+                                            </button>
                                         </div>
-                                        <button class="btn" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_MultiTesting_MissedWords">
-                                            <img class="setting-btn" src="./sett_icon.png" />
-                                        </button>
                                         break;
                                     default: break;
                                 }
                             </div>
                         </div>
                     </div>
-
-                </div>
             }
         </div>
 
@@ -321,6 +323,18 @@
         padding: 5px;
         height:175px;
         overflow-y: scroll
+    }
+    .panel-body-multi{
+        padding: 5px;
+        height:300px;
+        overflow-y: scroll
+    }
+    .panel-body-multi-mini{
+        height:150px;
+    }
+    .panel-body, .panel-body-multi{
+        border: 2px solid black;
+        border-radius: 5px;
     }
     .test-card {
         height:70px;
