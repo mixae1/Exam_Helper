@@ -12,88 +12,137 @@ namespace Exam_Helper.TestMethods
         public string htmlText;
         public bool IsSuccessed;
 
+        private string[] htmlParts;
         private List<string> parts;
-        private List<int> adjectives; //Содержит позиции прилагательных в parts
-        private int parts_amount;
-        private int adjectives_amount;
-        private int amount; // Кол-во выбранный прилагательных для замены
-
-        private Dictionary<int, string> changed_selected_adjectives; //Выбранные прилагательные с изменёнными окончаниями
-        private List<int> selected_ids;
+        private int number_of_parts;
 
         private float percent;
-        static readonly string alphabet = "ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσΤτΥυΦφΧχΨψΩω";
+        //static readonly string alphabet = "ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσΤτΥυΦφΧχΨψΩω";
+        
         private static readonly HttpClient client = new HttpClient();
-
-        public TestTheWrongText(string Text, string Instruction = "")
+        private static Random rand = new Random();
+        
+        private static void Shuffle<T>(IList<T> list)
         {
-            //text -> parts[]
-            parts = Regex.Replace(Text, @"(,|\.|:|\?|\&|!|\(|\)|\{|\}|\-|=|<|>|\r\n)", " " + "$1" + " ").Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
-            parts_amount = parts.Count();
-
-            //parts[] -> adjs[]
-            adjectives = parts.Select((x, ind) => (x, ind)).Where(x => isAdjective(x.x)).Select(x => x.ind).ToList();
-            adjectives_amount = adjectives.Count();
-
-            IsSuccessed = CreateTest();
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rand.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
         }
 
-        public bool CreateTest()
+        private bool CustomContains(List<int> list, int ind)
         {
-            Random rand = new Random();
-            amount = Math.Min(adjectives_amount - adjectives_amount % 2, rand.Next(1, 3) * 2);
-            if (amount == 0) return false;
-
-            //позиции выбранных 'прилагательных' в parts
-            selected_ids = new List<int>();
-            var selected_ids_buf = new List<int>();
-            for (int i = 0; i < amount;)
+            foreach(int el in list)
             {
-                int temp = rand.Next(0, adjectives_amount);
-                if (!selected_ids.Exists(x => x == adjectives[temp]))
+                if (parts[el] == parts[ind]) return true;
+            }
+            return false;
+        }
+
+        public TestTheWrongText(string Text, string Instruction)
+        {
+            if (string.IsNullOrEmpty(Instruction)) Instruction = "50;true;false;false;false";
+            var instructions = new WrongWordsInstruction(Instruction);
+
+            //text -> parts[]
+            parts = Regex.Replace(Text, @"(,|\.|:|\?|\&|!|\(|\)|\{|\}|\-|=|<|>|\r\n)", " " + "$1" + " ").Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            number_of_parts = parts.Count;
+            htmlParts = new string[number_of_parts];
+
+            IsSuccessed = CreateTest(instructions);
+        }
+
+        private bool CreateTest(WrongWordsInstruction instructions)
+        {
+            List<int> positions_of_adjs_in_parts; //Содержит позиции прилагательных в parts
+            int number_of_adjs;
+
+            //change adjs
+            {
+                int number_of_chosen_adjs = 0; // Кол-во выбранных прилагательных для замены
+
+                //получаем индексы всех предположительных прилагательных
+                positions_of_adjs_in_parts = parts.Select((x, ind) => (x, ind)).Where(x => isAdjective(x.x)).Select(x => x.ind).ToList();
+                number_of_adjs = positions_of_adjs_in_parts.Count;
+
+                //перемешиваю индексы
+                Shuffle(positions_of_adjs_in_parts);
+
+
+                if (instructions.isEndingsHided)
                 {
-                    selected_ids.Add(adjectives[temp]);
-                    selected_ids_buf.Add(adjectives[temp]);
-                    ++i;
+                    //собираем список прилагательных
+                    List<int> buf = new List<int>(4);
+                    for(int i = 0; i < number_of_adjs && buf.Count < 4; ++i)
+                    {
+                        if(!CustomContains(buf, positions_of_adjs_in_parts[i]))
+                        {
+                            buf.Add(positions_of_adjs_in_parts[i]);
+                        }
+                    }
+
+                    buf.Add(buf[0]); //для сдвига
+                    for(int i = 1; i < buf.Count; i++)
+                    {
+                        //очень плохой код, но что поделать
+                        htmlParts[buf[i - 1]] = (instructions.isEndingsHided ? cutEnding(parts[buf[i]]) : parts[buf[i]]) + "</label>";
+                        if (Char.IsUpper(parts[buf[i - 1]][0]) != Char.IsUpper(parts[buf[i]][0]))
+                        {
+                            if(Char.IsUpper(parts[buf[i - 1]][0]))
+                            {
+                                htmlParts[buf[i - 1]] = Char.ToUpper(htmlParts[buf[i - 1]][0]) + htmlParts[buf[i - 1]].Substring(1);
+                            }
+                            else
+                            {
+                                htmlParts[buf[i - 1]] = Char.ToLower(htmlParts[buf[i - 1]][0]) + htmlParts[buf[i - 1]].Substring(1);
+                            }
+                        }
+                        htmlParts[buf[i - 1]] = "<label id=\"wr\">" + htmlParts[buf[i - 1]];
+                    }
+                }
+                else
+                {
+                    //...
+                }
+
+            }
+
+            if (instructions.isEndingsHided)
+            {
+                //for(int i = 0; i < number_of_adjs; i++)
+                //{
+                //    parts[positions_of_adjs_in_parts[i]] = cutEnding(parts[positions_of_adjs_in_parts[i]]);
+                //}
+
+                for (int i = 0; i < number_of_parts; i++)
+                {
+                    parts[i] = cutEnding(parts[i]);
                 }
             }
-            selected_ids.Sort();
 
-            //выбранные 'прилагательные' в тексте
-            List<string> selected_adjectives = selected_ids_buf.Select(x => parts[x]).ToList();
-
-            //выбранные 'прилагательные' в тексте с измененными окончаниями
-            changed_selected_adjectives = new Dictionary<int, string>(amount);
-            for (int i = 0; i * 2 < amount; ++i)
+            if (instructions.isDigit)
             {
-                var temp = swapEndings(selected_adjectives[i * 2], selected_adjectives[i * 2 + 1]);
-                changed_selected_adjectives.Add(selected_ids_buf[i * 2 + 1], temp.Item1);
-                changed_selected_adjectives.Add(selected_ids_buf[i * 2], temp.Item2);
+
+            }
+
+            if (instructions.isSignes)
+            {
+
+            }
+
+            if (instructions.isLatin)
+            {
+
             }
 
             createHtmlText();
 
             return true;
-        }
-
-        private void createHtmlText()
-        {
-            htmlText = "";
-            int lastIdx = 0;
-
-            for (int j = 0; j < selected_ids.Count; j++)
-            {
-                for (int i = lastIdx; i < selected_ids[j]; i++)
-                {
-                    htmlText += parts[i] + " ";
-                }
-                htmlText += "<label id=\"wr\">" + changed_selected_adjectives[selected_ids[j]] + " </label>";
-                lastIdx = selected_ids[j] + 1;
-            }
-            for (int i = lastIdx; i < parts_amount; i++)
-            {
-                htmlText += parts[i] + " ";
-            }
         }
 
         private static async Task<string> rustxt(string word)
@@ -136,11 +185,35 @@ namespace Exam_Helper.TestMethods
 
         private static bool isAdjective(string s)
         {
-            if (s.Length >= 5 && Regex.IsMatch(s, @"(ой|ий|ый|ая|ое|ее|ье|ья|ые|ьи|ого|его|ей|ых|их|ому|ему|ым|им|ую|ью|ыми|ими|ем|ом)\b"))
+            if (s.Length >= 5 && Regex.IsMatch(s, @"(ие|ых|ой|ий|ый|ая|ое|ее|ье|ья|ые|ьи|ого|его|ей|ых|их|ому|ему|ым|им|ую|ью|ыми|ими|ем|ом)\b"))
                 return true;//ие
             return false;
         }
 
+        
+        private void createHtmlText()
+        {
+            for(int i = 0; i < parts.Count; i++)
+            {
+                if (string.IsNullOrEmpty(htmlParts[i])) htmlParts[i] = parts[i];
+            }
+            htmlText = string.Join(' ', htmlParts);
+        }
+
+        private static string cutEnding(string adj)
+        {
+            if (Regex.IsMatch(adj, @"(ого|его|ому|ему|ыми|ими|ьей|ьих|ьим|ьем)\b"))
+            {
+                return adj.Substring(0, adj.Length - 3) + "…";
+            }
+            else if (Regex.IsMatch(adj, @"(ой|ий|ый|ая|ое|ее|ье|ья|ые|ьи|ей|ых|их|ым|им|ую|ью|ем|ом|ие)\b"))
+            {
+                return adj.Substring(0, adj.Length - 2) + "…";
+            }
+            else return adj;
+        }
+
+        /*
         private static bool isAdjectiveDoubleCheck(string s)
         {
             if (s.Length >= 5 && Regex.IsMatch(s, @"(ой|ий|ый|ая|ое|ее|ье|ья|ые|ьи|ого|его|ей|ых|их|ому|ему|ым|им|ую|ью|ыми|ими|ем|ом|ие)\b"))
@@ -321,6 +394,42 @@ namespace Exam_Helper.TestMethods
                 return consonant + altVowel(another.vowel).ToString() + another.lastSigns;
             }
 
+        }
+        */
+
+        class WrongWordsInstruction
+        {
+            public float percent;
+            public bool isEndingsHided;
+            public bool isDigit;
+            public bool isSignes;
+            public bool isLatin;
+
+            private const float PERCENT = 50f;
+            private const bool IS_ENDINGS_HIDED = false;
+            private const bool IS_DIGIT = false;
+            private const bool IS_SIGNES = false;
+            private const bool IS_LATIN = false;
+
+
+            public WrongWordsInstruction(string instruction)
+            {
+                string[] instructions = instruction.Split(";");
+
+                if (!float.TryParse(instructions[0], out percent)) percent = PERCENT;
+
+                if (!bool.TryParse(instructions[1], out isEndingsHided)) isEndingsHided = IS_ENDINGS_HIDED;
+                
+                if (!bool.TryParse(instructions[2], out isDigit)) isDigit = IS_DIGIT;
+
+                if (!bool.TryParse(instructions[3], out isSignes)) isSignes = IS_SIGNES;
+                
+                if (!bool.TryParse(instructions[4], out isLatin)) isLatin = IS_LATIN;
+
+                if (percent < 1 || percent > 100)
+                    //throw new Exception("incorrect percent");
+                    percent = PERCENT;
+            }
         }
 
     }
