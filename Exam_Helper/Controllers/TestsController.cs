@@ -102,7 +102,8 @@ namespace Exam_Helper.Controllers
         {
             _sessionWorker.GetQuestion("question", out Question question);
             
-            TestMissedWords testMissed = new TestMissedWords(question.Definition, Instruction);
+            string text = (Instruction[Instruction.Length - 1] == '1' ? question.Definition : question.Proof); 
+            TestMissedWords testMissed = new TestMissedWords(text, Instruction);
             TestInfoMissedWords ts = new TestInfoMissedWords()
             {
                 Title = question.Title,
@@ -123,7 +124,8 @@ namespace Exam_Helper.Controllers
 
             _sessionWorker.GetQuestion("question", out Question question);
 
-            TestPuzzle testPuzzle = new TestPuzzle(question.Definition, Instruction);
+            string text = (Instruction[Instruction.Length - 1] == '1' ? question.Definition : question.Proof);
+            TestPuzzle testPuzzle = new TestPuzzle(text, Instruction);
             TestInfoPuzzle ts = new TestInfoPuzzle()
             {
                 Title = question.Title,
@@ -145,7 +147,8 @@ namespace Exam_Helper.Controllers
             Question question = SessionHelper.GetObjectFromJson<Question>(HttpContext.Session, "question");
             if (question == null) throw new Exception("question==null");
 
-            TestTheWrongText testTWT = new TestTheWrongText(question.Definition, Instruction);
+            string text = (Instruction[Instruction.Length - 1] == '1' ? question.Definition : question.Proof);
+            TestTheWrongText testTWT = new TestTheWrongText(text, Instruction);
             TestInfoTheWrongText ts = new TestInfoTheWrongText()
             {
                 Title = question.Title,

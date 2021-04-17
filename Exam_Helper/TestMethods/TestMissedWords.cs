@@ -88,13 +88,16 @@ namespace Exam_Helper.TestMethods
 
         public TestMissedWords(string Thereom, string Instruction = "33;true")
         {
+            if (string.IsNullOrEmpty(Thereom))
+            {
+                isPossible = false;
+                return;
+            }
+
             if (string.IsNullOrEmpty(Instruction)) Instruction = "50;false";
             var instructions = new MissedWordsInstruction(Instruction);
 
             percent = instructions.percent;
-
-            if (string.IsNullOrEmpty(Thereom))
-                throw new Exception("incorrect string");
 
             percent /= 200; // 2 - так как мы же не хотим все слова делать полями
 
@@ -213,7 +216,7 @@ namespace Exam_Helper.TestMethods
             if (!bool.TryParse(instructions[1], out isPrill)) isPrill = ISPRILL;
 
             if (percent < 1 || percent > 100)
-                throw new Exception("incorrect percent");
+                percent = PERCENT;
         }
     }
 

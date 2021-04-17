@@ -107,6 +107,12 @@ namespace Exam_Helper.TestMethods
 
         public TestTheWrongText(string Text, string Instruction)
         {
+            if (string.IsNullOrEmpty(Text))
+            {
+                IsSuccessed = false;
+                return;
+            }
+
             if (string.IsNullOrEmpty(Instruction)) Instruction = "50;true;false;false;false";
             var instructions = new WrongWordsInstruction(Instruction);
 
@@ -562,7 +568,6 @@ namespace Exam_Helper.TestMethods
                 if (!bool.TryParse(instructions[4], out isLatin)) isLatin = IS_LATIN;
 
                 if (percent < 1 || percent > 100)
-                    //throw new Exception("incorrect percent");
                     percent = PERCENT / 100;
             }
         }
