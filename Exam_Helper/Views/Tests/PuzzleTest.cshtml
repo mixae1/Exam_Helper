@@ -7,38 +7,38 @@
 
 <main>
     <div class="main d-flex flex-column">
-      
+
         @{int num_ans = 0; int num = 0; }
-    
+
         @if (Temp_Model.IsSuccessed)
         {
             <div class="container droppable-elems justify-content-start">
                 <div class="row row-cols-auto">
                     @foreach (var block in Temp_Model.TestStrings)
-                        {
-                            <div class="main-blocks" id="@("droppable" + num_ans.ToString())">
-                                <p class="mt-2"></p>
-                            </div>
-                            num_ans++;
-                        }
+                    {
+                        <div class="main-blocks" id="@("droppable" + num_ans.ToString())">
+                            <p class="mt-2"></p>
+                        </div>
+                        num_ans++;
+                    }
                 </div>
             </div>
-    
+
             <div class="container draggable-elems">
                 <div class="row row-cols-auto ">
                     @foreach (var block in Temp_Model.TestStrings)
-                        {
-                            <div class="mt-auto">
-                                <div class="block text-center" id="@("draggable" + @num.ToString())">
-                                    <p>@block</p>
-                                </div>
+                    {
+                        <div class="mt-auto">
+                            <div class="block text-center" id="@("draggable" + @num.ToString())">
+                                <p>@block</p>
                             </div>
-    
-                            num++;
-                        }
+                        </div>
+
+                        num++;
+                    }
                 </div>
             </div>
-    
+
             <div class="container form-group mt-3">
                 <input type="submit" value="Проверить ответ" class="btn btn-primary" id="CheckAnswers" />
             </div>
@@ -50,22 +50,23 @@
         <a asp-controller="PublicLibrary" asp-action="Index" class="container">
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
         </a>
-    
+
         <div class="container form-group mt-3">
-            @{
+            @if (Temp_Model.IsSuccessed)
+            {
                 if (Temp_Model.isMulti)
-                @Html.ActionLink("Следующее задание", "MultiTesting",(Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
+                    @Html.ActionLink("Следующее задание", "MultiTesting", (Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
                     else
-                @Html.ActionLink("Пройти еще раз", "PuzzleTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
-            }
+                        @Html.ActionLink("Пройти еще раз", "PuzzleTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
+                    }
         </div>
-        </div>
+    </div>
 </main>
 
 
-  
 
-    <script>
+
+<script>
 
     $("#CheckAnswers").click(function CheckAnswers() {
         var ans = [];
@@ -129,55 +130,56 @@
 
 
 
-    </script>
+</script>
 
-    <style>
-        main {
-            margin-top: 5%;
-        }
-        .block {
-            display: inline-block;
-            border: 2px solid black;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 10px;
-            margin-left: 0px;
-        }
-
-        .right {
-            background-color: green;
-        }
-
-        .wrong {
-            background-color: red;
-        }
-
-        .hover {
-            border-style: double;
-            border-color: black;
-        }
-
-        .droppable-elems {
-            display: inline-block;
-        }
-
-        .draggable-elems {
-            display: inline-block;
-        }
-
-        .main-blocks {
-            width: 30%;
-            height: 75px;
-            float: left;
-            border: 2px solid black;
-            border-radius: 5px;
-            margin: 10px;
-            margin-left: 0px;
-        }
-    </style>
-
-
-    @section Scripts {
-
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<style>
+    main {
+        margin-top: 5%;
     }
+
+    .block {
+        display: inline-block;
+        border: 2px solid black;
+        border-radius: 5px;
+        padding: 15px;
+        margin: 10px;
+        margin-left: 0px;
+    }
+
+    .right {
+        background-color: green;
+    }
+
+    .wrong {
+        background-color: red;
+    }
+
+    .hover {
+        border-style: double;
+        border-color: black;
+    }
+
+    .droppable-elems {
+        display: inline-block;
+    }
+
+    .draggable-elems {
+        display: inline-block;
+    }
+
+    .main-blocks {
+        width: 30%;
+        height: 75px;
+        float: left;
+        border: 2px solid black;
+        border-radius: 5px;
+        margin: 10px;
+        margin-left: 0px;
+    }
+</style>
+
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
