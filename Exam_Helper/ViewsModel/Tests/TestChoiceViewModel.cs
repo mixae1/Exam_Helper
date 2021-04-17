@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 namespace Exam_Helper.ViewsModel
 {
-    public class TestChoiceViewModel
+    public class TestChoiceViewModel:TestParent
     {
-        public TestChoiceViewModel()
+        public TestChoiceViewModel():base()
         {
             
         }

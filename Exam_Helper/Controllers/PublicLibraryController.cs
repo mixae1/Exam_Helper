@@ -144,7 +144,10 @@ namespace Exam_Helper.Controllers
             //TempData["question_id"] = id;
             HttpContext.Session.Remove("question_id");
             HttpContext.Session.Remove("question");
+            HttpContext.Session.Remove("ReturnControllerName");
+
             HttpContext.Session.SetInt32("question_id", id);
+            HttpContext.Session.SetString("ReturnControllerName", "PublicLibrary");
             return RedirectToAction(nameof(Index), nameof(Tests));
         }
 
@@ -153,7 +156,10 @@ namespace Exam_Helper.Controllers
         {
             HttpContext.Session.Remove("pack_id");
             HttpContext.Session.Remove("pack");
+            HttpContext.Session.Remove("ReturnControllerName");
+
             HttpContext.Session.SetInt32("pack_id", id);
+            HttpContext.Session.SetString("ReturnControllerName", "PublicLibrary");
             return RedirectToAction(nameof(Index),"PackTest");
         }
 

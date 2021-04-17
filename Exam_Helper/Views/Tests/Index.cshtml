@@ -244,7 +244,7 @@
         <div class="form-group mt-3">
             <button type="submit" class="btn btn-primary" id="sumbit" onclick="MakeInstruction()">Сделать выбор</button>
         </div>
-        <a asp-controller="PublicLibrary" asp-action="Index">
+        <a asp-controller=@Model.ReturnControllerName asp-action="Index">
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
         </a>
     </form>

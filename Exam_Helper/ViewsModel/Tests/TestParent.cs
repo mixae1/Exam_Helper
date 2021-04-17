@@ -16,5 +16,7 @@ namespace Exam_Helper.ViewsModel
         //имя контроллера , который инициировал многоразовое тестирование 
       public string ControllerName { get; set; }
 
+        //имя контроллера библиотеки,из которого пришли 
+        public string ReturnControllerName { get; set; }
     }
 }
