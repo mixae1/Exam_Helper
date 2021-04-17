@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Exam_Helper.ViewsModel
 {
-    public class TestInfoNamesAndDescription
+    public class TestInfoNamesAndDescription:TestParent
     {
         public string Description { get; set; }
 
@@ -15,7 +15,7 @@ namespace Exam_Helper.ViewsModel
 
         public string Instruction { get; set; }
 
-        public TestInfoNamesAndDescription()
+        public TestInfoNamesAndDescription():base()
         {
 
         }
