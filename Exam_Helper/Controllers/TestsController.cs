@@ -71,7 +71,8 @@ namespace Exam_Helper.Controllers
             var models = new TestChoiceViewModel()
             {
                 TestMethodsNames = tests.Select(x => x.Name).ToArray(),
-                TestsMethodsIds = tests.Select(x => x.Id).ToArray()
+                TestsMethodsIds = tests.Select(x => x.Id).ToArray(),
+                ReturnControllerName=HttpContext.Session.GetString("ReturnControllerName")
             };
 
             return View(models);
