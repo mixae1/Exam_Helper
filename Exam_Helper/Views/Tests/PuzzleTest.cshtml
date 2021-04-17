@@ -17,7 +17,6 @@
                     @foreach (var block in Temp_Model.TestStrings)
                     {
                         <div class="main-blocks" id="@("droppable" + num_ans.ToString())">
-                            <p class="mt-2"></p>
                         </div>
                         num_ans++;
                     }
@@ -25,13 +24,11 @@
             </div>
 
             <div class="container draggable-elems">
-                <div class="row row-cols-auto ">
+                <div class="row row-cols-auto">
                     @foreach (var block in Temp_Model.TestStrings)
                     {
-                        <div class="mt-auto">
-                            <div class="block text-center" id="@("draggable" + @num.ToString())">
-                                <p>@block</p>
-                            </div>
+                        <div class="block text-center" id="@("draggable" + @num.ToString())">
+                            <p>@block</p>
                         </div>
 
                         num++;
@@ -39,7 +36,7 @@
                 </div>
             </div>
 
-            <div class="container form-group mt-3">
+            <div class="container form-group">
                 <input type="submit" value="Проверить ответ" class="btn btn-primary" id="CheckAnswers" />
             </div>
         }
@@ -51,7 +48,7 @@
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
         </a>
 
-        <div class="container form-group mt-3">
+        <div class="container form-group">
             @if (Temp_Model.IsSuccessed)
             {
                 if (Temp_Model.isMulti)
@@ -88,6 +85,7 @@
                 $(this).removeClass("right");
                 $(this).addClass("wrong");
             }
+            setTimeout(function () { $('.droppable-elems').children().children().css("background-color","white"); }, 3000);
         });
     });
 
@@ -111,20 +109,47 @@
 
                     // измененяем размеры контейнеров (ширину и высоту )первые 2 строки - меняем контейнер в которых кидаем , последние 2 строки - меняем контейнер который переносим
                     // $(this).css('height', ui.draggable.css('height'));
-                      $(this).css('width', ui.draggable.css('width'));
-                      ui.draggable.css('height', $(this).css('height'));
-                    //ui.draggable.css('width', $(this).css('width'));
-                    let text = $(ui.draggable).children().text();
-                    console.log(text);
-                    $(this).children().text(text);
-                    $(ui.draggable).css('visibility','hidden');
+                    $(this).css('width', ui.draggable.css('width'));
+                    ui.draggable.css('height', $(this).css('height'));
+                    ui.draggable.css({'top': "0", 'left': "0",'bottom': "0",'right': "0"});
+                    // let text = $(ui.draggable).children().text();
+                    // console.log(text);
                     $(this).append(ui.draggable);
+                    $(this).children("[id^=draggable]").css("margin","0");
                     // $(this).css('border-width','0px');
                     $(this).removeClass('hover');
                 }
 
             }
 
+        });
+        $(".draggable-elems").droppable({
+            over: function (event, ui) {
+                $(this).addClass('hover');
+            },
+            out: function (event, ui) {
+                $(this).removeClass('hover');
+                $(this).position = 'absolute';
+
+            },
+            drop: function (event, ui) {
+                console.log($(this).children("[id^=draggable]"));
+                 // измененяем размеры контейнеров (ширину и высоту )первые 2 строки - меняем контейнер в которых кидаем , последние 2 строки - меняем контейнер который переносим
+                 // $(this).css('height', ui.draggable.css('height'));
+                 // $(this).css('width', ui.draggable.css('width'));
+                 // ui.draggable.css('height', $(this).css('height'));
+                 //ui.draggable.css('width', $(this).css('width'));
+                 // let text = $(ui.draggable).children().text();
+                 // console.log(text);
+                 // $(this).children("[id^=draggable]").css("margin","0px");
+                 // $(this).children("[id^=draggable]").removeClass("add-block");
+                 // $(this).children("[id^=draggable]").removeClass("block");
+                 ui.draggable.css({'top': "0", 'left': "0",'bottom': "0",'right': "0"});
+                 $(this).children().append(ui.draggable);
+                 $(this).children().children("[id^=draggable]").css("margin","10px");
+                 // $(this).css('border-width','0px');
+                 $(this).removeClass('hover');   
+                }
         });
     });
 
@@ -136,14 +161,34 @@
     main {
         margin-top: 5%;
     }
-
+    .draggable-elems{
+        min-height: 250px;
+        width: 100%;
+        margin-top: 15px;
+        margin-bottom: 10px;
+        border: 2px solid black;
+        border-radius: 5px;
+        padding: 10px;
+    }
     .block {
         display: inline-block;
+        min-width: 300px;
+        min-height: 75px;
+        border: 2px solid black;
+        border-radius: 5px;
+        margin: 10px;
+        padding: 15px;
+    }
+    .add-block{
+        display: inline-block;
+        min-width: 300px;
+        min-height: 75px;
         border: 2px solid black;
         border-radius: 5px;
         padding: 15px;
+    }
+    .block-shell{
         margin: 10px;
-        margin-left: 0px;
     }
 
     .right {
@@ -168,13 +213,11 @@
     }
 
     .main-blocks {
-        width: 30%;
+        min-width: 300px;
         height: 75px;
-        float: left;
         border: 2px solid black;
         border-radius: 5px;
         margin: 10px;
-        margin-left: 0px;
     }
 </style>
 
