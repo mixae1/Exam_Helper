@@ -67,12 +67,12 @@ namespace Exam_Helper.Controllers
             tests.Add(new Tests() { Name = "MultiTesting", Id = 3 });
             //полностью согласен
             tests.Add(new Tests() { Name = "wrong_text", Id = 4 });
+            ViewData["ReturnControllerName"] = HttpContext.Session.GetString("ReturnControllerName");
 
             var models = new TestChoiceViewModel()
             {
                 TestMethodsNames = tests.Select(x => x.Name).ToArray(),
-                TestsMethodsIds = tests.Select(x => x.Id).ToArray(),
-                ReturnControllerName=HttpContext.Session.GetString("ReturnControllerName")
+                TestsMethodsIds = tests.Select(x => x.Id).ToArray()
             };
 
             return View(models);
@@ -93,7 +93,7 @@ namespace Exam_Helper.Controllers
                 }
             }
             //?????
-            Console.WriteLine(ModelState.Values);
+         //   Console.WriteLine(ModelState.Values);
             return RedirectToAction(nameof(Index));
         }
 
@@ -182,16 +182,17 @@ namespace Exam_Helper.Controllers
              
              */
 
+       
+
+
+            if (string.IsNullOrEmpty(Instruction)) Instruction = "3;3;3";
+            if (string.IsNullOrEmpty(TestMethodsInstruction)) TestMethodsInstruction = "50;false|50;false;false;0|50;true;false;false;false";
+
+
             string text = HttpContext.Session.GetString("MaterialType");
             if (string.IsNullOrEmpty(text))
-            text = (Instruction[Instruction.Length - 1] == '1') ? ";1" : ";2";
+                text = (Instruction[Instruction.Length - 1] == '1') ? ";1" : ";2";
 
-
-
-            if (string.IsNullOrEmpty(Instruction)) Instruction = "1;1";
-            if (string.IsNullOrEmpty(TestMethodsInstruction)) TestMethodsInstruction = "50;false|50;false;false;0;";
-
-          
 
 
             var instructions = TestMethodsInstruction.Split('|');
@@ -205,32 +206,35 @@ namespace Exam_Helper.Controllers
             var PuzzleInstructions = HttpContext.Session.GetString("puzzle_inst");
             if (PuzzleInstructions == null) PuzzleInstructions = instructions[1];
 
-  
+            var WrongTextInstructions= HttpContext.Session.GetString("wrong_text");
+            if (WrongTextInstructions == null) WrongTextInstructions = instructions[2];
 
-            if (times[0] > 0 || times[1] > 0) 
+            if (times[0] > 0 || times[1] > 0 || times[2]>0) 
             {
                 Random r = new Random();
-                int nextTestMethod = r.Next(0, times.Length-1);
+                int nextTestMethod = r.Next(0, times.Length);
 
                 while(times[nextTestMethod]<=0)
-                  nextTestMethod = r.Next(0, times.Length-1 );
+                  nextTestMethod = r.Next(0, times.Length);
 
                 times[nextTestMethod]--;
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "test_times", times);
+                //вот это безобразие по-хорошему можно вынести в отдельный метод в ISessionworker
                 HttpContext.Session.SetString("missed_words_inst", MissedWordsInstructions);
                 HttpContext.Session.SetString("puzzle_inst", PuzzleInstructions);
                 HttpContext.Session.SetString("MaterialType", text);
-
+                HttpContext.Session.SetString("wrong_text", WrongTextInstructions);
 
                 switch (nextTestMethod) 
                 {
+                    case 2: return RedirectToAction(nameof(TheWrongTextTest), new { ControllerName = "Tests", Instruction = WrongTextInstructions + text, isMulti = true });
                     case 1:return RedirectToAction(nameof(MissingWordsTest),new { ControllerName = "Tests", Instruction=MissedWordsInstructions+text, isMulti=true});
                     case 0:return RedirectToAction(nameof(PuzzleTest), new { ControllerName = "Tests", Instruction=PuzzleInstructions+text, isMulti = true });
                 }
 
             }
 
-            _sessionWorker.RemoveDataSession("test_times", "missed_words_inst", "puzzle_inst", "MaterialType");
+            _sessionWorker.RemoveDataSession("test_times", "missed_words_inst", "puzzle_inst", "MaterialType","wrong_text");
 
             return RedirectToAction(nameof(UserStats));
           
