@@ -104,7 +104,8 @@ namespace Exam_Helper.Controllers
             _sessionWorker.GetQuestion("question", out Question question);
 
             string ReturnUrl = HttpContext.Session.GetString("ReturnControllerName");
-            string text = (Instruction[Instruction.Length - 1] == '1' ? question.Definition : question.Proof); 
+            string text = (Instruction[Instruction.Length - 1] == '1' ? question.Definition : question.Proof);
+            
             TestMissedWords testMissed = new TestMissedWords(text, Instruction);
             TestInfoMissedWords ts = new TestInfoMissedWords()
             {

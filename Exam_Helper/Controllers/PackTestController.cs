@@ -110,13 +110,12 @@ namespace Exam_Helper.Controllers
                 return RedirectToAction("Index", "PublicLibrary");
 
 
-
+            ViewData["ReturnControllerName"] = HttpContext.Session.GetString("ReturnControllerName");
             var models = new TestChoiceViewModel()
             {
                 TestMethodsNames = new string[] { "NameAndDesc", "TestConstructor", "Dummy" },
                 TestsMethodsIds = new int[] { 1, 2, 3 },
-                ReturnControllerName= HttpContext.Session.GetString("ReturnControllerName")
-        };
+            };
             return View(models);
         }
 
@@ -125,6 +124,7 @@ namespace Exam_Helper.Controllers
 
         public RedirectToActionResult Index([Bind("SelectedId, ServiceInfo")] TestChoiceViewModel temp)
         {
+            
             if (ModelState.IsValid)
             {
                 switch (temp.SelectedId)

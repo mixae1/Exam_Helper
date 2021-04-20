@@ -54,6 +54,9 @@ namespace Exam_Helper.TestMethods
 
         public string[] GetWordsWithInputs()
         {
+            if (words == null)
+                return new string[] { };
+
             List<string> stringUnioner = new List<string>();
             stringUnioner.Add("");
             int curr_word = 0;
@@ -88,6 +91,8 @@ namespace Exam_Helper.TestMethods
 
         public TestMissedWords(string Thereom, string Instruction = "33;true")
         {
+
+            answers = new SortedDictionary<int, string>();
             if (string.IsNullOrEmpty(Thereom))
             {
                 isPossible = false;
@@ -101,7 +106,7 @@ namespace Exam_Helper.TestMethods
 
             percent /= 200; // 2 - так как мы же не хотим все слова делать полями
 
-            
+           
             string rep = "$1";
             Thereom = Regex.Replace(Thereom, @"(,|\.|:|\?|\&|!|\(|\)|\{|\}|\-|=|<|>|\r\n)", " "+rep+" ").Trim();
             words = Thereom.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
