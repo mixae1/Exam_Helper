@@ -341,7 +341,8 @@
             case "MultiTesting":
                 instruction =
                     multi.find("input#mtParts_quantity").val().toString() + ";" +
-                    multi.find("input#mtMisWords_quantity").val().toString();
+                    multi.find("input#mtMisWords_quantity").val().toString() + ";" +
+                    multi.find("input#mtwrong_text_quantity").val().toString();
 
                 multitest_instruction = multi_missed.find("input#MultiTesting_mw_quantity").val().toString() + ";" +
                     multi_missed.find("input#MultiTesting_mw_isPrill").is(":checked").toString() + "|" +
@@ -351,11 +352,11 @@
                     multi_puzzle.find("input#MultiTesting_p_defaultBlocks").is(":checked").toString() + ";" +
                     multi_puzzle.find("input#MultiTesting_p_sep").val().toString() + "|" +
 
-                    multi.find("input#mtwrong_text_quantity").val().toString() + ";"+
-                multi_wt.find("input#MultiTesting_wt_quantity").val.toString() + ";"
-                    + multi_wt.find("input#MultiTesting_wt_numbers").is(":checked").toString() + ";" +
+
+                    multi_wt.find("input#MultiTesting_wt_quantity").val().toString() + ";" +
+                    multi_wt.find("input#MultiTesting_wt_numbers").is(":checked").toString() + ";" +
                     multi_wt.find("input#MultiTesting_wt_signs").is(":checked").toString() + ";" +
-                    multi_wt.find("input#MultiTesting_wt_alpha").is(":checked").toString() + ";"
+                    multi_wt.find("input#MultiTesting_wt_alpha").is(":checked").toString() + ";";
 
                
                 break;

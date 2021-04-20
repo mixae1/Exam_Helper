@@ -182,10 +182,7 @@ namespace Exam_Helper.Controllers
              
              */
 
-       
-
-
-            if (string.IsNullOrEmpty(Instruction)) Instruction = "3;3;3";
+            if (string.IsNullOrEmpty(Instruction)) Instruction = "3;3;3;1";
             if (string.IsNullOrEmpty(TestMethodsInstruction)) TestMethodsInstruction = "50;false|50;false;false;0|50;true;false;false;false";
 
 
@@ -220,10 +217,13 @@ namespace Exam_Helper.Controllers
                 times[nextTestMethod]--;
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "test_times", times);
                 //вот это безобразие по-хорошему можно вынести в отдельный метод в ISessionworker
-                HttpContext.Session.SetString("missed_words_inst", MissedWordsInstructions);
+               /* HttpContext.Session.SetString("missed_words_inst", MissedWordsInstructions);
                 HttpContext.Session.SetString("puzzle_inst", PuzzleInstructions);
                 HttpContext.Session.SetString("MaterialType", text);
-                HttpContext.Session.SetString("wrong_text", WrongTextInstructions);
+                HttpContext.Session.SetString("wrong_text", WrongTextInstructions);*/
+
+                _sessionWorker.PutDataSession(new string[] { "missed_words_inst", "puzzle_inst", "MaterialType", "wrong_text" },
+                                              new string[] { MissedWordsInstructions, PuzzleInstructions , text, WrongTextInstructions});
 
                 switch (nextTestMethod) 
                 {
