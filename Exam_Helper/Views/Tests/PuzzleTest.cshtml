@@ -67,7 +67,7 @@
 
     $("#CheckAnswers").click(function CheckAnswers() {
         var ans = [];
-        @if (Temp_Model.RightIndexes != null)
+        @if (Temp_Model.IsSuccessed)
          @for(int i = 0; i< Temp_Model.RightIndexes.Length; i++)
         {
             @:ans.push("@(new Microsoft.AspNetCore.Html.HtmlString(Temp_Model.RightIndexes[i].ToString()))");

@@ -1,7 +1,7 @@
 ﻿@using Exam_Helper.ViewsModel
-@model Exam_Helper.ViewsModel.TestParent;
+@model Exam_Helper.ViewsModel.TestChoiceViewModel;
 @{
-    var Temp_Model = Model as TestChoiceViewModel;
+   
 }
 
 <main style="height: 75vh;" class="container d-flex align-items-center justify-content-center">
@@ -10,7 +10,7 @@
             Выберите метод тестирования:
         </h2>
         <div asp-validation-summary="All" class="text-danger"></div>
-        @for (int i = 0; i < Temp_Model.TestMethodsNames.Length; i++)
+        @for (int i = 0; i < Model.TestMethodsNames.Length; i++)
         {
             <div class="panel-group" id="accordion">
                 <div class="panel">
@@ -19,40 +19,40 @@
                             <div class="input-group">
                                 <div class="input-group-prepend bg-white mr-3 test-card">
                                     <div class="input-group-text">
-                                        <input asp-for="@Temp_Model.SelectedId" value="@Temp_Model.TestsMethodsIds[i]" type="radio" id="method" method-type="@Temp_Model.TestMethodsNames[i]" />
-                                        <input asp-for="@Temp_Model.TestsMethodsIds[i]" type="hidden" />
-                                        <input asp-for="@Temp_Model.ServiceInfo" type="hidden" id="ServiceInfo" />
-                                        <span asp-validation-for="@Temp_Model.SelectedId" hidden></span>
+                                        <input asp-for="@Model.SelectedId" value="@Model.TestsMethodsIds[i]" type="radio" id="method" method-type="@Model.TestMethodsNames[i]" />
+                                        <input asp-for="@Model.TestsMethodsIds[i]" type="hidden" />
+                                        <input asp-for="@Model.ServiceInfo" type="hidden" id="ServiceInfo" />
+                                        <span asp-validation-for="@Model.SelectedId" hidden></span>
                                     </div>
                                     <div class="d-flex align-items-center">
-                                        <span asp-for="@Temp_Model.TestsMethodsIds[i]">
-                                            @switch (Temp_Model.TestMethodsNames[i])
+                                        <span asp-for="@Model.TestsMethodsIds[i]">
+                                            @switch (Model.TestMethodsNames[i])
                                             {
                                                 case "TestConstructor":@:Конструктор тестов
                                                     break;
 
-                                                case "NameAndDesc": @:сопоставить название и определение
+                                                case "NameAndDesc": @:Cопоставить название и определение
                                                     break;
 
                                                 case "Dummy": @:Методы тестирования/заучивания
                                                     break;
 
                                                 default:
-                                                    @Temp_Model.TestMethodsNames[i]
+                                                    @Model.TestMethodsNames[i]
                                                     break;
                                             }
                                         </span>
                                     </div>
-                                    <button class="btn" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Temp_Model.TestMethodsNames[i]">
+                                    <button class="btn" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
                                         <img class="setting-btn" src="./sett_icon.png" />
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div id="collapse_@Temp_Model.TestMethodsNames[i]" class="panel-collapse collapse in">
+                    <div id="collapse_@Model.TestMethodsNames[i]" class="panel-collapse collapse in">
                         <div class="panel-body">
-                            @switch (Temp_Model.TestMethodsNames[i])
+                            @switch (Model.TestMethodsNames[i])
                                             {
                                 case "TestConstructor":
                                     <p>
@@ -77,7 +77,7 @@
         <div class="form-group">
            <input type="submit" value="Сделать выбор" class="btn btn-primary" id="sumbit" onclick="MakeInstruction()" />
         </div>
-        <a asp-controller=@Temp_Model.ReturnControllerName asp-action="Index">
+        <a asp-controller=@ViewData["ReturnControllerName"] asp-action="Index">
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
         </a>
     </form>

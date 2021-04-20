@@ -43,6 +43,14 @@ namespace Exam_Helper.Controllers
 
         public void GetQuestion(string key, out Question question);
 
+        /// <summary>
+        /// получение вопроса из сессии.Если такого ключа нет , выбрасывается исключение : "problem with question in session data"
+        /// В дальнешем можно перебрасывать на индекс с уведомлением об ошибке 
+        /// </summary>
+        /// <param name="pack"></param>
+        public void PutDataSession(string[] Keys, string[] Values);
+        
+
     }
 
     public class SessionWorker : ISessionWorker
@@ -76,6 +84,14 @@ namespace Exam_Helper.Controllers
 
         }
 
+        public void PutDataSession(string[] Keys, string[] Values)
+        {
+            if (Keys.Length != Values.Length)
+                return;
+
+            for (int i = 0; i < Keys.Length; i++)
+                _httpContextAccessor.HttpContext.Session.SetString(Keys[i], Values[i]);
+        }
     }
 
 
@@ -110,13 +126,12 @@ namespace Exam_Helper.Controllers
                 return RedirectToAction("Index", "PublicLibrary");
 
 
-
+            ViewData["ReturnControllerName"] = HttpContext.Session.GetString("ReturnControllerName");
             var models = new TestChoiceViewModel()
             {
                 TestMethodsNames = new string[] { "NameAndDesc", "TestConstructor", "Dummy" },
                 TestsMethodsIds = new int[] { 1, 2, 3 },
-                ReturnControllerName= HttpContext.Session.GetString("ReturnControllerName")
-        };
+            };
             return View(models);
         }
 
@@ -125,6 +140,7 @@ namespace Exam_Helper.Controllers
 
         public RedirectToActionResult Index([Bind("SelectedId, ServiceInfo")] TestChoiceViewModel temp)
         {
+            
             if (ModelState.IsValid)
             {
                 switch (temp.SelectedId)
