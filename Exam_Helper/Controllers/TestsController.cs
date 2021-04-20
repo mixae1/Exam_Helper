@@ -65,12 +65,14 @@ namespace Exam_Helper.Controllers
 
             //лень было в БД заносить
             tests.Add(new Tests() { Name = "MultiTesting", Id = 3 });
-
+            //полностью согласен
+            tests.Add(new Tests() { Name = "wrong_text", Id = 4 });
 
             var models = new TestChoiceViewModel()
             {
                 TestMethodsNames = tests.Select(x => x.Name).ToArray(),
-                TestsMethodsIds = tests.Select(x => x.Id).ToArray()
+                TestsMethodsIds = tests.Select(x => x.Id).ToArray(),
+                ReturnControllerName=HttpContext.Session.GetString("ReturnControllerName")
             };
 
             return View(models);
@@ -85,7 +87,8 @@ namespace Exam_Helper.Controllers
                 {
                     case 1: return RedirectToAction(nameof(MissingWordsTest), new { Instruction = temp.ServiceInfo });
                     case 2: return RedirectToAction(nameof(PuzzleTest), new { Instruction = temp.ServiceInfo });
-                    case 3: return RedirectToAction(nameof(MultiTesting), new { Instruction = temp.ServiceInfo,TestMethodsInstruction=temp.MultiTestingInfoTests });
+                    case 3: return RedirectToAction(nameof(MultiTesting), new { Instruction = temp.ServiceInfo, TestMethodsInstruction = temp.MultiTestingInfoTests });
+                    case 4: return RedirectToAction(nameof(TheWrongTextTest), new { Instruction = temp.ServiceInfo });
                     default:return RedirectToAction(nameof(Index));
                 }
             }
@@ -99,8 +102,10 @@ namespace Exam_Helper.Controllers
         public IActionResult MissingWordsTest(string Instruction,bool isMulti=false,string ControllerName="Tests")
         {
             _sessionWorker.GetQuestion("question", out Question question);
-            
-            TestMissedWords testMissed = new TestMissedWords(question.Definition, Instruction);
+
+            string ReturnUrl = HttpContext.Session.GetString("ReturnControllerName");
+            string text = (Instruction[Instruction.Length - 1] == '1' ? question.Definition : question.Proof); 
+            TestMissedWords testMissed = new TestMissedWords(text, Instruction);
             TestInfoMissedWords ts = new TestInfoMissedWords()
             {
                 Title = question.Title,
@@ -109,7 +114,8 @@ namespace Exam_Helper.Controllers
                 IsSuccessed = testMissed.IsSuccessed,
                 TestInstructions=Instruction,
                 isMulti=isMulti,
-                ControllerName=ControllerName
+                ControllerName=ControllerName,
+                ReturnControllerName=ReturnUrl
             };
 
             return View(ts);
@@ -121,7 +127,9 @@ namespace Exam_Helper.Controllers
 
             _sessionWorker.GetQuestion("question", out Question question);
 
-            TestPuzzle testPuzzle = new TestPuzzle(question.Definition, Instruction);
+            string ReturnUrl = HttpContext.Session.GetString("ReturnControllerName");
+            string text = (Instruction[Instruction.Length - 1] == '1' ? question.Definition : question.Proof);
+            TestPuzzle testPuzzle = new TestPuzzle(text, Instruction);
             TestInfoPuzzle ts = new TestInfoPuzzle()
             {
                 Title = question.Title,
@@ -130,7 +138,30 @@ namespace Exam_Helper.Controllers
                 IsSuccessed = testPuzzle.IsSuccessed,
                 TestInstructions=Instruction,
                 isMulti=isMulti,
-                ControllerName=ControllerName
+                ControllerName=ControllerName,
+                ReturnControllerName=ReturnUrl
+            };
+
+            return View(ts);
+        }
+
+        [HttpGet]
+        public IActionResult TheWrongTextTest(string Instruction, bool isMulti = false)
+        {
+
+            _sessionWorker.GetQuestion("question", out Question question);
+
+            string ReturnUrl = HttpContext.Session.GetString("ReturnControllerName");
+            string text = (Instruction[Instruction.Length - 1] == '1' ? question.Definition : question.Proof);
+            TestTheWrongText testTWT = new TestTheWrongText(text, Instruction);
+            TestInfoTheWrongText ts = new TestInfoTheWrongText()
+            {
+                Title = question.Title,
+                Text = testTWT.htmlText,
+                IsSuccessed = testTWT.IsSuccessed,
+                TestInstructions = Instruction,
+                isMulti = isMulti,
+                ReturnControllerName=ReturnUrl
             };
 
             return View(ts);
@@ -149,8 +180,18 @@ namespace Exam_Helper.Controllers
              * 
              
              */
+
+            string text = HttpContext.Session.GetString("MaterialType");
+            if (string.IsNullOrEmpty(text))
+            text = (Instruction[Instruction.Length - 1] == '1') ? ";1" : ";2";
+
+
+
             if (string.IsNullOrEmpty(Instruction)) Instruction = "1;1";
             if (string.IsNullOrEmpty(TestMethodsInstruction)) TestMethodsInstruction = "50;false|50;false;false;0;";
+
+          
+
 
             var instructions = TestMethodsInstruction.Split('|');
 
@@ -168,25 +209,27 @@ namespace Exam_Helper.Controllers
             if (times[0] > 0 || times[1] > 0) 
             {
                 Random r = new Random();
-                int nextTestMethod = r.Next(0, times.Length);
+                int nextTestMethod = r.Next(0, times.Length-1);
 
                 while(times[nextTestMethod]<=0)
-                  nextTestMethod = r.Next(0, times.Length );
+                  nextTestMethod = r.Next(0, times.Length-1 );
 
                 times[nextTestMethod]--;
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "test_times", times);
                 HttpContext.Session.SetString("missed_words_inst", MissedWordsInstructions);
                 HttpContext.Session.SetString("puzzle_inst", PuzzleInstructions);
+                HttpContext.Session.SetString("MaterialType", text);
+
 
                 switch (nextTestMethod) 
                 {
-                    case 1:return RedirectToAction(nameof(MissingWordsTest),new { ControllerName = "Tests", Instruction=MissedWordsInstructions, isMulti=true});
-                    case 0:return RedirectToAction(nameof(PuzzleTest), new { ControllerName = "Tests", Instruction=PuzzleInstructions, isMulti = true });
+                    case 1:return RedirectToAction(nameof(MissingWordsTest),new { ControllerName = "Tests", Instruction=MissedWordsInstructions+text, isMulti=true});
+                    case 0:return RedirectToAction(nameof(PuzzleTest), new { ControllerName = "Tests", Instruction=PuzzleInstructions+text, isMulti = true });
                 }
 
             }
 
-            _sessionWorker.RemoveDataSession("test_times", "missed_words_inst", "puzzle_inst");
+            _sessionWorker.RemoveDataSession("test_times", "missed_words_inst", "puzzle_inst", "MaterialType");
 
             return RedirectToAction(nameof(UserStats));
           

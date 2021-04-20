@@ -114,8 +114,9 @@ namespace Exam_Helper.Controllers
             var models = new TestChoiceViewModel()
             {
                 TestMethodsNames = new string[] { "NameAndDesc", "TestConstructor", "Dummy" },
-                TestsMethodsIds = new int[] { 1, 2, 3 }
-            };
+                TestsMethodsIds = new int[] { 1, 2, 3 },
+                ReturnControllerName= HttpContext.Session.GetString("ReturnControllerName")
+        };
             return View(models);
         }
 
@@ -145,13 +146,16 @@ namespace Exam_Helper.Controllers
             //отслеживать производительность
             var ques = await _dbContext.Question.Where(x => pack.QuestionSet.Contains(x.Id.ToString())).Select(x => new HelpStruct(x.Definition, x.Title)).ToListAsync();
 
+            string ReturnUrl = HttpContext.Session.GetString("ReturnControllerName");
+
             TestNamesAndDescription testNamesAndDescription = new TestNamesAndDescription(ques);
             TestInfoNamesAndDescription ts = new TestInfoNamesAndDescription()
             {
                 Names = testNamesAndDescription.FinalNames,
                 Description = testNamesAndDescription.Description,
                 AnswerID = testNamesAndDescription.AnswerId,
-                Instruction = Instruction
+                Instruction = Instruction,
+                ReturnControllerName=ReturnUrl
             };
             return View(ts);
         }
@@ -191,8 +195,8 @@ namespace Exam_Helper.Controllers
 
                 switch (TestMethodId)
                 {
-                    case 1: return RedirectToAction(nameof(TestsController.MissingWordsTest), nameof(Tests), new { ControllerName = "PackTest", isMulti = true });
-                    case 0: return RedirectToAction(nameof(TestsController.PuzzleTest), nameof(Tests), new { ControllerName = "PackTest", isMulti = true });
+                    case 1: return RedirectToAction(nameof(TestsController.MissingWordsTest), nameof(Tests), new {Instruction= "50;false;1", ControllerName = "PackTest", isMulti = true });
+                    case 0: return RedirectToAction(nameof(TestsController.PuzzleTest), nameof(Tests), new { Instruction= "50;false;false;0;1", ControllerName = "PackTest", isMulti = true });
                 }
 
             }

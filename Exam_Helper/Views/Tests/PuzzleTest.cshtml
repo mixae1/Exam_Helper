@@ -7,39 +7,36 @@
 
 <main>
     <div class="main d-flex flex-column">
-      
+
         @{int num_ans = 0; int num = 0; }
-    
+
         @if (Temp_Model.IsSuccessed)
         {
             <div class="container droppable-elems justify-content-start">
                 <div class="row row-cols-auto">
                     @foreach (var block in Temp_Model.TestStrings)
-                        {
-                            <div class="main-blocks" id="@("droppable" + num_ans.ToString())">
-                                <p class="mt-2"></p>
-                            </div>
-                            num_ans++;
-                        }
+                    {
+                        <div class="main-blocks" id="@("droppable" + num_ans.ToString())">
+                        </div>
+                        num_ans++;
+                    }
                 </div>
             </div>
-    
+
             <div class="container draggable-elems">
-                <div class="row row-cols-auto ">
+                <div class="row row-cols-auto">
                     @foreach (var block in Temp_Model.TestStrings)
-                        {
-                            <div class="mt-auto">
-                                <div class="block text-center" id="@("draggable" + @num.ToString())">
-                                    <p>@block</p>
-                                </div>
-                            </div>
-    
-                            num++;
-                        }
+                    {
+                        <div class="block text-center" id="@("draggable" + @num.ToString())">
+                            <p>@block</p>
+                        </div>
+
+                        num++;
+                    }
                 </div>
             </div>
-    
-            <div class="container form-group mt-3">
+
+            <div class="container form-group">
                 <input type="submit" value="Проверить ответ" class="btn btn-primary" id="CheckAnswers" />
             </div>
         }
@@ -47,25 +44,26 @@
         {
             <p>Мы не можем создать данный тест для этого вопроса.</p>
         }
-        <a asp-controller="PublicLibrary" asp-action="Index" class="container">
+        <a asp-controller=@Temp_Model.ReturnControllerName asp-action="Index" class="container">
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
         </a>
-    
-        <div class="container form-group mt-3">
-            @{
+
+        <div class="container form-group">
+            @if (Temp_Model.IsSuccessed)
+            {
                 if (Temp_Model.isMulti)
-                @Html.ActionLink("следующее задание", "MultiTesting",(Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
+                    @Html.ActionLink("Следующее задание", "MultiTesting", (Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
                     else
-                @Html.ActionLink("пройти еще раз", "PuzzleTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
-            }
+                        @Html.ActionLink("Пройти еще раз", "PuzzleTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
+                    }
         </div>
-        </div>
+    </div>
 </main>
 
 
-  
 
-    <script>
+
+<script>
 
     $("#CheckAnswers").click(function CheckAnswers() {
         var ans = [];
@@ -87,6 +85,7 @@
                 $(this).removeClass("right");
                 $(this).addClass("wrong");
             }
+            setTimeout(function () { $('.droppable-elems').children().children().css("background-color","white"); }, 3000);
         });
     });
 
@@ -110,14 +109,13 @@
 
                     // измененяем размеры контейнеров (ширину и высоту )первые 2 строки - меняем контейнер в которых кидаем , последние 2 строки - меняем контейнер который переносим
                     // $(this).css('height', ui.draggable.css('height'));
-                      $(this).css('width', ui.draggable.css('width'));
-                      ui.draggable.css('height', $(this).css('height'));
-                    //ui.draggable.css('width', $(this).css('width'));
-                    let text = $(ui.draggable).children().text();
-                    console.log(text);
-                    $(this).children().text(text);
-                    $(ui.draggable).css('visibility','hidden');
+                    $(this).css('width', ui.draggable.css('width'));
+                    ui.draggable.css('height', $(this).css('height'));
+                    ui.draggable.css({'top': "0", 'left': "0",'bottom': "0",'right': "0"});
+                    // let text = $(ui.draggable).children().text();
+                    // console.log(text);
                     $(this).append(ui.draggable);
+                    $(this).children("[id^=draggable]").css("margin","0");
                     // $(this).css('border-width','0px');
                     $(this).removeClass('hover');
                 }
@@ -125,59 +123,106 @@
             }
 
         });
+        $(".draggable-elems").droppable({
+            over: function (event, ui) {
+                $(this).addClass('hover');
+            },
+            out: function (event, ui) {
+                $(this).removeClass('hover');
+                $(this).position = 'absolute';
+
+            },
+            drop: function (event, ui) {
+                console.log($(this).children("[id^=draggable]"));
+                 // измененяем размеры контейнеров (ширину и высоту )первые 2 строки - меняем контейнер в которых кидаем , последние 2 строки - меняем контейнер который переносим
+                 // $(this).css('height', ui.draggable.css('height'));
+                 // $(this).css('width', ui.draggable.css('width'));
+                 // ui.draggable.css('height', $(this).css('height'));
+                 //ui.draggable.css('width', $(this).css('width'));
+                 // let text = $(ui.draggable).children().text();
+                 // console.log(text);
+                 // $(this).children("[id^=draggable]").css("margin","0px");
+                 // $(this).children("[id^=draggable]").removeClass("add-block");
+                 // $(this).children("[id^=draggable]").removeClass("block");
+                 ui.draggable.css({'top': "0", 'left': "0",'bottom': "0",'right': "0"});
+                 $(this).children().append(ui.draggable);
+                 $(this).children().children("[id^=draggable]").css("margin","10px");
+                 // $(this).css('border-width','0px');
+                 $(this).removeClass('hover');   
+                }
+        });
     });
 
 
 
-    </script>
+</script>
 
-    <style>
-        main {
-            margin-top: 5%;
-        }
-        .block {
-            display: inline-block;
-            border: 2px solid black;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 10px;
-            margin-left: 0px;
-        }
-
-        .right {
-            background-color: green;
-        }
-
-        .wrong {
-            background-color: red;
-        }
-
-        .hover {
-            border-style: double;
-            border-color: black;
-        }
-
-        .droppable-elems {
-            display: inline-block;
-        }
-
-        .draggable-elems {
-            display: inline-block;
-        }
-
-        .main-blocks {
-            width: 30%;
-            height: 75px;
-            float: left;
-            border: 2px solid black;
-            border-radius: 5px;
-            margin: 10px;
-            margin-left: 0px;
-        }
-    </style>
-
-
-    @section Scripts {
-
-        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<style>
+    main {
+        margin-top: 5%;
     }
+    .draggable-elems{
+        min-height: 250px;
+        width: 100%;
+        margin-top: 15px;
+        margin-bottom: 10px;
+        border: 2px solid black;
+        border-radius: 5px;
+        padding: 10px;
+    }
+    .block {
+        display: inline-block;
+        min-width: 300px;
+        min-height: 75px;
+        border: 2px solid black;
+        border-radius: 5px;
+        margin: 10px;
+        padding: 15px;
+    }
+    .add-block{
+        display: inline-block;
+        min-width: 300px;
+        min-height: 75px;
+        border: 2px solid black;
+        border-radius: 5px;
+        padding: 15px;
+    }
+    .block-shell{
+        margin: 10px;
+    }
+
+    .right {
+        background-color: green;
+    }
+
+    .wrong {
+        background-color: red;
+    }
+
+    .hover {
+        border-style: double;
+        border-color: black;
+    }
+
+    .droppable-elems {
+        display: inline-block;
+    }
+
+    .draggable-elems {
+        display: inline-block;
+    }
+
+    .main-blocks {
+        min-width: 300px;
+        height: 75px;
+        border: 2px solid black;
+        border-radius: 5px;
+        margin: 10px;
+    }
+</style>
+
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

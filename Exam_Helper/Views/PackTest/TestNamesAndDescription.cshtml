@@ -1,5 +1,8 @@
-﻿@model Exam_Helper.ViewsModel.TestInfoNamesAndDescription;
-@{ ViewData["Title"] = "View"; }
+﻿@using Exam_Helper.ViewsModel;
+@model Exam_Helper.ViewsModel.TestParent;
+@{ ViewData["Title"] = "View";
+    var Temp_Model = Model as TestInfoNamesAndDescription;
+    }
 
 <head>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -7,16 +10,16 @@
 
 <main style="height: 85vh;" class="d-flex align-items-center">
     <div>
-        <div class="borderstyle1">@Model.Description</div>
+        <div class="borderstyle1">@Temp_Model.Description</div>
 
         <div><p></p></div>
 
         <div>
-            @for (int i = 0; i < Model.Names.Count; ++i)
+            @for (int i = 0; i < Temp_Model.Names.Count; ++i)
             {
                 <span class="borderstyle2">
                     <input type="radio" id=@i name="FinalNames" value=@i>
-                    <label for="i">@Model.Names[i]</label>
+                    <label for="i">@Temp_Model.Names[i]</label>
                 </span>
             }
         </div>
@@ -25,11 +28,11 @@
             <input type="submit" value="Проверить ответ" class="btn btn-primary" id="CheckAnswers" />
         </div>
 
-        <a asp-controller="PublicLibrary" asp-action="Index">
+        <a asp-controller=@Temp_Model.ReturnControllerName asp-action="Index">
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
         </a>
         @{
-            @Html.ActionLink("Пройти еще раз", "TestNamesAndDescription", "PackTest", new { Instruction = Model.Instruction }, new { @type = "button", @class = "btn btn-primary" })
+            @Html.ActionLink("Пройти еще раз", "TestNamesAndDescription", "PackTest", new { Instruction = Temp_Model.Instruction }, new { @type = "button", @class = "btn btn-primary" })
         }
     </div>
 </main>
@@ -38,7 +41,7 @@
 <script>
 
    $("#CheckAnswers").click(function CheckAnswers() {
-       var ans = "@(new Microsoft.AspNetCore.Html.HtmlString(Model.AnswerID.ToString()))";
+       var ans = "@(new Microsoft.AspNetCore.Html.HtmlString(Temp_Model.AnswerID.ToString()))";
        var rad = $('input[name="FinalNames"]:checked');
 
        if (rad.val() == ans) {

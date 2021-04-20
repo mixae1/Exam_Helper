@@ -71,6 +71,12 @@ namespace Exam_Helper.TestMethods
 
         public TestPuzzle(string Thereom, string Instruction = "33;false;false;0;")
         {
+            if (string.IsNullOrEmpty(Thereom))
+            {
+                isPossible = false;
+                return;
+            }
+
             /*
              Instruction:
             [0] - percent                       [1; 100]            by default 33
@@ -86,9 +92,6 @@ namespace Exam_Helper.TestMethods
             isDiffLenghtOfBlocks = puzzleInstruction.isDiffLenghtOfBlocks;
             isSetBlocksByDefault = puzzleInstruction.isSetBlocksByDefault;
             separatingIndex = puzzleInstruction.separatingIndex;
-
-            if (string.IsNullOrEmpty(Thereom))
-                throw new Exception("incorrect string");
 
             this.Thereom = Thereom;
             percent = (101 - percent) / 100;
@@ -335,10 +338,10 @@ namespace Exam_Helper.TestMethods
             if (!int.TryParse(instructions[3], out separatingIndex)) separatingIndex = SEPARATING_INDEX;
 
             if (percent < 1 || percent > 100)
-                throw new Exception("incorrect percent");
+                percent = PERCENT;
 
             if (separatingIndex < 0 || separatingIndex > 2)
-                throw new Exception("Out of range: separatingIndexs");
+                separatingIndex = SEPARATING_INDEX;
         }
     }
 }

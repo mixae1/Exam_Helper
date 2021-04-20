@@ -2,7 +2,7 @@
 @model Exam_Helper.ViewsModel.TestParent;
 @{
     ViewData["Title"] = "View";
-    var Temp_Model = Model as TestInfoMissedWords;
+    var Temp_Model = Model as TestInfoTheWrongText;
 }
 
 <head>
@@ -11,7 +11,7 @@
 
 
 
-<main style="height: 85vh;" class="container d-flex align-items-center">
+<main style="height: 85vh;" class="d-flex align-items-center">
     <div>
         @if (Temp_Model.IsSuccessed)
         {
@@ -20,10 +20,7 @@
             <span>Α α Β β Γ γ Δ δ Ε ε Ζ ζ Η η Θ θ Ι ι Κ κ Λ λ Μ μ Ν ν Ξ ξ Ο ο Π π Ρ ρ Σ σ Τ τ Υ υ Φ φ Χ χ Ψ ψ Ω ω</span>
 
             <div class="pt-3" style="white-space:pre-wrap; background-color: #f1f1f1;">
-                @foreach (var word in Temp_Model.Teorem)
-                {
-                    @Html.Raw(word);
-                }
+                <span style="white-space:pre-wrap;">@Html.Raw(Temp_Model.Text)</span>
             </div>
             <div class="form-group mt-3">
                 <input type="submit" value="Проверить ответ" class="btn btn-primary" id="CheckAnswers" />
@@ -36,16 +33,13 @@
         <a asp-controller=@Temp_Model.ReturnControllerName asp-action="Index">
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
         </a>
-        
-        @if(Temp_Model.IsSuccessed)
+        @if (Temp_Model.IsSuccessed)
         {
-
             if (Temp_Model.isMulti)
-                @Html.ActionLink("Cледующее задание", "MultiTesting", (Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
-            else
-                @Html.ActionLink("Пройти еще раз", "MissingWordsTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
-        }
-        
+                @Html.ActionLink("Следующее задание", "MultiTesting", "Tests", new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
+                else
+                    @Html.ActionLink("Пройти еще раз", "TheWrongTextTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
+                }
 
     </div>
 </main>
@@ -53,22 +47,7 @@
 <script>
 
     $("#CheckAnswers").click(function CheckAnswers() {
-        var ans = [];
-        @for (int i = 0; i< Temp_Model.Answers.Length; i++)
-        {
-            @:ans.push("@(new Microsoft.AspNetCore.Html.HtmlString(Temp_Model.Answers[i]))");
-        }
-        $("input.editablesection").each(function (index) {
-            console.log($(this).val(), " ", ans[index]);
-            if ($(this).val().toLowerCase() === ans[index].toLowerCase()) {
-                $(this).removeClass("wrong");
-                $(this).addClass("right");
-            }
-            else {
-                $(this).removeClass("right");
-                $(this).addClass("wrong");
-            }
-        });
+       
        });
 
 </script>
@@ -77,14 +56,10 @@
 
     .right {
         border-color: green;
-        border-width: 3px 3px 3px 3px;
-        padding:2px;
     }
 
     .wrong {
         border-color: red;
-        border-width: 3px 3px 3px 3px;
-        padding: 2px;
     }
 
     .editablesection {

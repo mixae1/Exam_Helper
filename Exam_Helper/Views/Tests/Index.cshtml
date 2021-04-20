@@ -9,6 +9,15 @@
             Выберите метод тестирования:
         </h2>
         <div asp-validation-summary="All" class="text-danger"></div>
+        
+        <div>
+
+            <input type="radio" id="de_choice" name="de_choice" de-choice="1" checked>
+            <label>Определение</label>
+            <input type="radio" id="de_choice" name="de_choice" de-choice="2">
+            <label>Доказательство</label>
+
+        </div>
         <div>
             @for (int i = 0; i < Model.TestMethodsNames.Length; i++)
             {
@@ -26,36 +35,39 @@
                                             <span asp-validation-for="@Model.SelectedId" hidden></span>
                                         </div>
                                         <div class="d-flex align-items-center text-center  p-2" asp-for="@Model.TestsMethodsIds[i]">
-                                                @switch (Model.TestMethodsNames[i])
-                                                {
-                                                    case "missed_words":
-                                                        <div class="miss_word"> <p class="mt-2">Метод пропущенных слов</p></div>
-                                                        @*<span class="tooltip miss_word_tootlip">Данный метод случайным образом вставляет пропуски, которые вам необходимо будет заполнить</span>*@
-                                                        break;
-                                                    case "puzzle":
+                                            @switch (Model.TestMethodsNames[i])
+                                            {
+                                                case "missed_words":
+                                                    <div class="miss_word"> <p class="mt-2">Метод пропущенных слов</p></div>
+                                                    @*<span class="tooltip miss_word_tootlip">Данный метод случайным образом вставляет пропуски, которые вам необходимо будет заполнить</span>*@
+                                                    break;
+                                                case "puzzle":
 
-                                                        @:Воссоздание по частям
-                                                        break;
+                                                    @:Воссоздание по частям
+                                                    break;
 
-                                                    <div class="puzzle"><p class="mt-2">Воссоздание по частям</p></div>
-                                                    @*<span class="tooltip puzzle_tootlip">Данный метод представляет из себя нечто вроде конструктора, из частей которого вам предстоит собрать правильную последовательность</span>*@
-                                                    case "MultiTesting":
-                                                        @:Конструктор тестов
-                                                        break;
-                                                }
-                                            </div>
+                                                <div class="puzzle"><p class="mt-2">Воссоздание по частям</p></div>
+                                                @*<span class="tooltip puzzle_tootlip">Данный метод представляет из себя нечто вроде конструктора, из частей которого вам предстоит собрать правильную последовательность</span>*@
+                                                case "MultiTesting":
+                                                    @:Конструктор тестов
+                                                    break;
+                                                case "wrong_text":
+                                                    @:Исправление ошибок
+                                                    break;
+                                            }
+                                        </div>
                                         <button class="btn" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_@Model.TestMethodsNames[i]">
-                                            <img class="setting-btn" src="./sett_icon.png" />
+                                            <img class="setting-btn" src="~/sett_icon.png" />
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div id="collapse_@Model.TestMethodsNames[i]" class="panel-collapse collapse in">
-                            <div class="panel-body">
-                                @switch (Model.TestMethodsNames[i])
-                                {
-                                    case "missed_words":
+                            @switch (Model.TestMethodsNames[i])
+                            {
+                                case "missed_words":
+                                    <div class="panel-body">
                                         <p>
                                             Количество пропущенных слов:
                                             <input type="range" min="1" max="100" value="50" id="mw_quantity">
@@ -76,8 +88,10 @@
                                                 <input type="checkbox" id="mw_isSign" disabled>
                                             </span>
                                         </p>
-                                        break;
-                                    case "puzzle":
+                                    </div>
+                                    break;
+                                case "puzzle":
+                                    <div class="panel-body">
                                         <p>
                                             Количество частей:
                                             <input type="range" min="1" max="100" value="50" id="p_quantity">
@@ -104,10 +118,11 @@
                                             </span>
 
                                         </p>
-                                        break;
+                                    </div>
+                                    break;
 
-                                    case "MultiTesting":
-
+                                case "MultiTesting":
+                                    <div class="panel-body-multi">
                                         <p>
                                             Количество тестов "Воссоздание по частям":
                                             <input type="range" min="1" max="5" value="3" id="mtParts_quantity" onchange="displayValue(this,'mtPuzzle-input')">
@@ -117,7 +132,7 @@
                                             Настройка для метода "Воссоздание по частям"
                                         </p>
                                         <div id="collapse_MultiTesting_Puzzle" class="panel-collapse collapse in">
-                                            <div class="panel-body">
+                                            <div class="panel-body-multi-mini">
                                                 <p>
                                                     Количество частей:
                                                     <input type="range" min="1" max="100" value="50" id="MultiTesting_p_quantity">
@@ -146,7 +161,7 @@
                                             </div>
                                         </div>
                                         <button class="btn" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_MultiTesting_Puzzle">
-                                            <img class="setting-btn" src="./sett_icon.png" />
+                                            <img class="setting-btn" src="~/sett_icon.png" />
                                         </button>
 
 
@@ -161,7 +176,7 @@
                                         </p>
 
                                         <div id="collapse_MultiTesting_MissedWords" class="panel-collapse collapse in">
-                                            <div class="panel-body">
+                                            <div class="panel-body-multi-mini">
                                                 <p>
                                                     Количество пропущенных слов:
                                                     <input type="range" min="1" max="100" value="50" id="MultiTesting_mw_quantity">
@@ -185,15 +200,43 @@
                                             </div>
                                         </div>
                                         <button class="btn" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_MultiTesting_MissedWords">
-                                            <img class="setting-btn" src="./sett_icon.png" />
+                                            <img class="setting-btn" src="~/sett_icon.png" />
                                         </button>
-                                        break;
-                                    default: break;
-                                }
-                            </div>
+                                    </div>
+                                    break;
+                                case "wrong_text":
+                                    <div class="panel-body">
+                                        <p>
+                                            Количество ошибок:
+                                            <input type="range" min="1" max="100" value="50" id="wt_quantity">
+                                        </p>
+                                        <p>
+                                            <span>
+                                                Убрать окончания у прилагательных:
+                                                <input type="checkbox" id="wt_hideEndings" checked disabled>
+                                            </span>
+                                            <br />
+                                            <span>
+                                                Делать ошибки в числах:
+                                                <input type="checkbox" id="wt_numbers">
+                                            </span>
+                                            <br />
+                                            <span>
+                                                Делать ошибки в знаках:
+                                                <input type="checkbox" id="wt_signs">
+                                            </span>
+                                            <br />
+                                            <span>
+                                                Делать ошибки в греческих буквах:
+                                                <input type="checkbox" id="wt_alpha">
+                                            </span>
+                                        </p>
+                                    </div>
+                                    break;
+                                default: break;
+                            }
                         </div>
                     </div>
-
                 </div>
             }
         </div>
@@ -201,7 +244,7 @@
         <div class="form-group mt-3">
             <button type="submit" class="btn btn-primary" id="sumbit" onclick="MakeInstruction()">Сделать выбор</button>
         </div>
-        <a asp-controller="PublicLibrary" asp-action="Index">
+        <a asp-controller=@Model.ReturnControllerName asp-action="Index">
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
         </a>
     </form>
@@ -213,6 +256,7 @@
 <script>
 
     const missed_words = $("#collapse_missed_words > div");
+    /**/
     const puzzle = $("#collapse_puzzle > div");
     /**/
     const multi = $("#collapse_MultiTesting > div");
@@ -220,6 +264,10 @@
     const multi_missed = $("#collapse_MultiTesting_MissedWords > div");
     const multi_puzzle = $("#collapse_MultiTesting_Puzzle > div");
     /**/
+    const wrong_text = $("#collapse_wrong_text > div");
+    /**/
+
+
 
     function MakeInstruction() {
         var curr_method;
@@ -242,7 +290,7 @@
                     puzzle.find("input#p_quantity").val().toString() + ";" +
                     puzzle.find("input#p_diffLenghtOfBlock").is(":checked").toString() + ";" +
                     puzzle.find("input#p_defaultBlocks").is(":checked").toString() + ";" +
-                    puzzle.find("input#p_sep").val().toString() + ";";
+                    puzzle.find("input#p_sep").val().toString();
                 break;
             case "MultiTesting":
                 instruction =
@@ -256,18 +304,33 @@
                     multi_puzzle.find("input#MultiTesting_p_diffLenghtOfBlock").is(":checked").toString() + ";" +
                     multi_puzzle.find("input#MultiTesting_p_defaultBlocks").is(":checked").toString() + ";" +
                     multi_puzzle.find("input#MultiTesting_p_sep").val().toString() + ";";
-                
+
+                break;
+            case "wrong_text":
+                instruction =
+                    wrong_text.find("input#wt_quantity").val().toString() + ";" +
+                    wrong_text.find("input#wt_hideEndings").is(":checked").toString() + ";" +
+                    wrong_text.find("input#wt_numbers").is(":checked").toString() + ";" +
+                    wrong_text.find("input#wt_signs").is(":checked").toString() + ";" +
+                    wrong_text.find("input#wt_alpha").is(":checked").toString();
                 break;
         }
 
-        $("input#ServiceInfo").val(instruction);
+        var de_choice;
+        $("input#de_choice").each(function () {
+            if ($(this).is(":checked")) {
+                de_choice = $(this).attr("de-choice");
+            }
+        });
+
+        $("input#ServiceInfo").val(instruction + ";" + de_choice);
         $("input#InfoTest").val(multitest_instruction);
     };
 
     const sepSlider = puzzle.find("input#p_sep");
     const sepLog = puzzle.find("span#sepLog");
 
-    function displayValue(obj,id) {
+    function displayValue(obj, id) {
         var inputSpan = document.getElementById(id);
         inputSpan.innerHTML = obj.value;
     }
@@ -292,14 +355,17 @@
     main {
         margin-top: 5%;
     }
-    .input-group-text{
+
+    .input-group-text {
         border: 0px solid black;
         background-color: white;
     }
-    .test-card{
+
+    .test-card {
         border: 2px solid black;
         border-radius: 5px;
     }
+
     .setting-btn {
         width: 50%;
     }
@@ -319,11 +385,27 @@
     }*/
     .panel-body {
         padding: 5px;
-        height:175px;
+        height: 175px;
         overflow-y: scroll
     }
+
+    .panel-body-multi {
+        padding: 5px;
+        height: 300px;
+        overflow-y: scroll
+    }
+
+    .panel-body-multi-mini {
+        height: 150px;
+    }
+
+    .panel-body, .panel-body-multi {
+        border: 2px solid black;
+        border-radius: 5px;
+    }
+
     .test-card {
-        height:70px;
+        height: 70px;
     }
 </style>
 
