@@ -33,13 +33,13 @@
         <a asp-controller=@Temp_Model.ReturnControllerName asp-action="Index">
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
         </a>
-        @if (Temp_Model.IsSuccessed)
+        @if (Temp_Model.isMulti)
+            @Html.ActionLink("Cледующее задание", "MultiTesting", (Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
+
+        @if (Temp_Model.IsSuccessed && !Temp_Model.isMulti)
         {
-            if (Temp_Model.isMulti)
-                @Html.ActionLink("Следующее задание", "MultiTesting", "Tests", new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
-                else
-                    @Html.ActionLink("Пройти еще раз", "TheWrongTextTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
-                }
+            @Html.ActionLink("Пройти еще раз", "MissingWordsTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
+        }
 
     </div>
 </main>
