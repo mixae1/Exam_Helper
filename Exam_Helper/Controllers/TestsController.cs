@@ -75,6 +75,7 @@ namespace Exam_Helper.Controllers
                 TestsMethodsIds = tests.Select(x => x.Id).ToArray()
             };
 
+
             return View(models);
         }
 
@@ -83,6 +84,7 @@ namespace Exam_Helper.Controllers
         {   
             if (ModelState.IsValid)
             {
+                _sessionWorker.RemoveDataSession("test_times", "missed_words_inst", "puzzle_inst", "MaterialType", "wrong_text");
                 switch (temp.SelectedId)
                 {
                     case 1: return RedirectToAction(nameof(MissingWordsTest), new { Instruction = temp.ServiceInfo });
@@ -209,10 +211,10 @@ namespace Exam_Helper.Controllers
             if (times[0] > 0 || times[1] > 0 || times[2]>0) 
             {
                 Random r = new Random();
-                int nextTestMethod = r.Next(0, times.Length);
+                int nextTestMethod = r.Next(0, times.Length-1);
 
                 while(times[nextTestMethod]<=0)
-                  nextTestMethod = r.Next(0, times.Length);
+                  nextTestMethod = r.Next(0, times.Length-1);
 
                 times[nextTestMethod]--;
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "test_times", times);

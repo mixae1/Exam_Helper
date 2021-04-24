@@ -49,13 +49,13 @@
         </a>
 
         <div class="container form-group">
-            @if (Temp_Model.IsSuccessed)
+            @if (Temp_Model.isMulti)
+                @Html.ActionLink("Cледующее задание", "MultiTesting", (Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
+
+            @if (Temp_Model.IsSuccessed && !Temp_Model.isMulti)
             {
-                if (Temp_Model.isMulti)
-                    @Html.ActionLink("Следующее задание", "MultiTesting", (Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
-                    else
-                        @Html.ActionLink("Пройти еще раз", "PuzzleTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
-                    }
+                @Html.ActionLink("Пройти еще раз", "MissingWordsTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
+            }
         </div>
     </div>
 </main>
