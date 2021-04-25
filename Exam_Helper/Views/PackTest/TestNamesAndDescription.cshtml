@@ -31,6 +31,11 @@
         <a asp-controller=@Temp_Model.ReturnControllerName asp-action="Index">
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
         </a>
+
+        <a asp-controller="PackTest" asp-action="Index">
+            <input type="button" value="Вернуться к выбору метода тестирования" class="btn btn-primary" />
+        </a>
+
         @{
             @Html.ActionLink("Пройти еще раз", "TestNamesAndDescription", "PackTest", new { Instruction = Temp_Model.Instruction }, new { @type = "button", @class = "btn btn-primary" })
         }

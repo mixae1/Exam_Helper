@@ -8,15 +8,23 @@ namespace Exam_Helper.ViewsModel
     public class TestParent
     {
        public TestParent() { }
-        //настройки метода тестирования для кнопки : пройти еше раз 
-      public string TestInstructions { get; set; }
-        //флаг ,который определяет, метод запущен самостоятельно или в составе мульти 
+
+        ///<summary>
+        /// настройки метода тестирования для кнопки : пройти еше раз 
+        /// </summary>
+        public string TestInstructions { get; set; }
+        ///флаг ,который определяет, метод запущен самостоятельно или в составе мульти 
       public bool isMulti { get; set; }
 
-        //имя контроллера , который инициировал многоразовое тестирование 
-      public string ControllerName { get; set; }
+        ///<summary>
+        ///имя контроллера , который инициировал многоразовое тестирование 
+        ///</summary>
+        public string ControllerName { get; set; }
 
-        //имя контроллера библиотеки,из которого пришли 
+        
+        ///<summary>
+        ///имя контроллера библиотеки,из которого пришли 
+        ///</summary>
         public string ReturnControllerName { get; set; }
     }
 }

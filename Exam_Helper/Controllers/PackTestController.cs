@@ -218,7 +218,7 @@ namespace Exam_Helper.Controllers
             }
             _sessionWorker.RemoveDataSession("question", "PackTestingTimes");
 
-            return RedirectToAction(nameof(TestsController.UserStats), nameof(Tests));
+            return RedirectToAction(nameof(TestsController.UserStats), nameof(Tests),new { ControllerName = "PackTest" , ReturnControllerName = HttpContext.Session.GetString("ReturnControllerName") });
 
         }
 

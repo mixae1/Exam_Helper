@@ -1,10 +1,14 @@
-﻿
+﻿@model Exam_Helper.ViewsModel.TestParent 
 @{
     ViewData["Title"] = "UserStats";
 }
 
 <h1>Здесь могла бы быть ваша статистика</h1>
 
-<a asp-controller="PackTest" asp-action="Index">
+<a asp-controller="@Model.ReturnControllerName" asp-action="Index">
+    <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
+</a>
+
+<a asp-controller="@Model.ControllerName" asp-action="Index">
     <input type="button" value="Вернуться к выбору метода тестирования" class="btn btn-primary" />
 </a>

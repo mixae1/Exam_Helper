@@ -35,11 +35,15 @@
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary mt-2" />
         </a>
 
+        <a asp-controller="@Temp_Model.ControllerName" asp-action="Index">
+            <input type="button" value="Вернуться к выбору метода тестирования" class="btn btn-primary" />
+        </a>
+
         @if (Temp_Model.isMulti)
-                                @Html.ActionLink("Cледующее задание", "MultiTesting", (Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary mt-2" })
+            @Html.ActionLink("Cледующее задание", "MultiTesting", (Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary mt-2" })
 
         @if (Temp_Model.IsSuccessed && !Temp_Model.isMulti)
-        {   
+        {
             @Html.ActionLink("Пройти еще раз", "MissingWordsTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary mt-2" })
         }
 

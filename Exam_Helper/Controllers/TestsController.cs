@@ -238,13 +238,14 @@ namespace Exam_Helper.Controllers
 
             _sessionWorker.RemoveDataSession("test_times", "missed_words_inst", "puzzle_inst", "MaterialType","wrong_text");
 
-            return RedirectToAction(nameof(UserStats));
+          
+            return RedirectToAction(nameof(UserStats),new { ControllerName = "Tests", ReturnControllerName = HttpContext.Session.GetString("ReturnControllerName") });
           
         }
 
-        public IActionResult UserStats()
+        public IActionResult UserStats(string ControllerName, string ReturnControllerName)
         {
-            return View();
+            return View(new TestParent() { ControllerName=ControllerName,ReturnControllerName=ReturnControllerName});
         }
      
     }
