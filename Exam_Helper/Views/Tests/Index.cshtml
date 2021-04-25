@@ -3,8 +3,8 @@
 <head>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
 </head>
-<main class="container d-flex align-items-center justify-content-center">
-    <form asp-action="Index" method="post">
+<main class="container d-flex flex-column align-items-center">
+    <form asp-action="Index" method="post" class="d-flex flex-column  align-items-center justify-content-center">
         <h2>
             Выберите метод тестирования:
         </h2>
@@ -38,21 +38,30 @@
                                             @switch (Model.TestMethodsNames[i])
                                             {
                                                 case "missed_words":
-                                                    <div class="miss_word"> <p class="mt-2">Метод пропущенных слов</p></div>
+                                                    <div class="miss_word" data-toggle="tooltip" data-placement="bottom" 
+                                                         title="В данном методе необходимо заполнить пробелы в тексте">
+                                                        <p class="mt-2">Метод пропущенных слов</p>
+                                                    </div>
                                                     @*<span class="tooltip miss_word_tootlip">Данный метод случайным образом вставляет пропуски, которые вам необходимо будет заполнить</span>*@
                                                     break;
                                                 case "puzzle":
-
-                                                    @:Воссоздание по частям
+                                                    <div class="puzzle" data-toggle="tooltip" data-placement="bottom" 
+                                                         title="В данном методе необходимо собирать по частям вопрос путем перетаскивания блоков (к сожалению не работает на мобильных устройствах)">
+                                                        <p class="mt-2">Воссоздание по частям</p>
+                                                    </div>
                                                     break;
-
-                                                <div class="puzzle"><p class="mt-2">Воссоздание по частям</p></div>
                                                 @*<span class="tooltip puzzle_tootlip">Данный метод представляет из себя нечто вроде конструктора, из частей которого вам предстоит собрать правильную последовательность</span>*@
                                                 case "MultiTesting":
-                                                    @:Конструктор тестов
+                                                    <div class="puzzle" data-toggle="tooltip" data-placement="bottom" 
+                                                         title="В данном методе совмещены все методы, между которыми вы можете переключатсья">
+                                                        <p class="mt-2">Конструктор тестов</p>
+                                                    </div>
                                                     break;
                                                 case "wrong_text":
-                                                    @:Исправление ошибок
+                                                    <div class="puzzle" data-toggle="tooltip" data-placement="bottom" 
+                                                         title="В данном необходимо найти и исправить ошибки, которые случайным образом расставлены в тексте">
+                                                        <p class="mt-2">Исправление ошибок</p>
+                                                    </div>
                                                     break;
                                             }
                                         </div>
@@ -131,38 +140,53 @@
                             <p>
                                 Настройка для метода "Воссоздание по частям"
                             </p>
-                            <div id="collapse_MultiTesting_Puzzle" class="panel-collapse collapse in">
-                                <div class="panel-body-multi-mini">
-                                    <p>
-                                        Количество частей:
-                                        <input type="range" min="1" max="100" value="50" id="MultiTesting_p_quantity">
-                                    </p>
-                                    <p>
-                                        <span>
-                                            Различная длина частей:
-                                            <input type="checkbox" id="MultiTesting_p_diffLenghtOfBlock">
-                                        </span>
-                                        <br />
-                                        <span>
-                                            Части по умолчанию:
-                                            <input type="checkbox" id="MultiTesting_p_defaultBlocks" disabled>
-                                        </span>
-                                    </p>
-
-                                    <p>
-
-                                        <span>
-                                            Тип разделения:
-                                            <input type="range" min="0" max="2" step="1" value="0" id="MultiTesting_p_sep" onchange="UpdateSepName()" />
-                                            <span id="sepLog">sepIndulge</span>
-                                        </span>
-
-                                    </p>
-                                </div>
-                            </div>
-                            <button class="btn" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_MultiTesting_Puzzle">
+                            <button class="btn" type="button" data-toggle="modal" data-target="#parts-modal">
                                 <img class="setting-btn" src="~/sett_icon.png" />
                             </button>
+                            <div class="modal fade" id="parts-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Воссоздание по частям</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                      <div class="modal-body">
+                                        <div class="panel-body-multi-mini">
+                                            <p>
+                                                Количество частей:
+                                                <input type="range" min="1" max="100" value="50" id="MultiTesting_p_quantity">
+                                            </p>
+                                            <p>
+                                                <span>
+                                                    Различная длина частей:
+                                                    <input type="checkbox" id="MultiTesting_p_diffLenghtOfBlock">
+                                                </span>
+                                                <br />
+                                                <span>
+                                                    Части по умолчанию:
+                                                    <input type="checkbox" id="MultiTesting_p_defaultBlocks" disabled>
+                                                </span>
+                                            </p>
+    
+                                            <p>
+    
+                                                <span>
+                                                    Тип разделения:
+                                                    <input type="range" min="0" max="2" step="1" value="0" id="MultiTesting_p_sep" onchange="UpdateSepName()" />
+                                                    <span id="sepLog">sepIndulge</span>
+                                                </span>
+    
+                                            </p>
+                                        </div>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary">Сохранить</button>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
 
 
                             <p>
@@ -174,34 +198,48 @@
                             <p>
                                 Настройка для метода "Вставка пропущенных слов"
                             </p>
-
-                            <div id="collapse_MultiTesting_MissedWords" class="panel-collapse collapse in">
-                                <div class="panel-body-multi-mini">
-                                    <p>
-                                        Количество пропущенных слов:
-                                        <input type="range" min="1" max="100" value="50" id="MultiTesting_mw_quantity">
-                                    </p>
-                                    <p>
-                                        <span>
-                                            Прилагательные:
-                                            <input type="checkbox" id="MultiTesting_mw_isPrill">
-                                        </span>
-                                        <br />
-                                        <span>
-                                            Знаки:
-                                            <input type="checkbox" id="MultiTesting_mw_isLetter" disabled>
-                                        </span>
-                                        <br />
-                                        <span>
-                                            Спец. символы:
-                                            <input type="checkbox" id="MultiTesting_mw_isSign" disabled>
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                            <button class="btn" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_MultiTesting_MissedWords">
+                            <button class="btn" type="button" data-toggle="modal" data-target="#missed-modal">
                                 <img class="setting-btn" src="~/sett_icon.png" />
                             </button>
+                            <div class="modal fade" id="missed-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Вставка пропущенных слов</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                      <div class="modal-body">
+                                        <div class="panel-body-multi-mini">
+                                            <p>
+                                                Количество пропущенных слов:
+                                                <input type="range" min="1" max="100" value="50" id="MultiTesting_mw_quantity">
+                                            </p>
+                                            <p>
+                                                <span>
+                                                    Прилагательные:
+                                                    <input type="checkbox" id="MultiTesting_mw_isPrill">
+                                                </span>
+                                                <br />
+                                                <span>
+                                                    Знаки:
+                                                    <input type="checkbox" id="MultiTesting_mw_isLetter" disabled>
+                                                </span>
+                                                <br />
+                                                <span>
+                                                    Спец. символы:
+                                                    <input type="checkbox" id="MultiTesting_mw_isSign" disabled>
+                                                </span>
+                                            </p>
+                                        </div>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary">Сохранить</button>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <p>
                                 Настройка для метода "Исправление ошибок"
@@ -212,40 +250,53 @@
                                 <input type="range" min="1" max="5" value="3" id="mtwrong_text_quantity" onchange="displayValue(this,'mtwrong_text-input')">
                                 <span id="mtwrong_text-input">3</span>
                             </p>
-
-                            <div id="collapse_MultiTesting_wrong_text" class="panel-collapse collapse in">
-                                <div class="panel-body-multi-mini">
-
-                                    <p>
-                                        Количество ошибок:
-                                        <input type="range" min="1" max="100" value="50" id="MultiTesting_wt_quantity">
-                                    </p>
-                                    <p>
-                                        <span>
-                                            Убрать окончания у прилагательных:
-                                            <input type="checkbox" id="MultiTesting_wt_hideEndings" checked disabled>
-                                        </span>
-                                        <br />
-                                        <span>
-                                            Делать ошибки в числах:
-                                            <input type="checkbox" id="MultiTesting_wt_numbers">
-                                        </span>
-                                        <br />
-                                        <span>
-                                            Делать ошибки в знаках:
-                                            <input type="checkbox" id="MultiTesting_wt_signs">
-                                        </span>
-                                        <br />
-                                        <span>
-                                            Делать ошибки в греческих буквах:
-                                            <input type="checkbox" id="MultiTesting_wt_alpha">
-                                        </span>
-                                    </p>
-                                </div>
-                            </div>
-                            <button class="btn" type="button" data-toggle="collapse" data-parent="#accordion" data-target="#collapse_MultiTesting_wrong_text">
+                            <button class="btn" type="button" data-toggle="modal" data-target="#correct-modal">
                                 <img class="setting-btn" src="~/sett_icon.png" />
                             </button>
+                            <div class="modal fade" id="correct-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Исправление ошибок</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                      <div class="modal-body">
+                                        <div class="panel-body-multi-mini">
+                                            <p>
+                                                Количество ошибок:
+                                                <input type="range" min="1" max="100" value="50" id="MultiTesting_wt_quantity">
+                                            </p>
+                                            <p>
+                                                <span>
+                                                    Убрать окончания у прилагательных:
+                                                    <input type="checkbox" id="MultiTesting_wt_hideEndings" checked disabled>
+                                                </span>
+                                                <br />
+                                                <span>
+                                                    Делать ошибки в числах:
+                                                    <input type="checkbox" id="MultiTesting_wt_numbers">
+                                                </span>
+                                                <br />
+                                                <span>
+                                                    Делать ошибки в знаках:
+                                                    <input type="checkbox" id="MultiTesting_wt_signs">
+                                                </span>
+                                                <br />
+                                                <span>
+                                                    Делать ошибки в греческих буквах:
+                                                    <input type="checkbox" id="MultiTesting_wt_alpha">
+                                                </span>
+                                            </p>
+                                        </div>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary">Сохранить</button>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
                                     break;
@@ -286,15 +337,15 @@
             }
         </div>
 
-        <div class="form-group mt-3">
-            <button type="submit" class="btn btn-primary" id="sumbit" onclick="MakeInstruction()">Сделать выбор</button>
+    <div class="d-flex flex-wrap">
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary mr-2" id="sumbit" onclick="MakeInstruction()">Сделать выбор</button>
         </div>
         <a asp-controller=@ViewData["ReturnControllerName"] asp-action="Index">
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
         </a>
+    </div>
     </form>
-
-
 </main>
 
 

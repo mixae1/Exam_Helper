@@ -47,7 +47,7 @@ html {
         width: 50%;
     }
     html {
-        font-size: 16px;
+        font-size: 13px;
     }
     #qTitle, .titleText {
         font-size: 20px;
@@ -70,7 +70,11 @@ html {
     }
 }
 
-
+@media screen and (max-width: 350px) {
+    .test-page{
+        margin-top: 10vh;
+    }
+}
 @media (min-width: 768px) {
 
     #first_icon {
@@ -84,6 +88,7 @@ html {
     html {
     font-size: 16px;
     }
+    
     .titleText {
         white-space: nowrap ;
     }

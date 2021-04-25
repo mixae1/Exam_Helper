@@ -11,15 +11,15 @@
 
 
 
-<main style="height: 85vh;" class="d-flex align-items-center">
+<main style="height: 85vh;" class="container d-flex align-items-center test-page">
     <div>
         @if (Temp_Model.IsSuccessed)
         {
             <h2>@Temp_Model.Title</h2>
 
-            <span>Α α Β β Γ γ Δ δ Ε ε Ζ ζ Η η Θ θ Ι ι Κ κ Λ λ Μ μ Ν ν Ξ ξ Ο ο Π π Ρ ρ Σ σ Τ τ Υ υ Φ φ Χ χ Ψ ψ Ω ω</span>
+            
 
-            <div class="pt-3" style="white-space:pre-wrap; background-color: #f1f1f1;">
+            <div class="wrong-text p-3" style="white-space:pre-wrap;">
                 <span style="white-space:pre-wrap;">@Html.Raw(Temp_Model.Text)</span>
             </div>
             <div class="form-group mt-3">
@@ -34,7 +34,7 @@
             <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
         </a>
         @if (Temp_Model.isMulti)
-            @Html.ActionLink("Cледующее задание", "MultiTesting", (Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
+                                @Html.ActionLink("Cледующее задание", "MultiTesting", (Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
 
         @if (Temp_Model.IsSuccessed && !Temp_Model.isMulti)
         {
@@ -43,17 +43,71 @@
 
     </div>
 </main>
+<div class="side-bar">
+    <div class="sidebar-content">
+        <div class="tab">
+            <button class="tablinks" onclick="openTab(event, 'Latin')">Latin</button>
+            <button class="tablinks" onclick="openTab(event, 'Math')">Math</button>
+        </div>
+        <div id="Latin" class="tabcontent">
+            <caption>Латынь</caption>
+            <table border="1">
+
+                <tr><td>Α</td><td>α</td><td>Β</td><td>β</td><td>Γ</td><td>γ</td></tr>
+                <tr><td>Δ</td><td>δ</td><td>Ε</td><td>ε</td><td>Ζ</td><td>ζ</td></tr>
+                <tr><td>Η</td><td>η</td><td>Θ</td><td>θ</td><td>Ι</td><td>ι</td></tr>
+                <tr><td>Κ</td><td>κ</td><td>Λ</td><td>λ</td><td>Μ</td><td>μ</td></tr>
+                <tr><td>Ν</td><td>ν</td><td>Ξ</td><td>ξ</td><td>Ο</td><td>ο</td></tr>
+                <tr><td>Π</td><td>π</td><td>Ρ</td><td>ρ</td><td>Σ</td><td>σ</td></tr>
+                <tr><td>Τ</td><td>τ</td><td>Υ</td><td>υ</td><td>Φ</td><td>φ</td></tr>
+                <tr><td>Χ</td><td>χ</td><td>Ψ</td><td>ψ</td><td>Ω</td><td>ω</td></tr>
+            </table>
+        </div>
+
+        <div id="Math" class="tabcontent">
+            <caption>Мат. знаки</caption>
+            <table border="1">
+
+                <tr><td>∧</td><td>∨</td><td>¬</td><td>→</td><td>∀</td><td>∃</td></tr>
+                <tr><td>≤</td><td>≥</td><td>∈</td><td>∉</td><td>∑</td><td>∏</td></tr>
+                <tr><td>⊆</td><td>⊂</td><td>⊊</td><td>⊇</td><td>⊃</td><td>⊋</td></tr>
+                <tr><td>∪</td><td>⋂</td></tr>
+            </table>
+        </div>
+    </div>
+    <a class="sidebar" onclick="toggleSymbols()"></a>
+</div>
 
 <script>
 
     $("#CheckAnswers").click(function CheckAnswers() {
        
        });
+    function toggleSymbols() {
+        $(".side-bar div.sidebar-content").toggle();
+    }
+
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
 
 </script>
 
 <style>
-
+    .wrong-text{
+        border: 2px solid black;
+        border-radius: 5px;
+    }
     .right {
         border-color: green;
     }
@@ -71,6 +125,69 @@
         font: inherit;
         margin: 0;
         box-sizing: inherit;
+    }
+    .side-bar {
+        position: fixed;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+
+        .side-bar a {
+            display: grid;
+            text-align: center;
+            padding: 16px;
+            transition: all 0.3s ease;
+            color: white;
+            font-size: 20px;
+        }
+
+            .side-bar a:hover {
+                background-color: #000;
+            }
+
+    .sidebar {
+        background: #3B5998;
+        color: white;
+    }
+
+        .sidebar-content {
+            display: none;
+        }
+
+
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: bisque;
+    }
+
+    .tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 3px 4px;
+        transition: 0.3s;
+        font-size: 17px;
+    }
+
+        .tab button:hover {
+            background-color: #ddd;
+        }
+
+        .tab button.active {
+            background-color: #ccc;
+        }
+
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        border-top: none;
+        background-color: aliceblue;
     }
 </style>
 

@@ -8,6 +8,9 @@ $(".main-blocks").css("border-color",localStorage.getItem("bc"))
 $(".block").css("border-color",localStorage.getItem("bc"))
 $(".test-card").css("border-color",localStorage.getItem("bc"))
 $(".alert").css("background-color",localStorage.getItem("bc"))
+$(".draggable-elems").css("border-color",localStorage.getItem("bc"))
+$(".wrong-text").css("border-color",localStorage.getItem("bc"))
+$(".miss-words").css("border-color",localStorage.getItem("bc"))
 
 $(".action-button").css("background-color",localStorage.getItem("bc"))
 
@@ -20,6 +23,9 @@ $('.change-color').click(function () {
     $(".block").css("border-color",color)
     $(".action-button").css("background-color",color)
     $(".alert").css("background-color",color)
+    $(".draggable-elems").css("border-color",color)
+    $(".wrong-text").css("border-color",color)
+    $(".miss-words").css("border-color",color)
     
     $(".test-card").css("border-color",color)
     // $(".btn-outline-info").css("border-color",color)
