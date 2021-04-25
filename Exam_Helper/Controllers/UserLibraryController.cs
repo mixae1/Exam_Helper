@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -156,10 +157,8 @@ namespace Exam_Helper.Controllers
         [HttpGet]
         public async Task<IActionResult> QCreate()
         {
-            var tags = await _context.Tags.AsNoTracking().Select(x => new TagForQuestionCreatingModel()
-            { Id = x.Id, Name = x.Title, IsSelected = false }).ToListAsync();
-
-            return View(new ClassForQuestionCreatingModel() { tags = tags });
+            var tags = await _context.Tags.AsNoTracking().Select(x => x.Title).ToListAsync();
+            return View(new ClassForQuestionCreatingModel() { tags = new TagsForQuestionCreatinModel { LoadedTags = tags } });
         }
 
         // POST: QuestionsLib/Create
@@ -167,24 +166,42 @@ namespace Exam_Helper.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> QCreate(ClassForQuestionCreatingModel ob)
+        public async Task<IActionResult> QCreate([Bind("Definition,Title,Proof,tags")]ClassForQuestionCreatingModel ob)
         {
             if (ModelState.IsValid)
             {
-                var tags = ob.tags.Where(x => x.IsSelected).Select(x => x.Id);
+                List<string> selectedTags = (ob.tags == null ? new List<string>() : ob.tags.SelectedTags);
+                List<Tags> loadedTags = await _context.Tags.AsNoTracking().ToListAsync();
+                List<Tags> tagsIntersection = new List<Tags>();
 
-                /* Пока разрешим создание без тегов
-                if (tags.Count() == 0)
-                    ModelState.AddModelError(string.Empty, "вы должны указать как минимум один тег");
-                */
+                StringBuilder selectedTagsString = new StringBuilder();
+                //получение номеров тэгов, которые уже существовали
+                foreach (var tagName in selectedTags)
+                {
+                    Tags temp = loadedTags.FirstOrDefault(y => y.Title == tagName);
+                    if (temp == null) 
+                    {
+                        tagsIntersection.Add(new Tags{ Title = tagName });
+                        continue;
+                    }
+                    selectedTagsString.Append(temp.Id);
+                    selectedTagsString.Append(';');
+                }
+
+                foreach(var tag in tagsIntersection)
+                {
+                    _context.Add(tag);
+                    await _context.SaveChangesAsync();
+                    selectedTagsString.Append(tag.Id);
+                    selectedTagsString.Append(';');
+                }
 
                 Question obj = new Question();
-                var StringTags = string.Join(";",tags);
                 var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
                 obj.CreationDate = DateTime.Now;
                 obj.UpdateDate = DateTime.Now;
                 obj.Author = User.Identity.Name;
-                obj.TagIds = StringTags;
+                obj.TagIds = selectedTagsString.ToString();
                 obj.IsPrivate = true;
                 obj.Definition = ob.Definition;
                 obj.Proof = ob.Proof;
@@ -193,11 +210,10 @@ namespace Exam_Helper.Controllers
                 _context.Add(obj);
                 await _context.SaveChangesAsync();
 
-
                 qa.QuestionSet = string.IsNullOrEmpty(qa.QuestionSet) ? obj.Id + ";" : qa.QuestionSet + obj.Id + ";";
                 _context.Update(qa);
-
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(ob);
@@ -346,16 +362,26 @@ namespace Exam_Helper.Controllers
                 return NotFound();
             }
             // делаем выборку тегов и отмечаем те ,которые уже стоят на вопросе
+
+            //номера тэгов
+            string[] qtags = question.TagIds.Split(';', StringSplitOptions.RemoveEmptyEntries);
             
-            var tags = await _context.Tags.AsNoTracking().Select(x => new TagForQuestionCreatingModel()
-            { Id = x.Id, Name = x.Title, IsSelected = question.TagIds.Contains(x.Id.ToString())}).ToListAsync();
+            List<Tags> dbtags = await _context.Tags.AsNoTracking().ToListAsync();
 
-            if (tags == null)
-                tags = new List<TagForQuestionCreatingModel>();
+            List<string> selectedTags = dbtags.Where(x => qtags.Contains(x.Id.ToString())).Select(x => x.Title).ToList();
+            if (selectedTags == null) 
+                selectedTags = new List<string>();
 
-            return View(new ClassForQuestionCreatingModel() { Id=question.Id,Definition=question.Definition,Proof=question.Proof,
-                                                              Title=question.Title, tags = tags });
-
+            return View(new ClassForQuestionCreatingModel() { 
+                Id=question.Id,
+                Definition=question.Definition,
+                Proof=question.Proof,
+                Title=question.Title,
+                tags = new TagsForQuestionCreatinModel{ 
+                    SelectedTags = selectedTags,
+                    LoadedTags = dbtags.Select(x=>x.Title).ToList()
+                } 
+            });
         }
 
         // POST: QuestionsLib/Edit/5
@@ -373,16 +399,31 @@ namespace Exam_Helper.Controllers
 
             if (ModelState.IsValid)
             {
-                var tags_check = ques.tags.Where(x => x.IsSelected).Select(x => x.Id);
+                List<string> selectedTags = (ques.tags == null ? new List<string>() : ques.tags.SelectedTags);
+                List<Tags> loadedTags = await _context.Tags.AsNoTracking().ToListAsync();
+                List<Tags> tagsIntersection = new List<Tags>();
 
-                /*
-                if (tags_check.Count() == 0)
+                StringBuilder selectedTagsString = new StringBuilder();
+                //получение номеров тэгов, которые уже существовали
+                foreach (var tagName in selectedTags)
                 {
-                    ModelState.AddModelError(string.Empty, "вы должны указать как минимум один тег");
-                    return View(ques);
+                    Tags temp = loadedTags.FirstOrDefault(y => y.Title == tagName);
+                    if (temp == null)
+                    {
+                        tagsIntersection.Add(new Tags { Title = tagName });
+                        continue;
+                    }
+                    selectedTagsString.Append(temp.Id);
+                    selectedTagsString.Append(';');
                 }
-                
-                */
+
+                foreach (var tag in tagsIntersection)
+                {
+                    _context.Add(tag);
+                    await _context.SaveChangesAsync();
+                    selectedTagsString.Append(tag.Id);
+                    selectedTagsString.Append(';');
+                }
 
                 try
                 {
@@ -391,7 +432,7 @@ namespace Exam_Helper.Controllers
                     Question question = new Question()
                     {
                         Title = ques.Title,
-                        TagIds = string.Join(";",tags_check),
+                        TagIds = selectedTagsString.ToString(),
                         Proof =ques.Proof,
                         Definition = ques.Definition,
                         CreationDate = DateTime.Now,

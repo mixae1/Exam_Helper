@@ -24,9 +24,15 @@ namespace Exam_Helper.ViewsModel
         public int Id { get;set; }
 
         [Display(Name = "Теги")]
-        public List<TagForQuestionCreatingModel> tags { get; set; }
-
+        public TagsForQuestionCreatinModel tags { get; set; }
         
+    }
+
+    public class TagsForQuestionCreatinModel
+    {
+        public List<string> LoadedTags { get; set; }
+        public List<string> SelectedTags { get; set; }
+        //public List<string> CreatedTags { get; set; }
     }
 
     public class TagForQuestionCreatingModel
