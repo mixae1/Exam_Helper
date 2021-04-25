@@ -4,77 +4,89 @@
     ViewData["Title"] = "Edit";
 }
 
+<head>
+    <script src="~/js/tag_adding.js"></script>
+</head>
+<main class="container" p-2>
+    <h1>Редактирование</h1>
+    <h4>Вопрос</h4>
 
-<h1>Редактирование</h1>
-<h4>Вопрос</h4>
 
+    <hr color="brown" />
 
-<hr color="brown" />
-
-<div class="instruction">
-    <span>Поля,помеченные (<span class="colortext" style="color:red">*</span>) ,обязательны для заполнения:</span>
-</div>
-<form asp-action="QEdit">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-    <input type="hidden" asp-for="Id" />
-
-    <div class="d-flex justify-content-between pt-3 pb-3">
-        <span>
-            <b>@Html.DisplayNameFor(model => model.Title)<span class="colortext" style="color:red">*</span>:</b>
-            <input asp-for="Title" type="text" class="form-control w-100">
-        </span>
-        <span asp-validation-for="Title" class="text-danger"></span>
+    <div class="instruction">
+        <span>Поля,помеченные (<span class="colortext" style="color:red">*</span>) ,обязательны для заполнения:</span>
     </div>
-    <div class="d-flex justify-content-between pt-3 pb-3">
-        <span>
-            <b>@Html.DisplayNameFor(model => model.Definition)<span class="colortext" style="color:red">*</span>:</b>
-            <br />
-            <textarea asp-for="Definition" id="textarea" style="white-space: pre-wrap; width: 70vh; margin-top: 2vh;" rows="3"></textarea>
-            <span asp-validation-for="Definition" class="text-danger"></span>
-        </span>
-    </div>
-    <div class="d-flex justify-content-between pt-3 pb-3">
-        <span>
-            <b>@Html.DisplayNameFor(model => model.Proof):</b>
-            <br />
-            <textarea asp-for="Proof" id="textarea" style="white-space: pre-wrap; width: 120vh; margin-top: 2vh;" rows="10"></textarea>
-            <span asp-validation-for="Proof" class="text-danger"></span>
+    <form asp-action="QEdit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        </span>
-    </div>
-    <div class="form-group">
-        <label asp-for="@Model.tags" class="control-label"></label>
-        <ul class="list-group" id="tags" style="height: 288px; overflow-y: scroll; width: 284px;">
-            <input class="form-control" id="tInput" type="text" placeholder="Поиск..">
-            @for (int i = 0; i < Model.tags.Count; i++)
-            {
-                <li class="list-group-item">
-                    <input type="checkbox" asp-for="@Model.tags[i].IsSelected" />
-                    <label asp-for="@Model.tags[i].IsSelected" id="tName"> @Model.tags[i].Name</label>
-                    <input type="hidden" asp-for="@Model.tags[i].Id" />
-                    <input type="hidden" asp-for="@Model.tags[i].Name" />
-                </li>
-            }
-        </ul>
-        <span asp-validation-for="@Model.tags" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Сохранить" class="btn btn-success" />
-        <a asp-action="Index">
-            <button type="button" class="btn btn-secondary">Обратно к списку</button>
-        </a>
-    </div>
-</form>
+        <input type="hidden" asp-for="Id" />
 
+        <div class="d-flex justify-content-between pt-3 pb-3">
+            <span>
+                <b>@Html.DisplayNameFor(model => model.Title)<span class="colortext" style="color:red">*</span>:</b>
+                <input asp-for="Title" type="text" class="form-control w-100">
+            </span>
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="d-flex justify-content-between pt-3 pb-3">
+            <span>
+                <b>@Html.DisplayNameFor(model => model.Definition)<span class="colortext" style="color:red">*</span>:</b>
+                <br />
+                <textarea asp-for="Definition" id="textarea" style="white-space: pre-wrap; width: 70vh; margin-top: 2vh;" rows="3"></textarea>
+                <span asp-validation-for="Definition" class="text-danger"></span>
+            </span>
+        </div>
+        <div class="d-flex justify-content-between pt-3 pb-3">
+            <span>
+                <b>@Html.DisplayNameFor(model => model.Proof):</b>
+                <br />
+                <textarea asp-for="Proof" id="textarea" style="white-space: pre-wrap; width: 120vh; margin-top: 2vh;" rows="10"></textarea>
+                <span asp-validation-for="Proof" class="text-danger"></span>
+
+            </span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="@Model.tags" class="control-label"></label>
+            <div style="display: flex;">
+                <div>
+                    <input class="form-control" id="tInput" type="text" placeholder="Выберите или создайте" autocomplete="off">
+                    <div class="list-group" style="max-height: 288px; overflow-y: scroll; display: none;" id="tList"></div>
+                </div>
+
+                <div id="stList" style="display: flex;">
+
+                </div>
+                <span onclick="RemoveLastSelectedTag()">&times;</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <input type="submit" value="Сохранить" class="btn btn-success" />
+            <a asp-action="Index">
+                <button type="button" class="btn btn-secondary">Обратно к списку</button>
+            </a>
+        </div>
+    </form>
+</main>
 <script>
     $(document).ready(function () {
-        $("#tInput").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("ul.list-group#tags li").filter(function () {
-                $(this).toggle($(this).find("label#tName").text().toLowerCase().indexOf(value) > -1)
-            });
-        });
+        SetInput("input#tInput");
+        SetTagListForChoice("div#tList");
+        SetTagListForSelected("div#stList");
+
+        var tags = [];
+        @foreach(var tagName in Model.tags.LoadedTags)
+        {
+            @:tags.push("@(new Microsoft.AspNetCore.Html.HtmlString(tagName))");
+        }
+        @foreach(var tagName in Model.tags.SelectedTags)
+        {
+            @:AppendTagToSelected("@(new Microsoft.AspNetCore.Html.HtmlString(tagName))");
+        }
+        LoadTags(tags);
+        Tune();
     });
 </script>
 
