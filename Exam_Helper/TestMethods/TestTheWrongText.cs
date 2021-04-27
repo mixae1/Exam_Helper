@@ -140,7 +140,8 @@ namespace Exam_Helper.TestMethods
                 number_of_adjs = positions_of_adjs_in_parts.Count;
 
                 if (number_of_adjs < 2) goto Label1;
-                
+                int percent_number_of_adj = Math.Max(Math.Min((int)((number_of_adjs - 2) * instructions.percent + 2), number_of_adjs), 2);
+
                 //перемешиваю индексы
                 Shuffle(positions_of_adjs_in_parts);
 
@@ -148,8 +149,8 @@ namespace Exam_Helper.TestMethods
                 if (instructions.isEndingsHided)
                 {
                     //собираем список прилагательных
-                    List<int> buf = new List<int>(5);
-                    for(int i = 0; i < number_of_adjs && buf.Count < 4; ++i)
+                    List<int> buf = new List<int>(percent_number_of_adj + 1);
+                    for(int i = 0; i < number_of_adjs && buf.Count < percent_number_of_adj; ++i)
                     {
                         if(!CustomContains(buf, positions_of_adjs_in_parts[i]))
                         {
@@ -161,7 +162,7 @@ namespace Exam_Helper.TestMethods
                     for(int i = 1; i < buf.Count; i++)
                     {
                         //очень плохой код, но что поделать
-                        htmlParts[buf[i - 1]] = (instructions.isEndingsHided ? cutEnding(parts[buf[i]]) : parts[buf[i]]) + "</label>";
+                        htmlParts[buf[i - 1]] = (instructions.isEndingsHided ? cutEnding(parts[buf[i]]) : parts[buf[i]]) + " </label>";
                         if (Char.IsUpper(parts[buf[i - 1]][0]) != Char.IsUpper(parts[buf[i]][0]))
                         {
                             if(Char.IsUpper(parts[buf[i - 1]][0]))
@@ -173,7 +174,7 @@ namespace Exam_Helper.TestMethods
                                 htmlParts[buf[i - 1]] = Char.ToLower(htmlParts[buf[i - 1]][0]) + htmlParts[buf[i - 1]].Substring(1);
                             }
                         }
-                        htmlParts[buf[i - 1]] = "<label id=\"wr\">" + htmlParts[buf[i - 1]];
+                        htmlParts[buf[i - 1]] = "<label class=\"wr-label\" data-answer=\"" + parts[buf[i - 1]] + "\">" + htmlParts[buf[i - 1]];
                     }
                 }
                 else
@@ -209,8 +210,8 @@ namespace Exam_Helper.TestMethods
 
                 for(int i = 0; i < number_of_numbers * instructions.percent; i++)
                 {
-                    htmlParts[positions_of_numbers_in_parts[i]] = 
-                        "<label id=\"wr\">" + (int.Parse(parts[positions_of_numbers_in_parts[i]]) + RandIntAtRange(3)).ToString() + "</label>";
+                    htmlParts[positions_of_numbers_in_parts[i]] =
+                        "<label class=\"wr-label\" data-answer=\"" + parts[positions_of_numbers_in_parts[i]] + "\">" + (int.Parse(parts[positions_of_numbers_in_parts[i]]) + RandIntAtRange(3)).ToString() + " </label>";
                 }
                 
                 anyChanges = true;
@@ -230,7 +231,7 @@ namespace Exam_Helper.TestMethods
                 for (int i = 0; i < number_of_signes * instructions.percent; i++)
                 {
                     htmlParts[positions_of_signes_in_parts[i]] =
-                        "<label id=\"wr\">" + RandSign(parts[positions_of_signes_in_parts[i]][0]) + "</label>";
+                        "<label class=\"wr-label\" data-answer=\"" + parts[positions_of_signes_in_parts[i]] + "\">" + RandSign(parts[positions_of_signes_in_parts[i]][0]) + " </label>";
                 }
 
                 anyChanges = true;
@@ -254,7 +255,7 @@ namespace Exam_Helper.TestMethods
                 for (int i = 0; i < number_of_latin * instructions.percent; i++)
                 {
                     htmlParts[positions_of_latin_in_parts[i]] =
-                        "<label id=\"wr\">" + RandLatin(parts[positions_of_latin_in_parts[i]][0], set_of_latin.ToList()) + "</label>";
+                        "<label class=\"wr-label\" data-answer=\"" + parts[positions_of_latin_in_parts[i]] + "\">" + RandLatin(parts[positions_of_latin_in_parts[i]][0], set_of_latin.ToList()) + " </label>";
                 }
 
                 anyChanges = true;
@@ -262,9 +263,10 @@ namespace Exam_Helper.TestMethods
 
             Label4:
 
-            if (!anyChanges) return false; 
+            if (!anyChanges) return false;
 
-            createHtmlText();
+            createHtmlTextSeparateParts();
+            //createHtmlTextJoinedParts
 
             return true;
         }
@@ -330,9 +332,18 @@ namespace Exam_Helper.TestMethods
             return s.Length == 1 && alphabet.Contains(s);
         }
 
-        private void createHtmlText()
+        private void createHtmlTextSeparateParts()
         {
             for(int i = 0; i < parts.Count; i++)
+            {
+                if (string.IsNullOrEmpty(htmlParts[i])) htmlParts[i] = "<label>" + parts[i] + " </label>";
+            }
+            htmlText = string.Join(null, htmlParts);
+        }
+
+        private void createHtmlTextJoinedParts()
+        {
+            for (int i = 0; i < parts.Count; i++)
             {
                 if (string.IsNullOrEmpty(htmlParts[i])) htmlParts[i] = parts[i];
             }
