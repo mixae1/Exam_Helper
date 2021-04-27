@@ -69,6 +69,46 @@ html {
         margin-left: 15px;
     }
 }
+@media screen and (max-height: 550px){
+    #first_icon {
+        content: url("../user-black-close-up-shape_icon.png");
+    }
+
+    #second_icon {
+        content: url("../book_dictionary_icon.png");
+    }
+
+    .main_page span {
+        font-size: 15px;
+    }
+
+    .tags {
+        width: 50%;
+    }
+    html {
+        font-size: 13px;
+    }
+    #qTitle, .titleText {
+        font-size: 20px;
+    }
+    .cardText{
+        font-size: 15px;
+    }
+    .titleText {
+        white-space: normal;
+    }
+    .card-check{
+        width: 10px;
+    }
+    h1{
+        font-size: 17px;
+    }
+    .log{
+        margin-top: 5px;
+        margin-left: 15px;
+    }
+    
+}
 
 @media screen and (max-width: 350px) {
     .test-page{
