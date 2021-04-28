@@ -149,7 +149,7 @@ namespace Exam_Helper.Controllers
         }
 
         [HttpGet]
-        public IActionResult TheWrongTextTest(string Instruction, bool isMulti = false)
+        public IActionResult TheWrongTextTest(string Instruction, bool isMulti = false, string ControllerName = "Tests")
         {
 
             _sessionWorker.GetQuestion("question", out Question question);
@@ -164,7 +164,8 @@ namespace Exam_Helper.Controllers
                 IsSuccessed = testTWT.IsSuccessed,
                 TestInstructions = Instruction,
                 isMulti = isMulti,
-                ReturnControllerName=ReturnUrl
+                ReturnControllerName=ReturnUrl,
+                ControllerName=ControllerName
             };
 
             return View(ts);
