@@ -115,10 +115,11 @@ namespace Exam_Helper.Controllers
                 Teorem = testMissed.GetWordsWithInputs(),
                 Answers = testMissed.Answers,
                 IsSuccessed = testMissed.IsSuccessed,
-                TestInstructions=Instruction,
-                isMulti=isMulti,
-                ControllerName=ControllerName,
-                ReturnControllerName=ReturnUrl
+                TestInstructions = Instruction,
+                isMulti = isMulti,
+                ControllerName = ControllerName,
+                ReturnControllerName = ReturnUrl,
+                Hint = text
             };
 
             return View(ts);
@@ -142,7 +143,8 @@ namespace Exam_Helper.Controllers
                 TestInstructions=Instruction,
                 isMulti=isMulti,
                 ControllerName=ControllerName,
-                ReturnControllerName=ReturnUrl
+                ReturnControllerName=ReturnUrl,
+                Hint = text
             };
 
             return View(ts);
@@ -165,7 +167,8 @@ namespace Exam_Helper.Controllers
                 TestInstructions = Instruction,
                 isMulti = isMulti,
                 ReturnControllerName=ReturnUrl,
-                ControllerName=ControllerName
+                ControllerName=ControllerName,
+                Hint = text
             };
 
             return View(ts);

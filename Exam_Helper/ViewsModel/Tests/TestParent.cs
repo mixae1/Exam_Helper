@@ -13,8 +13,9 @@ namespace Exam_Helper.ViewsModel
         /// настройки метода тестирования для кнопки : пройти еше раз 
         /// </summary>
         public string TestInstructions { get; set; }
+        
         ///флаг ,который определяет, метод запущен самостоятельно или в составе мульти 
-      public bool isMulti { get; set; }
+        public bool isMulti { get; set; }
 
         ///<summary>
         ///имя контроллера , который инициировал многоразовое тестирование 
@@ -23,6 +24,11 @@ namespace Exam_Helper.ViewsModel
 
        
         public string UserAnswers { get; set; }
+
+        /// <summary>
+        /// Подсказка в виде полного текста
+        /// </summary>
+        public string Hint { get; set; }
 
         ///<summary>
         ///имя контроллера библиотеки,из которого пришли 
