@@ -21,7 +21,9 @@ namespace Exam_Helper.ViewsModel
         ///</summary>
         public string ControllerName { get; set; }
 
-        
+       
+        public string UserAnswers { get; set; }
+
         ///<summary>
         ///имя контроллера библиотеки,из которого пришли 
         ///</summary>
