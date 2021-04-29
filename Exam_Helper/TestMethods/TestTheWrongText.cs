@@ -336,7 +336,9 @@ namespace Exam_Helper.TestMethods
         {
             for(int i = 0; i < parts.Count; i++)
             {
-                if (string.IsNullOrEmpty(htmlParts[i])) htmlParts[i] = "<label>" + parts[i] + " </label>";
+                if (string.IsNullOrEmpty(htmlParts[i]))
+                    if (parts[i] == "\r\n") htmlParts[i] = parts[i];
+                    else htmlParts[i] = "<label>" + parts[i] + " </label>";
             }
             htmlText = string.Join(null, htmlParts);
         }
