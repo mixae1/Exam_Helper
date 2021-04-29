@@ -207,10 +207,13 @@ namespace Exam_Helper.Controllers
                 times--;
                 HttpContext.Session.SetInt32("PackTestingTimes", times.Value);
 
-                int TestMethodId = r.Next(0, 1);
+                int TestMethodId = r.Next(3);
+
+                Console.WriteLine($"{TestMethodId}");
 
                 switch (TestMethodId)
                 {
+                    case 2: return RedirectToAction(nameof(TestsController.TheWrongTextTest), nameof(Tests), new { Instruction = "50;true;false;false;false", ControllerName = "PackTest", isMulti = true });
                     case 1: return RedirectToAction(nameof(TestsController.MissingWordsTest), nameof(Tests), new {Instruction= "50;false;1", ControllerName = "PackTest", isMulti = true });
                     case 0: return RedirectToAction(nameof(TestsController.PuzzleTest), nameof(Tests), new { Instruction= "50;false;false;0;1", ControllerName = "PackTest", isMulti = true });
                 }
