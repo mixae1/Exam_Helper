@@ -89,12 +89,12 @@
                                             <br />
                                             <span>
                                                 Знаки:
-                                                <input type="checkbox" id="mw_isLetter" disabled>
+                                                <input type="checkbox" id="mw_isLetter">
                                             </span>
                                             <br />
                                             <span>
                                                 Спец. символы:
-                                                <input type="checkbox" id="mw_isSign" disabled>
+                                                <input type="checkbox" id="mw_isSign">
                                             </span>
                                         </p>
                                     </div>
@@ -380,7 +380,9 @@
             case "missed_words":
                 instruction =
                     missed_words.find("input#mw_quantity").val().toString() + ";" +
-                    missed_words.find("input#mw_isPrill").is(":checked").toString();
+                    missed_words.find("input#mw_isPrill").is(":checked").toString() + ";" +
+                    missed_words.find("input#mw_isLetter").is(":checked").toString() + ";" +
+                    missed_words.find("input#mw_isSign").is(":checked").toString();
                 break;
             case "puzzle":
                 instruction =

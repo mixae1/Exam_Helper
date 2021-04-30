@@ -112,8 +112,7 @@ namespace Exam_Helper.Controllers
             TestInfoMissedWords ts = new TestInfoMissedWords()
             {
                 Title = question.Title,
-                Teorem = testMissed.GetWordsWithInputs(),
-                Answers = testMissed.Answers,
+                Text = testMissed.htmlText,
                 IsSuccessed = testMissed.IsSuccessed,
                 TestInstructions = Instruction,
                 isMulti = isMulti,

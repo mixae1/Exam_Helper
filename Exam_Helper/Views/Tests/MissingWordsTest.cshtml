@@ -18,13 +18,10 @@
             <h2>@Temp_Model.Title</h2>
 
             <div class="miss-words p-3" style="white-space:pre-wrap;">
-                @foreach (var word in Temp_Model.Teorem)
-                {
-                    @Html.Raw(word);
-                }
+                <span style="white-space:pre-wrap;">@Html.Raw(Temp_Model.Text)</span>
             </div>
             <div class="form-group mt-3">
-                <input type="submit" value="Проверить ответ" class="btn btn-primary" id="CheckAnswers" />
+                <input type="submit" value="Проверить ответ" class="btn btn-primary" onclick="CheckAnswers()" />
             </div>
         }
         else
@@ -107,15 +104,10 @@
 
 <script>
 
-    $("#CheckAnswers").click(function CheckAnswers() {
-        var ans = [];
-        @for (int i = 0; i< Temp_Model.Answers.Length; i++)
-        {
-            @:ans.push("@(new Microsoft.AspNetCore.Html.HtmlString(Temp_Model.Answers[i]))");
-        }
+    function CheckAnswers() {
         $("input.editablesection").each(function (index) {
-            console.log($(this).val(), " ", ans[index]);
-            if ($(this).val().toLowerCase() === ans[index].toLowerCase()) {
+            console.log($(this).val(), " ", $(this).attr("data-answer"));
+            if ($(this).val().toLowerCase() === $(this).attr("data-answer").toLowerCase()) {
                 $(this).removeClass("wrong");
                 $(this).addClass("right");
             }
@@ -124,10 +116,8 @@
                 $(this).addClass("wrong");
             }
         });
-       });
-    $("#CheckAnswers").click(function CheckAnswers() {
-           
-       });
+       };
+
     function toggleSymbols() {
         $(".side-bar div.sidebar-content").toggle();
     }
