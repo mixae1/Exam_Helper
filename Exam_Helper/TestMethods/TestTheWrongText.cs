@@ -133,8 +133,6 @@ namespace Exam_Helper.TestMethods
 
             //change adjs
             {
-                int number_of_chosen_adjs = 0; // Кол-во выбранных прилагательных для замены
-
                 //получаем индексы всех предположительных прилагательных
                 positions_of_adjs_in_parts = parts.Select((x, ind) => (x, ind)).Where(x => isAdjective(x.x)).Select(x => x.ind).ToList();
                 number_of_adjs = positions_of_adjs_in_parts.Count;
@@ -204,11 +202,11 @@ namespace Exam_Helper.TestMethods
                 List<int> positions_of_numbers_in_parts = parts.Select((x, ind) => (x, ind)).Where(x => isNumber(x.x)).Select(x => x.ind).ToList();
                 int number_of_numbers = positions_of_numbers_in_parts.Count;
 
-                if (number_of_numbers * instructions.percent < 1) goto Label2;
+                if (number_of_numbers < 1) goto Label2;
 
                 Shuffle(positions_of_numbers_in_parts);
 
-                for(int i = 0; i < number_of_numbers * instructions.percent; i++)
+                for(int i = 0; i < Math.Max(number_of_numbers * instructions.percent, 1); i++)
                 {
                     htmlParts[positions_of_numbers_in_parts[i]] =
                         "<label class=\"wr-label\" data-answer=\"" + parts[positions_of_numbers_in_parts[i]] + "\">" + (int.Parse(parts[positions_of_numbers_in_parts[i]]) + RandIntAtRange(3)).ToString() + " </label>";
@@ -224,11 +222,11 @@ namespace Exam_Helper.TestMethods
                 List<int> positions_of_signes_in_parts = parts.Select((x, ind) => (x, ind)).Where(x => isSign(x.x)).Select(x => x.ind).ToList();
                 int number_of_signes = positions_of_signes_in_parts.Count;
 
-                if (number_of_signes * instructions.percent < 1) goto Label3;
+                if (number_of_signes < 1) goto Label3;
 
                 Shuffle(positions_of_signes_in_parts);
 
-                for (int i = 0; i < number_of_signes * instructions.percent; i++)
+                for (int i = 0; i < Math.Max(number_of_signes * instructions.percent, 1); i++)
                 {
                     htmlParts[positions_of_signes_in_parts[i]] =
                         "<label class=\"wr-label\" data-answer=\"" + parts[positions_of_signes_in_parts[i]] + "\">" + RandSign(parts[positions_of_signes_in_parts[i]][0]) + " </label>";
@@ -248,11 +246,11 @@ namespace Exam_Helper.TestMethods
                 HashSet<char> set_of_latin = new HashSet<char>();
                 foreach (int ind in positions_of_latin_in_parts) set_of_latin.Add(parts[ind][0]);
 
-                if (number_of_latin * instructions.percent < 2 || set_of_latin.Count < 2) goto Label4;
+                if (number_of_latin < 2 || set_of_latin.Count < 2) goto Label4;
 
                 Shuffle(positions_of_latin_in_parts);
 
-                for (int i = 0; i < number_of_latin * instructions.percent; i++)
+                for (int i = 0; i < Math.Max(number_of_latin * instructions.percent, 2); i++)
                 {
                     htmlParts[positions_of_latin_in_parts[i]] =
                         "<label class=\"wr-label\" data-answer=\"" + parts[positions_of_latin_in_parts[i]] + "\">" + RandLatin(parts[positions_of_latin_in_parts[i]][0], set_of_latin.ToList()) + " </label>";
@@ -570,7 +568,10 @@ namespace Exam_Helper.TestMethods
 
                 if (!float.TryParse(instructions[0], out percent)) percent = PERCENT;
 
-                percent /= 100;
+                if (percent < 1 || percent > 100)
+                    percent = PERCENT / 200;
+                else
+                    percent /= 200;
 
                 if (!bool.TryParse(instructions[1], out isEndingsHided)) isEndingsHided = IS_ENDINGS_HIDED;
                 
@@ -580,8 +581,6 @@ namespace Exam_Helper.TestMethods
                 
                 if (!bool.TryParse(instructions[4], out isLatin)) isLatin = IS_LATIN;
 
-                if (percent < 1 || percent > 100)
-                    percent = PERCENT / 100;
             }
         }
 
