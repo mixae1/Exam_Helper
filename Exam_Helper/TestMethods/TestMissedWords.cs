@@ -9,40 +9,20 @@ namespace Exam_Helper.TestMethods
 {
     public class TestMissedWords
     {
-        public string Thereom { get; set; }
-        private string[] words;
-        //настройка кол-ва слов которые вытаскивать будем
-        private int missedwords;
-        private float percent;
-        private bool isPossible;
+        public string htmlText;
+        public bool IsSuccessed;
+
+        private string[] htmlParts;
+        private List<string> parts;
+        private int number_of_parts;
+
+        static readonly string alphabet = "ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσΤτΥυΦφΧχΨψΩω";
+        static readonly string signes = "∧∨¬→∀∃=><⩽≤⩾≥-+*^∈∉⊆⊂⊇⊃⊊⊋∪⋂∑∏";
+
+        private static Random rand = new Random();
 
         private SortedDictionary<int, string> answers;
-        private List<Func<string, bool>> funcs;
-        const string alphabet= "ΑαΒβΓγΔδΕεΖζΗηΘθΙιΚκΛλΜμΝνΞξΟοΠπΡρΣσΤτΥυΦφΧχΨψΩω";
-        const string rus = "аи";
-        //свойство лучше их юзать а не автосвойства 
-        public int AmountOfMissed
-        {
-            get
-            {
-                return missedwords;
-            }
-            
-        }
-        public bool IsSuccessed
-        {
-            get
-            {
-                return isPossible;
-            }
-        }
-        public string[] Words
-        {
-            get
-            {
-                return words;
-            }
-        }
+
         public string[] Answers
         {
             get
@@ -52,154 +32,170 @@ namespace Exam_Helper.TestMethods
             }
         }
 
-        public string[] GetWordsWithInputs()
+        private void createHtmlText()
         {
-            if (words == null)
-                return new string[] { };
-
-            List<string> stringUnioner = new List<string>();
-            stringUnioner.Add("");
-            int curr_word = 0;
-            while(curr_word < words.Length)
+            for (int i = 0; i < parts.Count; i++)
             {
-                if (!answers.ContainsKey(curr_word))
-                {
-                    stringUnioner[stringUnioner.Count - 1] += words[curr_word] + " ";
-                }
-                else
-                {
-                    if (stringUnioner[stringUnioner.Count - 1] != "")
-                    {
-                        stringUnioner[stringUnioner.Count - 1] = "<span class=\"h5\">" + stringUnioner[stringUnioner.Count - 1] + "</span>";
-                        stringUnioner.Add("<input class=\"editablesection test\" maxlength=\"" + answers[curr_word].Length + "\" style=\"width: " + answers[curr_word].Length*10 + "px;\"/>");
-                    }
-                    else
-                    {
-                        stringUnioner[stringUnioner.Count - 1] = "<input size=\"5\" class=\"editablesection test\" maxlength=\"" + answers[curr_word].Length + "\" style=\"width: " + answers[curr_word].Length * 10 + "px;\" />";
-                    }
-                    if (curr_word != words.Length - 1) stringUnioner.Add("");
-                    else return stringUnioner.ToArray();
-                }
-                curr_word++;
+                if (string.IsNullOrEmpty(htmlParts[i]))
+                    if (parts[i] == "\r\n") htmlParts[i] = parts[i];
+                    else htmlParts[i] = "<span class=\"h5\">" + parts[i] + " </span>";
             }
-            stringUnioner[stringUnioner.Count - 1] = "<span class=\"h5\"> " + stringUnioner[stringUnioner.Count - 1] + "</span>";
-            return stringUnioner.ToArray();
-            //return Words.Select((x, i) => answers.ContainsKey(i) ?
-            //"<input size=\"5\" class=\"test\" />" :
-            //"<span class=\"h5\">" + words[i] + "</span>").ToArray();
+            htmlText = string.Join(null, htmlParts);
         }
 
-        public TestMissedWords(string Thereom, string Instruction = "33;true")
+        public TestMissedWords(string Text, string Instruction)
         {
 
             answers = new SortedDictionary<int, string>();
-            if (string.IsNullOrEmpty(Thereom))
+            if (string.IsNullOrEmpty(Text))
             {
-                isPossible = false;
+                IsSuccessed = false;
                 return;
             }
 
-            if (string.IsNullOrEmpty(Instruction)) Instruction = "50;false";
+            if (string.IsNullOrEmpty(Instruction)) Instruction = "50;false;false;false";
             var instructions = new MissedWordsInstruction(Instruction);
 
-            percent = instructions.percent;
+            //text -> parts[]
+            parts = Regex.Replace(Text, @"([,\.:\?\&!\(\)\{\}\-¬→∧∨∀∃=><⩽≤⩾≥\+\*\^∈∉⊆⊂⊇⊃⊊⊋∪⋂∑∏]|\r\n)", " " + "$1" + " ").Trim().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+            number_of_parts = parts.Count;
+            htmlParts = new string[number_of_parts];
 
-            percent /= 200; // 2 - так как мы же не хотим все слова делать полями
-
-           
-            string rep = "$1";
-            Thereom = Regex.Replace(Thereom, @"(,|\.|:|\?|\&|!|\(|\)|\{|\}|\-|=|<|>|\r\n)", " "+rep+" ").Trim();
-            words = Thereom.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-            funcs = new List<Func<string, bool>>();
-
-            if(instructions.isPrill) funcs.Add(isPril);
-            //...
-
-            isPossible = CreateTest();
+            IsSuccessed = CreateTest(instructions);
         }
 
-        //staff for 
-        static bool InvokeMethod(Delegate method, params object[] args)
+        private static void Shuffle<T>(IList<T> list)
         {
-            return (bool)method.DynamicInvoke(args);
+            int n = list.Count;
+            while (n > 1)
+            {
+                n--;
+                int k = rand.Next(n + 1);
+                T value = list[k];
+                list[k] = list[n];
+                list[n] = value;
+            }
         }
 
-        //вспомогательный метод проверки на прилагательное
-        //также может захватывать глаголы
-        bool isPril(string x)
+        private bool CreateTest(MissedWordsInstruction instructions)
         {
-            if (x.Length >= 3 && Regex.IsMatch(x, @"((ая)|ое|на|о|ых)\b"))
-                return true;
+            bool anyChanges = false;
 
+            List<int> positions_of_words_in_parts; //Содержит позиции слов в parts
+            int number_of_words;
+
+            if(!instructions.isPrill)
+                positions_of_words_in_parts = parts.Select((x, ind) => (x, ind)).Where(x => isWord(x.x)).Select(x => x.ind).ToList();
+            else
+                positions_of_words_in_parts = parts.Select((x, ind) => (x, ind)).Where(x => isAdjective(x.x)).Select(x => x.ind).ToList();
+
+            // words/adjs
+            {
+                number_of_words = positions_of_words_in_parts.Count;
+
+                if (number_of_words == 0) goto Label1;
+                int percent_number_of_words = Math.Max(Math.Min((int)((number_of_words - 2) * instructions.percent + 2), number_of_words), 2);
+
+                //перемешиваю индексы
+                Shuffle(positions_of_words_in_parts);
+
+                for(int i = 0; i < percent_number_of_words; ++i)
+                {
+                    htmlParts[positions_of_words_in_parts[i]] = 
+                        "<input class=\"editablesection\" maxlength=\"" + 
+                        parts[positions_of_words_in_parts[i]].Length + 
+                        "\" style=\"width: " + 
+                        parts[positions_of_words_in_parts[i]].Length * 10 + 
+                        "px;\" data-answer=\"" + 
+                        parts[positions_of_words_in_parts[i]] + 
+                        "\"/> ";
+                }
+
+                anyChanges = true;
+            }
+
+        Label1:
+
+            if (instructions.isSignes)
+            {
+                List<int> positions_of_signes_in_parts = parts.Select((x, ind) => (x, ind)).Where(x => isSign(x.x)).Select(x => x.ind).ToList();
+                int number_of_signes = positions_of_signes_in_parts.Count;
+
+                if (number_of_signes == 0) goto Label2;
+
+                Shuffle(positions_of_signes_in_parts);
+
+                for (int i = 0; i < Math.Max(number_of_signes * instructions.percent, 1); i++)
+                {
+                    htmlParts[positions_of_signes_in_parts[i]] =
+                        "<input class=\"editablesection\" maxlength=\"1\" style=\"width: 20px;\" data-answer=\"" +
+                        parts[positions_of_signes_in_parts[i]] +
+                        "\"/> ";
+                }
+
+                anyChanges = true;
+            }
+
+        Label2:
+
+            if (instructions.isLatin)
+            {
+
+                List<int> positions_of_latin_in_parts = parts.Select((x, ind) => (x, ind)).Where(x => isLatin(x.x)).Select(x => x.ind).ToList();
+                int number_of_latin = positions_of_latin_in_parts.Count;
+
+                if (number_of_latin < 1) goto Label3;
+
+                Shuffle(positions_of_latin_in_parts);
+
+                for (int i = 0; i < Math.Max(number_of_latin * instructions.percent, 1); i++)
+                {
+                    htmlParts[positions_of_latin_in_parts[i]] =
+                        "<input class=\"editablesection\" maxlength=\"1\" style=\"width: 20px;\" data-answer=\"" +
+                        parts[positions_of_latin_in_parts[i]] +
+                        "\"/> ";
+                }
+
+                anyChanges = true;
+            }
+
+        Label3:
+
+            if (!anyChanges) return false;
+
+            createHtmlText();
+
+            return true;
+        }
+
+
+        private static bool isAdjective(string s)
+        {
+            if (s.Length >= 5 && Regex.IsMatch(s, @"(ие|ых|ой|ий|ый|ая|ое|ее|ье|ья|ые|ьи|ого|его|ей|ых|их|ому|ему|ым|им|ую|ью|ыми|ими|ем|ом)\b"))
+                return true;//ие
             return false;
         }
 
-        bool isPunct(string x)
+        private static bool isWord(string s)
         {
-            return char.IsPunctuation(x, x.Length - 1) && x!="=";
+            if (s.Length >= 3 && !Regex.IsMatch(s, @"[^а-яА-Я]")) return true;
+            else return false;
         }
 
-        int GreekChars(string x)
+        private static bool isNumber(string s)
         {
-            return x.Count(x => alphabet.Contains(x));
-        }
-
-        bool ValidSingleChar(string x)
-        {
-            return x.Length==1 && !(x.Count(x => rus.Contains(x)) == 1 || GreekChars(x) == 1);
-        }
-
-        bool BR(string x)
-        {
-            return x == "\r\n";
-        }
-
-        bool NotValid(string x)
-        {
-            return isPunct(x) || GreekChars(x)>1  || ValidSingleChar(x) || BR(x);
-        }
-
-        //получаем строку из которой выкидываем слова 
-        private bool CreateTest()
-        {
-            List<(int, string)> temp = new List<(int, string)>();
-
-            for(int i = 0; i<words.Length; i++)
-            {
-                if (NotValid(words[i])) continue;
-                foreach(var func in funcs)
-                {
-                    if (!InvokeMethod(func, words[i])) goto label1;
-                }
-                temp.Add((i, words[i].Trim()));
-            label1:
-                ;
-            }
-
-            answers = new SortedDictionary<int, string>();
-
-            if (temp.Count() == 0)
-                return false;
-
-            Random r = new Random((int)DateTime.Now.Ticks);
-
-            missedwords = (int)(temp.Count() * percent);
-            if (missedwords == 0) missedwords++;
-
-            if (missedwords == temp.Count)
-                return false;
-            
-
-            while (answers.Count != missedwords)
-            {
-                int t = r.Next() % temp.Count;
-                if (!answers.ContainsKey(temp[t].Item1) && !answers.ContainsKey(temp[t].Item1-1) && !answers.ContainsKey(temp[t].Item1+1))
-                {
-                    answers.Add(temp[t].Item1, temp[t].Item2);
-                }
-            }
+            foreach (var c in s) if (!Char.IsDigit(c)) return false;
             return true;
+        }
+
+        private static bool isSign(string s)
+        {
+            return s.Length == 1 && signes.Contains(s);
+        }
+
+        private static bool isLatin(string s)
+        {
+            return s.Length == 1 && alphabet.Contains(s);
         }
 
     }
@@ -208,9 +204,13 @@ namespace Exam_Helper.TestMethods
     {
         public float percent;
         public bool isPrill;
+        public bool isLatin;
+        public bool isSignes;
 
-        private const float PERCENT = 33f;
-        private const bool ISPRILL = true;
+        private const float PERCENT = 50f;
+        private const bool ISPRILL = false;
+        private const bool ISLATIN = false;
+        private const bool ISSIGNES = false;
 
         public MissedWordsInstruction(string instruction)
         {
@@ -218,10 +218,17 @@ namespace Exam_Helper.TestMethods
 
             if (!float.TryParse(instructions[0], out percent)) percent = PERCENT;
 
+            if (percent < 1 || percent > 100)
+                percent = PERCENT / 200;
+            else
+                percent /= 200;
+
             if (!bool.TryParse(instructions[1], out isPrill)) isPrill = ISPRILL;
 
-            if (percent < 1 || percent > 100)
-                percent = PERCENT;
+            if (!bool.TryParse(instructions[2], out isLatin)) isLatin = ISLATIN;
+
+            if (!bool.TryParse(instructions[3], out isSignes)) isSignes = ISSIGNES;
+
         }
     }
 

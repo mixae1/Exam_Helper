@@ -6,13 +6,9 @@ namespace Exam_Helper.ViewsModel
     {   
         public string Title { get; set; }
 
-        public string[] Teorem { get; set; }
-
-        public string[] Answers { get; set; }
+        public string Text { get; set; }
 
         public bool IsSuccessed { get; set; }
-
-       
 
         public TestInfoMissedWords():base()
         {
