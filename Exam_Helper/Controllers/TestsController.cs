@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using Exam_Helper.Models;
 
 namespace Exam_Helper.Controllers
 {
@@ -255,9 +256,56 @@ namespace Exam_Helper.Controllers
         }
      
         [HttpPost]
-        public RedirectToActionResult UserStats(string userAnswer, string userURL,bool f=true)
+        public RedirectToActionResult UserStats(string userAnswer, string userURL,string userName)
         {
+            CreateATest(userName, userAnswer);
             return RedirectToAction(nameof(Index),userURL);
+        }
+
+        public async void CreateATest(string userName, string Answers)
+        {
+            if (string.IsNullOrEmpty(userName)) return;
+
+            var user = _dbContext.User.AsNoTracking().FirstOrDefault(x => x.UserName == userName);
+
+            if (user == null)
+                return;
+
+            var question = HttpContext.Session.GetInt32("question_id");
+            if (question == null) return;
+            int question_id = question.Value;
+
+
+
+            var atest = _dbContext.Stats.FirstOrDefault(x => x.UserId == user.Id && x.QuestionId == question_id);
+
+            if (atest == null)
+            {
+                _dbContext.Add(new Stat()
+                {
+                    UserId = (user.Id),
+                    QuestionId = question_id,
+                    ServiceInfo = Answers
+                });
+
+            }
+            else
+            {
+                var Statsdata = atest.ServiceInfo.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                var inputData = Answers.Split('|');
+                for (int i = 0; i < Statsdata.Length; i++)
+                {
+                    var singleStat = Statsdata[i].Split(';');
+                    var singleInput = inputData[i].Split(';');
+                    singleStat[0] = (int.Parse(singleStat[0]) + int.Parse(singleInput[0])).ToString();
+                    singleStat[1] = (int.Parse(singleStat[1]) + int.Parse(singleInput[1])).ToString();
+                    Statsdata[i] = singleStat[0] + ';' + singleStat[1];
+                }
+                atest.ServiceInfo = string.Join("|", Statsdata);
+                _dbContext.Update(atest);
+            }
+
+             _dbContext.SaveChanges();
         }
 
 

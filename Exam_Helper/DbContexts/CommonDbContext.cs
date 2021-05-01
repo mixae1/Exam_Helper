@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Exam_Helper.Models;
 
 namespace Exam_Helper
 {
@@ -25,6 +26,7 @@ namespace Exam_Helper
         public virtual DbSet<Tests> Tests { get; set; }
         public virtual DbSet<User> User { get; set; }
 
+        public virtual DbSet<Stat> Stats { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         { 
             /*
@@ -49,13 +51,18 @@ namespace Exam_Helper
 
                 entity.Property(e => e.ObjectId).HasColumnName("object_id");
 
+                entity.Property(e => e.UserId)
+                   .IsRequired()
+                   .HasColumnName("user_id")
+                   .HasColumnType("character varying");
+
                 entity.Property(e => e.Serviceinfo)
                     .IsRequired()
                     .HasColumnName("serviceinfo")
                     .HasColumnType("character varying").HasMaxLength(256);
 
                 entity.Property(e => e.TypeId).HasColumnName("type_id");
-
+                /*
                 entity.HasOne(d => d.Object)
                     .WithMany(p => p.ATest)
                     .HasForeignKey(d => d.ObjectId)
@@ -67,7 +74,7 @@ namespace Exam_Helper
                     .HasForeignKey(d => d.ObjectId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("atest_ques_fkey");
-
+                */
                 entity.HasOne(d => d.Type)
                     .WithMany(p => p.ATest)
                     .HasForeignKey(d => d.TypeId)
