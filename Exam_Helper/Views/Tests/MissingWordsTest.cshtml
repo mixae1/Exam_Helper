@@ -15,13 +15,16 @@
     <div>
         @if (Temp_Model.IsSuccessed)
         {
+            
             <h2>@Temp_Model.Title</h2>
 
             <div class="miss-words p-3" style="white-space:pre-wrap;">
                 <span style="white-space:pre-wrap;">@Html.Raw(Temp_Model.Text)</span>
             </div>
             <div class="form-group mt-3">
+
                 <input type="submit" value="Проверить ответ" class="btn btn-primary" onclick="CheckAnswers()" />
+              
             </div>
         }
         else
@@ -37,7 +40,8 @@
         </a>
 
         @if (Temp_Model.isMulti)
-            @Html.ActionLink("Cледующее задание", "MultiTesting", (Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
+        {@Html.ActionLink("Cледующее задание", "MultiTesting", (Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "submit", @class = "btn btn-primary" })}
+
 
         @if (Temp_Model.IsSuccessed && !Temp_Model.isMulti)
         {
@@ -67,6 +71,7 @@
 
     </div>
 </main>
+   
 <div class="side-bar">
     <div class="sidebar-content">
         <div class="tab">
@@ -104,19 +109,48 @@
 
 <script>
 
+
     function CheckAnswers() {
+         var ans = [];
+        let correctAns =0;
+        let all = 0;
+  
         $("input.editablesection").each(function (index) {
             console.log($(this).val(), " ", $(this).attr("data-answer"));
             if ($(this).val().toLowerCase() === $(this).attr("data-answer").toLowerCase()) {
                 $(this).removeClass("wrong");
                 $(this).addClass("right");
+                correctAns++;
             }
             else {
                 $(this).removeClass("right");
                 $(this).addClass("wrong");
             }
+            all++;
         });
+
+        var testIsFinished = localStorage.getItem('testfinished');
+
+        if (testIsFinished=='f') {
+            let dataMethod = localStorage.getItem('userStats/MissingWords');
+            if (dataMethod === null) dataMethod = "0;0";
+            let data = dataMethod.split(';');
+            data[0] = (parseInt(data[0]) + correctAns).toString();
+            data[1] = (parseInt(data[1]) + all).toString();
+
+            console.log(data);
+
+            localStorage.setItem('userStats/MissingWords', data[0] + ';' + data[1]);
+        }
+        
+
+    });
+    $("#CheckAnswers").click(function CheckAnswers() {
+
+       });
+
        };
+
 
     function toggleSymbols() {
         $(".side-bar div.sidebar-content").toggle();

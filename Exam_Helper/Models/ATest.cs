@@ -10,8 +10,8 @@ namespace Exam_Helper
         public int TypeId { get; set; }
         public string Serviceinfo { get; set; }
 
-        public virtual Pack Object { get; set; }
-        public virtual Question ObjectNavigation { get; set; }
+        public string UserId { get; set; }
+
         public virtual Tests Type { get; set; }
     }
 }

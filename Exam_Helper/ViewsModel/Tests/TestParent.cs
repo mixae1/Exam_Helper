@@ -22,7 +22,9 @@ namespace Exam_Helper.ViewsModel
         ///</summary>
         public string ControllerName { get; set; }
 
-       
+       /// <summary>
+       /// строка ,отвечающая за кол-во правильных и неправильных вопросов пользователя 
+       /// </summary>
         public string UserAnswers { get; set; }
 
         /// <summary>

@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using Exam_Helper.Models;
 
 namespace Exam_Helper.Controllers
 {
@@ -85,6 +86,7 @@ namespace Exam_Helper.Controllers
             if (ModelState.IsValid)
             {
                 _sessionWorker.RemoveDataSession("test_times", "missed_words_inst", "puzzle_inst", "MaterialType", "wrong_text");
+               
                 switch (temp.SelectedId)
                 {
                     case 1: return RedirectToAction(nameof(MissingWordsTest), new { Instruction = temp.ServiceInfo });
@@ -100,6 +102,7 @@ namespace Exam_Helper.Controllers
         }
 
         // для подключения к библиотеки question нужно сюда в параметры передать question
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet]
         public IActionResult MissingWordsTest(string Instruction,bool isMulti=false,string ControllerName="Tests")
         {
@@ -124,6 +127,7 @@ namespace Exam_Helper.Controllers
             return View(ts);
         }
 
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet]
         public IActionResult PuzzleTest(string Instruction,bool isMulti=false, string ControllerName = "Tests")
         {
@@ -149,6 +153,7 @@ namespace Exam_Helper.Controllers
             return View(ts);
         }
 
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet]
         public IActionResult TheWrongTextTest(string Instruction, bool isMulti = false, string ControllerName = "Tests")
         {
@@ -173,6 +178,7 @@ namespace Exam_Helper.Controllers
             return View(ts);
         }
 
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet]
         public RedirectToActionResult MultiTesting(string Instruction,string TestMethodsInstruction)
         {
@@ -187,6 +193,7 @@ namespace Exam_Helper.Controllers
              
              */
 
+          
             if (string.IsNullOrEmpty(Instruction)) Instruction = "3;3;3;1";
             if (string.IsNullOrEmpty(TestMethodsInstruction)) TestMethodsInstruction = "50;false;false;false|50;false;false;0|50;true;false;false;false";
 
@@ -238,18 +245,71 @@ namespace Exam_Helper.Controllers
                 }
 
             }
-
-            _sessionWorker.RemoveDataSession("test_times", "missed_words_inst", "puzzle_inst", "MaterialType","wrong_text");
-
           
             return RedirectToAction(nameof(UserStats),new { ControllerName = "Tests", ReturnControllerName = HttpContext.Session.GetString("ReturnControllerName") });
           
         }
 
+      
+        [HttpGet]
         public IActionResult UserStats(string ControllerName, string ReturnControllerName)
         {
             return View(new TestParent() { ControllerName=ControllerName,ReturnControllerName=ReturnControllerName});
         }
      
+        [HttpPost]
+        public RedirectToActionResult UserStats(string userAnswer, string userURL,string userName)
+        {
+            CreateATest(userName, userAnswer);
+            return RedirectToAction(nameof(Index),userURL);
+        }
+
+        public async void CreateATest(string userName, string Answers)
+        {
+            if (string.IsNullOrEmpty(userName)) return;
+
+            var user = _dbContext.User.AsNoTracking().FirstOrDefault(x => x.UserName == userName);
+
+            if (user == null)
+                return;
+
+            var question = HttpContext.Session.GetInt32("question_id");
+            if (question == null) return;
+            int question_id = question.Value;
+
+
+
+            var atest = _dbContext.Stats.FirstOrDefault(x => x.UserId == user.Id && x.QuestionId == question_id);
+
+            if (atest == null)
+            {
+                _dbContext.Add(new Stat()
+                {
+                    UserId = (user.Id),
+                    QuestionId = question_id,
+                    ServiceInfo = Answers
+                });
+
+            }
+            else
+            {
+                var Statsdata = atest.ServiceInfo.Split(new char[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
+                var inputData = Answers.Split('|');
+                for (int i = 0; i < Statsdata.Length; i++)
+                {
+                    var singleStat = Statsdata[i].Split(';');
+                    var singleInput = inputData[i].Split(';');
+                    singleStat[0] = (int.Parse(singleStat[0]) + int.Parse(singleInput[0])).ToString();
+                    singleStat[1] = (int.Parse(singleStat[1]) + int.Parse(singleInput[1])).ToString();
+                    Statsdata[i] = singleStat[0] + ';' + singleStat[1];
+                }
+                atest.ServiceInfo = string.Join("|", Statsdata);
+                _dbContext.Update(atest);
+            }
+
+             _dbContext.SaveChanges();
+        }
+
+
     }
 }

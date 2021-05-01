@@ -107,8 +107,26 @@
 <script>
 
     $("#CheckAnswers").click(function CheckAnswers() {
-       
-       });
+
+        correctAns = 0;
+        all = 0;
+
+        var testIsFinished = localStorage.getItem('testfinished');
+        if (testIsFinished == 'f') {
+            let dataMethod = localStorage.getItem('userStats/Wrong');
+            if (dataMethod === null) dataMethod = "0;0";
+            let data = dataMethod.split(';');
+            data[0] = (parseInt(data[0]) + correctAns).toString();
+            data[1] = (parseInt(data[1]) + all).toString();
+
+            console.log(data);
+
+            localStorage.setItem('userStats/Wrong', data[0] + ';' + data[1]);
+        }
+
+    });
+
+
     function toggleSymbols() {
         $(".side-bar div.sidebar-content").toggle();
     }

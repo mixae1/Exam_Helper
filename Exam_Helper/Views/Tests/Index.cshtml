@@ -364,6 +364,13 @@
     const wrong_text = $("#collapse_wrong_text > div");
     /**/
 
+    $(function () {
+
+        localStorage.removeItem('userStats/MissingWords');
+        localStorage.removeItem('userStats/Puzzle');
+        localStorage.removeItem('userStats/Wrong');
+        localStorage.setItem('testfinished','f');
+    });
 
 
     function MakeInstruction() {

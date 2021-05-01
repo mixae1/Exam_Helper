@@ -97,6 +97,8 @@
             @:ans.push("@(new Microsoft.AspNetCore.Html.HtmlString(Temp_Model.RightIndexes[i].ToString()))");
         }
 
+        let correctAns = 0;
+        let all = 0;
 
         $("[id^=droppable]").each(function (index, elem) {
             var id_elem = $(elem).children("[id^=draggable]");
@@ -104,13 +106,30 @@
             if ($(id_elem).attr("id") === ('draggable' + ans[index])) {
                 $(this).removeClass("wrong");
                 $(this).addClass("right");
+                correctAns++;
             }
             else {
                 $(this).removeClass("right");
                 $(this).addClass("wrong");
             }
-            setTimeout(function () { $('.droppable-elems').children().children().css("background-color","white"); }, 3000);
+            setTimeout(function () { $('.droppable-elems').children().children().css("background-color", "white"); }, 3000);
+            all++;
         });
+
+        var testIsFinished = localStorage.getItem('testfinished');
+
+        if (testIsFinished == 'f') {
+            let dataMethod = localStorage.getItem('userStats/Puzzle');
+            if (dataMethod === null) dataMethod = "0;0";
+            let data = dataMethod.split(';');
+            data[0] = (parseInt(data[0]) + correctAns).toString();
+            data[1] = (parseInt(data[1]) + all).toString();
+
+            console.log(data);
+
+            localStorage.setItem('userStats/Puzzle', data[0] + ';' + data[1]);
+        }
+
     });
 
     $(function () {
