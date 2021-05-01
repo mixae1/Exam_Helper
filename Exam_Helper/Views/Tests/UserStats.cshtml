@@ -5,10 +5,69 @@
 
 <h1>Здесь могла бы быть ваша статистика</h1>
 
-<a asp-controller="@Model.ReturnControllerName" asp-action="Index">
-    <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
-</a>
+<form asp-action="UserStats">
 
-<a asp-controller="@Model.ControllerName" asp-action="Index">
-    <input type="button" value="Вернуться к выбору метода тестирования" class="btn btn-primary" />
-</a>
+    <input type="hidden"  id="answer" name="userAnswer" />
+    <input type="hidden" id="userURL" name="userURL"/>
+    <div>
+        <span>Исправление ошибок </span>
+        <span id="Wrong_user">Процент выполнения: </span>
+    </div>
+
+
+    <div>
+        <span>Воссоздание по частям</span>
+        <span id="Puzzle_user">Процент выполнения:</span>
+    </div>
+
+    <div>
+        <span>Вставка пропущенных слов </span>
+        <span id="Mis_user">Процент выполнения:</span>
+    </div>
+    <span> При подсчете процента выполнения заданий учитываются все результаты, полученные при  нажатии кнопки "Проверить ответ" (доработать) </span>
+    <a asp-controller="@Model.ReturnControllerName" asp-action="UserStats">
+        <input type="submit" value="Вернуться в библиотеку" onclick="$('#userURL').val('@Model.ReturnControllerName')" class="btn btn-primary" />
+    </a>
+
+    <a asp-controller="@Model.ControllerName" asp-action="UserStats">
+        <input type="submit" value="Вернуться к выбору метода тестирования" onclick="DataToController('@Model.ControllerName')" class="btn btn-primary" />
+    </a>
+
+</form>
+
+
+<script>
+
+    $(function () {
+        var dataMis = localStorage.getItem('userStats/MissingWords');
+        var dataPuzzle = localStorage.getItem('userStats/Puzzle');
+        var dataWrong = localStorage.getItem('userStats/Wrong');
+
+        if (dataMis == null) dataMis = "0;0";
+        if (dataPuzzle == null) dataPuzzle = "0;0";
+        if (dataWrong == null) dataWrong = "0;0";
+
+
+
+        OutputData('Wrong_user', dataWrong.split(';'));
+        OutputData('Puzzle_user', dataPuzzle.split(';'));
+        OutputData('Mis_user', dataMis.split(';'));
+
+        $('#answer').val(dataMis + '|' + dataPuzzle + '|' + dataWrong);
+
+    });
+
+    function OutputData(id, data)
+    {
+        var temp = $('#' + id);
+        if (data[1] == '0') temp.text(temp.text() + ' -');
+        else temp.text(temp.text() + Math.round((parseFloat(data[0]) / parseInt(data[1]) * 100)) + '%');
+    }
+
+    function DataToController(data)
+    {
+        $('#userURL').val(data);
+    }
+
+
+</script>

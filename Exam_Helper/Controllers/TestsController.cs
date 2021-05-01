@@ -85,6 +85,7 @@ namespace Exam_Helper.Controllers
             if (ModelState.IsValid)
             {
                 _sessionWorker.RemoveDataSession("test_times", "missed_words_inst", "puzzle_inst", "MaterialType", "wrong_text");
+               
                 switch (temp.SelectedId)
                 {
                     case 1: return RedirectToAction(nameof(MissingWordsTest), new { Instruction = temp.ServiceInfo });
@@ -185,6 +186,7 @@ namespace Exam_Helper.Controllers
              
              */
 
+          
             if (string.IsNullOrEmpty(Instruction)) Instruction = "3;3;3;1";
             if (string.IsNullOrEmpty(TestMethodsInstruction)) TestMethodsInstruction = "50;false|50;false;false;0|50;true;false;false;false";
 
@@ -237,17 +239,24 @@ namespace Exam_Helper.Controllers
 
             }
 
-            _sessionWorker.RemoveDataSession("test_times", "missed_words_inst", "puzzle_inst", "MaterialType","wrong_text");
-
+          
           
             return RedirectToAction(nameof(UserStats),new { ControllerName = "Tests", ReturnControllerName = HttpContext.Session.GetString("ReturnControllerName") });
           
         }
 
+        [HttpGet]
         public IActionResult UserStats(string ControllerName, string ReturnControllerName)
         {
             return View(new TestParent() { ControllerName=ControllerName,ReturnControllerName=ReturnControllerName});
         }
      
+        [HttpPost]
+        public RedirectToActionResult UserStats(string userAnswer, string userURL,bool f=true)
+        {
+            return RedirectToAction(nameof(Index),userURL);
+        }
+
+
     }
 }
