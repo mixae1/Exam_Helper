@@ -188,7 +188,7 @@ namespace Exam_Helper.Controllers
              */
 
             if (string.IsNullOrEmpty(Instruction)) Instruction = "3;3;3;1";
-            if (string.IsNullOrEmpty(TestMethodsInstruction)) TestMethodsInstruction = "50;false|50;false;false;0|50;true;false;false;false";
+            if (string.IsNullOrEmpty(TestMethodsInstruction)) TestMethodsInstruction = "50;false;false;false|50;false;false;0|50;true;false;false;false";
 
 
             string text = HttpContext.Session.GetString("MaterialType");
