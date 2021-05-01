@@ -19,6 +19,8 @@ namespace Exam_Helper.ViewsModel
 
         [Required(ErrorMessage ="Название не указано")]
         [Display(Name ="Название")]
+        [MaxLength(100, ErrorMessage = "Максимальная длина наименования - 100 символов")]
+        [MinLength(1, ErrorMessage = "Наименование не задано")]
         public string pack_name { get; set; }
     }
 

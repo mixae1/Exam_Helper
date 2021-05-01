@@ -19,13 +19,12 @@
             <h2>@Temp_Model.Title</h2>
 
             <div class="miss-words p-3" style="white-space:pre-wrap;">
-                @foreach (var word in Temp_Model.Teorem)
-                {
-                    @Html.Raw(word);
-                }
+                <span style="white-space:pre-wrap;">@Html.Raw(Temp_Model.Text)</span>
             </div>
             <div class="form-group mt-3">
-                <input type="button" value="Проверить ответ" class="btn btn-primary" id="CheckAnswers" />
+
+                <input type="submit" value="Проверить ответ" class="btn btn-primary" onclick="CheckAnswers()" />
+              
             </div>
         }
         else
@@ -47,6 +46,26 @@
         @if (Temp_Model.IsSuccessed && !Temp_Model.isMulti)
         {
             @Html.ActionLink("Пройти еще раз", "MissingWordsTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
+            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#parts-modal">
+                Подсказка
+            </button>
+            <div class="modal fade" id="parts-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Подсказка</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="modal-hint" style="white-space:pre-wrap;">
+                                @Model.Hint
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         }
 
 
@@ -90,18 +109,15 @@
 
 <script>
 
-    $("#CheckAnswers").click(function CheckAnswers() {
-        var ans = [];
+
+    function CheckAnswers() {
+         var ans = [];
         let correctAns =0;
         let all = 0;
-
-        @for (int i = 0; i < Temp_Model.Answers.Length; i++)
-        {
-            @:ans.push("@(new Microsoft.AspNetCore.Html.HtmlString(Temp_Model.Answers[i]))");
-        }
+  
         $("input.editablesection").each(function (index) {
-            console.log($(this).val(), " ", ans[index]);
-            if ($(this).val().toLowerCase() === ans[index].toLowerCase()) {
+            console.log($(this).val(), " ", $(this).attr("data-answer"));
+            if ($(this).val().toLowerCase() === $(this).attr("data-answer").toLowerCase()) {
                 $(this).removeClass("wrong");
                 $(this).addClass("right");
                 correctAns++;
@@ -112,6 +128,7 @@
             }
             all++;
         });
+
         var testIsFinished = localStorage.getItem('testfinished');
 
         if (testIsFinished=='f') {
@@ -131,6 +148,10 @@
     $("#CheckAnswers").click(function CheckAnswers() {
 
        });
+
+       };
+
+
     function toggleSymbols() {
         $(".side-bar div.sidebar-content").toggle();
     }
