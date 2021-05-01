@@ -94,7 +94,7 @@
         var ans = [];
         let correctAns =0;
         let all = 0;
-      
+
         @for (int i = 0; i < Temp_Model.Answers.Length; i++)
         {
             @:ans.push("@(new Microsoft.AspNetCore.Html.HtmlString(Temp_Model.Answers[i]))");
@@ -112,20 +112,24 @@
             }
             all++;
         });
+        var testIsFinished = localStorage.getItem('testfinished');
 
-        let dataMethod = localStorage.getItem('userStats/MissingWords');
-        if (dataMethod === null) dataMethod = "0;0";
-        let data = dataMethod.split(';');
-        data[0] = (parseInt(data[0]) + correctAns).toString();
-        data[1] = (parseInt(data[1]) + all).toString();
+        if (testIsFinished=='f') {
+            let dataMethod = localStorage.getItem('userStats/MissingWords');
+            if (dataMethod === null) dataMethod = "0;0";
+            let data = dataMethod.split(';');
+            data[0] = (parseInt(data[0]) + correctAns).toString();
+            data[1] = (parseInt(data[1]) + all).toString();
 
-        console.log(data);
+            console.log(data);
 
-        localStorage.setItem('userStats/MissingWords', data[0] + ';' + data[1]); 
-      
+            localStorage.setItem('userStats/MissingWords', data[0] + ';' + data[1]);
+        }
+        
+
     });
     $("#CheckAnswers").click(function CheckAnswers() {
-           
+
        });
     function toggleSymbols() {
         $(".side-bar div.sidebar-content").toggle();

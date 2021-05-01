@@ -96,15 +96,19 @@
             all++;
         });
 
-        let dataMethod = localStorage.getItem('userStats/Puzzle');
-        if (dataMethod === null) dataMethod = "0;0";
-        let data = dataMethod.split(';');
-        data[0] = (parseInt(data[0]) + correctAns).toString();
-        data[1] =(parseInt(data[1]) + all).toString();
+        var testIsFinished = localStorage.getItem('testfinished');
 
-        console.log(data);
+        if (testIsFinished == 'f') {
+            let dataMethod = localStorage.getItem('userStats/Puzzle');
+            if (dataMethod === null) dataMethod = "0;0";
+            let data = dataMethod.split(';');
+            data[0] = (parseInt(data[0]) + correctAns).toString();
+            data[1] = (parseInt(data[1]) + all).toString();
 
-        localStorage.setItem('userStats/Puzzle', data[0] +';'+ data[1]);
+            console.log(data);
+
+            localStorage.setItem('userStats/Puzzle', data[0] + ';' + data[1]);
+        }
 
     });
 

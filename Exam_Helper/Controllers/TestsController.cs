@@ -101,6 +101,7 @@ namespace Exam_Helper.Controllers
         }
 
         // для подключения к библиотеки question нужно сюда в параметры передать question
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet]
         public IActionResult MissingWordsTest(string Instruction,bool isMulti=false,string ControllerName="Tests")
         {
@@ -125,6 +126,7 @@ namespace Exam_Helper.Controllers
             return View(ts);
         }
 
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet]
         public IActionResult PuzzleTest(string Instruction,bool isMulti=false, string ControllerName = "Tests")
         {
@@ -149,6 +151,7 @@ namespace Exam_Helper.Controllers
             return View(ts);
         }
 
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet]
         public IActionResult TheWrongTextTest(string Instruction, bool isMulti = false, string ControllerName = "Tests")
         {
@@ -172,6 +175,7 @@ namespace Exam_Helper.Controllers
             return View(ts);
         }
 
+        [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
         [HttpGet]
         public RedirectToActionResult MultiTesting(string Instruction,string TestMethodsInstruction)
         {
@@ -238,13 +242,12 @@ namespace Exam_Helper.Controllers
                 }
 
             }
-
-          
           
             return RedirectToAction(nameof(UserStats),new { ControllerName = "Tests", ReturnControllerName = HttpContext.Session.GetString("ReturnControllerName") });
           
         }
 
+      
         [HttpGet]
         public IActionResult UserStats(string ControllerName, string ReturnControllerName)
         {

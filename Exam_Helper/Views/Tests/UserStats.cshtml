@@ -30,7 +30,7 @@
     </a>
 
     <a asp-controller="@Model.ControllerName" asp-action="UserStats">
-        <input type="submit" value="Вернуться к выбору метода тестирования" onclick="DataToController('@Model.ControllerName')" class="btn btn-primary" />
+        <input type="submit" value="Вернуться к выбору метода тестирования" onclick="$('#userURL').val('@Model.ControllerName')" class="btn btn-primary" />
     </a>
 
 </form>
@@ -39,6 +39,9 @@
 <script>
 
     $(function () {
+
+        localStorage.setItem('testfinished', 't');
+
         var dataMis = localStorage.getItem('userStats/MissingWords');
         var dataPuzzle = localStorage.getItem('userStats/Puzzle');
         var dataWrong = localStorage.getItem('userStats/Wrong');
@@ -64,9 +67,13 @@
         else temp.text(temp.text() + Math.round((parseFloat(data[0]) / parseInt(data[1]) * 100)) + '%');
     }
 
-    function DataToController(data)
-    {
-        $('#userURL').val(data);
+    $(document).ready(function () {
+        setTimeout("DisableBackButton()", 0);
+        window.onunload = function () { null };
+    });
+
+    function DisableBackButton() {
+        window.history.forward(1);
     }
 
 
