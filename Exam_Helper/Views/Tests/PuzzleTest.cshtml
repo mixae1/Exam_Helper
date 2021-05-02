@@ -3,6 +3,20 @@
 @{
     ViewData["Title"] = "View";
     var Temp_Model = Model as TestInfoPuzzle;
+    Random rand = new Random();
+    int[] buf = new int[Temp_Model.RightIndexes.Length];
+    Temp_Model.RightIndexes.CopyTo(buf, 0);
+
+    int n = buf.Length;
+    while (n > 1)
+    {
+        n--;
+        int k = rand.Next(n + 1);
+        int value = buf[k];
+        buf[k] = buf[n];
+        buf[n] = value;
+    }
+
 }
 
 <main>
@@ -14,10 +28,17 @@
         {
             <div class="container droppable-elems justify-content-start">
                 <div class="row row-cols-auto">
-                    @foreach (var block in Temp_Model.TestStrings)
+                    @foreach (var ind in Temp_Model.RightIndexes)
                     {
-                        <div class="main-blocks" id="@("droppable" + num_ans.ToString())">
-                        </div>
+                        @if (ind >= 0)
+                        {
+                            <div class="main-blocks" id="@("droppable" + num_ans.ToString())"></div>
+                        }
+                        else
+                        {
+                            <label id="byDef">@Temp_Model.TestStrings[-ind]</label>
+                        }
+
                         num_ans++;
                     }
                 </div>
@@ -25,11 +46,12 @@
 
             <div class="container draggable-elems">
                 <div class="row row-cols-auto">
-                    @foreach (var block in Temp_Model.TestStrings)
+                    @foreach (var ind in Temp_Model.RightIndexes)
                     {
-                        <div class="block text-center" id="@("draggable" + @num.ToString())">
-                            <p>@block</p>
-                        </div>
+                        @if (ind >= 0)
+                        {
+                    <div class="main-blocks" id="@("draggable" + num.ToString())">@Temp_Model.TestStrings[ind]</div>
+                        }
 
                         num++;
                     }
@@ -89,14 +111,26 @@
 
 <script>
 
+    $(document).ready(function () {
+        $("label#byDef").each(function () {
+            var num = $(this).attr("data-num");
+            var here = $("div[class='main-blocks'][id='droppable" + num + "']");
+            here.html(this.innerHTML);
+            here.removeClass("main-blocks");
+        });
+    });
+
     $("#CheckAnswers").click(function CheckAnswers() {
         var ans = [];
         @if (Temp_Model.IsSuccessed)
-         @for(int i = 0; i< Temp_Model.RightIndexes.Length; i++)
-        {
-            @:ans.push("@(new Microsoft.AspNetCore.Html.HtmlString(Temp_Model.RightIndexes[i].ToString()))");
-        }
-
+            @for(int i = 0; i< Temp_Model.RightIndexes.Length; i++)
+            {
+                @if(Temp_Model.RightIndexes[i]>=0)
+                {
+                    @:ans.push("@(new Microsoft.AspNetCore.Html.HtmlString(Temp_Model.RightIndexes[i].ToString()))");
+                }
+            }
+        console.log(ans);
 
         $("[id^=droppable]").each(function (index, elem) {
             var id_elem = $(elem).children("[id^=draggable]");
