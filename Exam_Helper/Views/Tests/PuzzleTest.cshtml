@@ -28,15 +28,15 @@
         {
             <div class="container droppable-elems justify-content-start">
                 <div class="row row-cols-auto">
-                    @foreach (var ind in Temp_Model.RightIndexes)
+                    @foreach (var ind in Temp_Model.TestStrings)
                     {
-                        @if (ind >= 0)
+                        @if (Temp_Model.RightIndexes[num_ans] >= 0)
                         {
                             <div class="main-blocks" id="@("droppable" + num_ans.ToString())"></div>
                         }
                         else
                         {
-                            <label id="byDef">@Temp_Model.TestStrings[-ind]</label>
+                            <label id="byDef">@Temp_Model.TestStrings[-Temp_Model.RightIndexes[num_ans]]</label>
                         }
 
                         num_ans++;
@@ -46,14 +46,15 @@
 
             <div class="container draggable-elems">
                 <div class="row row-cols-auto">
-                    @foreach (var ind in Temp_Model.RightIndexes)
+                    @foreach (var ind in buf)
                     {
                         @if (ind >= 0)
                         {
-                    <div class="main-blocks" id="@("draggable" + num.ToString())">@Temp_Model.TestStrings[ind]</div>
+                    <div class="main-blocks" id="@("draggable" + ind.ToString())">@Temp_Model.TestStrings[ind]</div>
+                            num++;
                         }
 
-                        num++;
+                       
                     }
                 </div>
             </div>
