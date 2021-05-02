@@ -18,45 +18,46 @@
     </div>
     <form asp-action="QCreate">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="d-flex justify-content-between pt-3 pb-3">
-            <span>
-                <b>@Html.DisplayNameFor(model => model.Title)<span class="colortext" style="color:red">*</span>:</b>
-                <br />
-                <input asp-for="@Model.Title" type="text" class="form-control w-100">
-                <span asp-validation-for="@Model.Title" class="text-danger"></span>
-            </span>
-        </div>
-
-        <div class="d-flex justify-content-between pt-3 pb-3">
-            <span>
-                <b>@Html.DisplayNameFor(model => model.Definition)<span class="colortext" style="color:red">*</span>:</b>
-                <br />
-                <textarea asp-for="@Model.Definition" id="textarea" style="width:750px;min-width:100px;margin-top:2vh;" rows="3"></textarea>
-                <br />
-                <span asp-validation-for="@Model.Definition" class="text-danger"></span>
-            </span>
-        </div>
-
-        <div class="d-flex justify-content-between pt-3 pb-3">
-            <span>
-                <b>@Html.DisplayNameFor(model => model.Proof):</b>
-                <br />
-                <textarea asp-for="@Model.Proof" id="textarea" style="width:750px;min-width:100px;margin-top:2vh;" rows="10"></textarea>
-            </span>
+        <div class="form-group">
+            <div class="d-flex justify-content-between pt-3 pb-3">
+                <span>
+                    <b>@Html.DisplayNameFor(model => model.Title)<span class="colortext" style="color:red">*</span>:</b>
+                    <br />
+                    <input asp-for="@Model.Title" type="text" class="form-control w-100">
+                    <span asp-validation-for="@Model.Title" class="text-danger"></span>
+                </span>
+            </div>
+    
+            <div class="d-flex justify-content-between pt-3 pb-3">
+                <span>
+                    <b>@Html.DisplayNameFor(model => model.Definition)<span class="colortext" style="color:red">*</span>:</b>
+                    <br />
+                    <textarea asp-for="@Model.Definition" id="textarea" rows="3"></textarea>
+                    <br />
+                    <span asp-validation-for="@Model.Definition" class="text-danger"></span>
+                </span>
+            </div>
+            <div class="d-flex justify-content-between pt-3 pb-3">
+                <span>
+                    <b>@Html.DisplayNameFor(model => model.Proof):</b>
+                    <br />
+                    <textarea asp-for="@Model.Proof" id="textarea" rows="5"></textarea>
+                </span>
+            </div>
         </div>
 
         <div class="form-group">
             <label asp-for="@Model.tags" class="control-label"></label>
-            <div style="display: flex;">
+            <div class="d-flex flex-column">
                 <div>
-                    <input class="form-control" id="tInput" type="text" placeholder="Выберите или создайте" autocomplete="off">
+                    <input class="form-control w-25" id="tInput" type="text" placeholder="Выберите или создайте" autocomplete="off">
                     <div class="list-group" style="max-height: 288px; overflow-y: scroll; display: none;" id="tList"></div>
                 </div>
-
-                <div id="stList" style="display: flex;">
-
+                <div class="d-flex">
+                    <div id="stList" class="d-flex flex-wrap ml-3 mt-2">
+                    </div>
+                    <button onclick="RemoveLastSelectedTag()" style="width: 30px; height: 30px;" class="ml-1 mt-4 bg-light">&times;</button>
                 </div>
-                <span onclick="RemoveLastSelectedTag()">&times;</span>
             </div>
         </div>
 
@@ -89,3 +90,17 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+<style>
+    textarea{
+        width: 300px;
+    }
+    .badge{
+        display: flex;
+        align-items: center;
+        height: 50px;
+        font-size: 15px;
+        background-color: #778899;
+        margin-top: 5px;
+        margin-left: 5px;
+    }
+</style>

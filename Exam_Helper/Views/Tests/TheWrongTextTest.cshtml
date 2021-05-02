@@ -105,7 +105,25 @@
 </div>
 
 <script>
-
+    
+    $(".wrong-text").children().children().click(function (event){
+        console.log(event.target);
+        if ($(event.target).hasClass("wr-label")){
+            $(event.target).css("color", "green");   
+            $(event.target).text($(event.target).attr("data-answer"));
+        }
+        else{
+            $(event.target).css("color", "red");
+            setTimeout(function (){
+                $(".wrong-text").children().children().each(function (id,el){
+                    if(!$(el).hasClass("wr-label")){
+                        $(el).css("color", "black");
+                    }
+                })
+            }, 5000)
+        }
+    })
+    
     $("#CheckAnswers").click(function CheckAnswers() {
 
         correctAns = 0;

@@ -68,6 +68,15 @@ html {
         margin-top: 5px;
         margin-left: 15px;
     }
+    #stList{
+        margin-left: 0;
+        flex-direction: column;
+    }
+    .badge{
+        margin-left: 0;
+        display: inline-block;
+        margin-top: 15px;
+    }
 }
 @media screen and (max-height: 550px){
     #first_icon {
