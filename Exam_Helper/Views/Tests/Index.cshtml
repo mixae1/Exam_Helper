@@ -174,7 +174,7 @@
     
                                                 <span>
                                                     Тип разделения:
-                                                    <input type="range" min="0" max="2" step="1" value="0" id="MultiTesting_p_sep" onchange="UpdateSepName()" />
+                                                    <input type="range" min="0" max="2" step="1" value="0" id="MultiTesting_p_sep" onchange="UpdateMultiSepName()" />
                                                     <span id="sepLog">sepIndulge</span>
                                                 </span>
     
@@ -448,6 +448,9 @@
 
     const sepSlider = puzzle.find("input#p_sep");
     const sepLog = puzzle.find("span#sepLog");
+    
+    const multisepSlider = multi_puzzle.find("input#MultiTesting_p_sep");
+    const multisepLog = multi_puzzle.find("span#sepLog");
 
     function displayValue(obj, id) {
         var inputSpan = document.getElementById(id);
@@ -462,11 +465,25 @@
                 break;
             case "1": buf = "sepByParts";
                 break;
-            case "2": buf = "sepBySentances";
+            case "2": buf = "sepBySentences";
                 break;
             default: buf = "impossible";
         }
         sepLog.html(buf);
+    }
+    
+    function UpdateMultiSepName() {
+        var buf = "";
+        switch (multisepSlider.val()) {
+            case "0": buf = "sepIndulge";
+                break;
+            case "1": buf = "sepByParts";
+                break;
+            case "2": buf = "sepBySentences";
+                break;
+            default: buf = "impossible";
+        }
+        multisepLog.html(buf);
     };
 </script>
 
