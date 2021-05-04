@@ -953,6 +953,7 @@ namespace Exam_Helper.Controllers
             return PartialView(new ClassForChangePrivateSelectedConfirmed(tuples, publish));
         }
 
+       
         public async Task<string> ChangePackPrivateSelectedComfirmed(List<int> ids, bool publish)
         {
             var qa = await _context.User.AsNoTracking().FirstAsync(x => x.UserName == User.Identity.Name);
@@ -971,6 +972,7 @@ namespace Exam_Helper.Controllers
 
             await _context.SaveChangesAsync();
 
+            //это что за безобразие!
             return "inDeveloping";
         }
 
