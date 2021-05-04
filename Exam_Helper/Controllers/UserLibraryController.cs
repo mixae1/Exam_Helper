@@ -943,5 +943,39 @@ namespace Exam_Helper.Controllers
                 return true;
             }
         }
+
+
+        public async Task<IActionResult> ChangePackPrivateSelected(List<int> ids, bool publish)
+        {
+            var qa = await _context.User.AsNoTracking().FirstAsync(x => x.UserName == User.Identity.Name);
+            var tuples = await _context.Pack.AsNoTracking().Where(x => ids.Contains(x.Id) && qa.PackSet.Contains(x.Id.ToString()) && x.IsPrivate == publish).Select(x => new ClassForSelectedComfirmed(x.Name, x.Id)).ToListAsync();
+
+            return PartialView(new ClassForChangePrivateSelectedConfirmed(tuples, publish));
+        }
+
+       
+        public async Task<string> ChangePackPrivateSelectedComfirmed(List<int> ids, bool publish)
+        {
+            var qa = await _context.User.AsNoTracking().FirstAsync(x => x.UserName == User.Identity.Name);
+
+            foreach (var id in ids)
+            {
+                if (qa.PackSet.Contains(id.ToString()))
+                {
+                    var temp = await _context.Pack.FindAsync(id);
+
+                    temp.IsPrivate = !publish;
+
+                    _context.Update(temp);
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            //это что за безобразие!
+            return "inDeveloping";
+        }
+
+
     }
 }
