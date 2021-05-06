@@ -483,6 +483,16 @@ namespace Exam_Helper.Controllers
                     _context.Update(qa);
                     await _context.SaveChangesAsync();
 
+                
+                        var stat_object = await _context.Stats.FirstOrDefaultAsync(x => x.QuestionId == Id && x.UserId.Equals(qa.Id));
+                        if (stat_object != null)
+                        {
+                            stat_object.QuestionId = question.Id;
+                            _context.Update(stat_object);
+                            await _context.SaveChangesAsync();
+                        }
+                  
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
