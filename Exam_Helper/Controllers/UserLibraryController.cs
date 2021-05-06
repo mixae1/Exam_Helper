@@ -36,6 +36,8 @@ namespace Exam_Helper.Controllers
             //Загружаем пользователя
             var qa = await _context.User.FirstAsync(x => x.UserName == User.Identity.Name);
 
+          
+
             //Получаем список паков пользователя
             var temp_pa = qa.PackSet;
 
@@ -78,11 +80,19 @@ namespace Exam_Helper.Controllers
             //Преобразуем вопросы пользователя в List - WHY?
             //var temp_ques = await _ques.ToListAsync();
 
+            var question_stats = await _context.Stats.AsNoTracking().Where(x => qs.Contains(x.QuestionId) && x.UserId.Equals(qa.Id)).ToListAsync();
+
+
+            var question_stats_dict = question_stats.ToDictionary(x => x.QuestionId, t=> new  StatsInfo(){  MissWords = GetPercent(t.ServiceInfo.Split('|')[0])
+                 , PuzzleTest = GetPercent(t.ServiceInfo.Split('|')[1]), WrongText = GetPercent(t.ServiceInfo.Split('|')[2]) });
+        
+
             //Создаём вспомогательную структуру для вопросов 
             var ques = _ques.Select(x => new QuestionInfo()
             {
                 question = x,
                 IsUser = qa.QuestionSet.Contains(x.Id.ToString()),
+                stats = question_stats_dict.ContainsKey(x.Id) ? question_stats_dict[x.Id] : new StatsInfo() {MissWords=0,WrongText=0,PuzzleTest=0 },
                 IsSearched = string.IsNullOrEmpty(SearchString) ? true :
                 (//Отбираем вопросы по SearchString
                     x.Title.ToLower().Trim().Contains(SearchString) ||
@@ -96,6 +106,10 @@ namespace Exam_Helper.Controllers
             //Загружаем тэги
             var tags =await _context.Tags.AsNoTracking().ToListAsync();
 
+
+           
+
+
             return View(new ClassForUserLibrary
             {
                 packs = await _packs.ToListAsync(),
@@ -103,6 +117,22 @@ namespace Exam_Helper.Controllers
                 tags = tags
             });
         }
+
+        //нужен для получения данных из  строки вида w;a - где w- кол-во правильных ответов на задания
+        //a-кол-во всех заданий
+        private double GetPercent(string s)
+        {
+            if (string.IsNullOrEmpty(s)) return 0;
+
+            var values = s.Split(';');
+            bool f = int.TryParse(values[0], out int f_val);
+            bool a = int.TryParse(values[1], out int s_val);
+
+            if (!a || !f) return 0;
+
+            return s_val != 0 ? Math.Round(f_val * 1.0 / s_val,2)*100 : 0;
+        }
+
 
         public async Task<IActionResult> QDetails(int? id)
         {
@@ -452,6 +482,16 @@ namespace Exam_Helper.Controllers
 
                     _context.Update(qa);
                     await _context.SaveChangesAsync();
+
+                
+                        var stat_object = await _context.Stats.FirstOrDefaultAsync(x => x.QuestionId == Id && x.UserId.Equals(qa.Id));
+                        if (stat_object != null)
+                        {
+                            stat_object.QuestionId = question.Id;
+                            _context.Update(stat_object);
+                            await _context.SaveChangesAsync();
+                        }
+                  
 
                 }
                 catch (DbUpdateConcurrencyException)

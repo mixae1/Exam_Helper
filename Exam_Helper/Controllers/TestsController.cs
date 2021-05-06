@@ -264,7 +264,7 @@ namespace Exam_Helper.Controllers
             return RedirectToAction(nameof(Index),userURL);
         }
 
-        public async void CreateATest(string userName, string Answers)
+        public  void CreateATest(string userName, string Answers)
         {
             if (string.IsNullOrEmpty(userName)) return;
 

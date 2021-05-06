@@ -79,7 +79,10 @@
                                                 <button class="btn text-center titleText" type="button" data-toggle="collapse" data-target="#q_collapse_@item.question.Id.ToString()" aria-expanded="false" aria-controls="q_collapse_@item.question.Id.ToString()">
                                                     <span class="h4" id="qTitle">@Html.DisplayFor(modelItem=>item.question.Title) </span> 
                                                 </button>
-                                           
+                                                <span>
+                                                    @item.stats.MissWords %
+                                                    WrongText: @item.stats.WrongText %
+                                                </span>
 
                                         </div>
                                         <div class="btn-group justify-content-center align-items-center actionButton pr-5">
