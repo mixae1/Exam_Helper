@@ -94,8 +94,6 @@ namespace Exam_Helper.Controllers
                 return NotFound();
             }
 
-
-
             var question = await _context.Question.AsNoTracking()
                 .FirstOrDefaultAsync(m => m.Id == id);
             
@@ -264,6 +262,36 @@ namespace Exam_Helper.Controllers
             _context.Update(qa);
             await _context.SaveChangesAsync();
             return "InDeveloping";
+        }
+
+        [HttpGet]
+        public RedirectToActionResult AddHashQP(string hash)
+        {
+            QPHash qPHash = new QPHash(hash);
+            if (qPHash.type == QPHash.Type.Question)
+            {
+
+                if(_context.Question.AsNoTracking().FirstOrDefault(x => x.Id == qPHash.number) != null)
+                {
+                    return RedirectToAction(nameof(QDetails), new { id = qPHash.number });
+                }
+                else
+                {
+                    return RedirectToAction();
+                }
+            }
+            else if (qPHash.type == QPHash.Type.Pack)
+            {
+                if (_context.Pack.AsNoTracking().FirstOrDefault(x => x.Id == qPHash.number) != null)
+                {
+                    return RedirectToAction(nameof(PDetails), new { id = qPHash.number });
+                }
+                else
+                {
+                    return RedirectToAction();
+                }
+            }
+            else return RedirectToAction();
         }
     }
 }

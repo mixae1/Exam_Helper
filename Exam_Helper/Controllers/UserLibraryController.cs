@@ -975,20 +975,5 @@ namespace Exam_Helper.Controllers
             //это что за безобразие!
             return "inDeveloping";
         }
-
-        [HttpGet]
-        public async Task<IActionResult> AddHashQP(string hash)
-        {
-            QPHash qPHash = new QPHash(hash);
-            if (qPHash.type == QPHash.Type.Question)
-            {
-                //await AddQuestionToMyLib(qPHash.number); я не уверен
-            }
-            else if (qPHash.type == QPHash.Type.Pack)
-            {
-                //await AddPackToMyLib(qPHash.number); я не уверен
-            }
-            return View(); //something
-        }
     }
 }

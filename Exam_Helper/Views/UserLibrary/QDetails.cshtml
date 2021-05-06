@@ -1,5 +1,5 @@
 ﻿@model Exam_Helper.Question
-
+@using Exam_Helper.ViewsModel
 <div class="modal-content">
     <div class="modal-header">
         <h4 class="modal-title" style="color:darkred">Подробности вопроса</h4>
@@ -9,6 +9,12 @@
     <hr />
     <div class="modal-body">
         <dl class="row">
+            <dt class="col-sm-10">
+                Id вопроса:
+            </dt>
+            <dd class="col-sm-10">
+                @QPHash.CreateHash(QPHash.Type.Question, Model.Id)
+            </dd>
             <dt class="col-sm-10">
                 @Html.DisplayNameFor(model => model.Title):
             </dt>

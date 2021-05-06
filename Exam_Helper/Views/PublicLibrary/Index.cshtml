@@ -201,13 +201,13 @@
             $.ajax({
                 type: 'GET',
                 data: { hash: event.srcElement.value },
-                url: '@Url.Action("AddHashQP", "UserLibrary")',
+                url: '@Url.Action("AddHashQP", "PublicLibrary")',
                 success: function (data) {
                     $('#dialogContent').html(data);
                     $('#modDialog').modal('show');
                 },
                 error: function (data) {
-                    CreateAlert("Что-то пошло не так", "");
+                    CreateAlert("Неправильный id.", "warning");
                 }
             })
         }
@@ -383,7 +383,7 @@
                     CreateAlert("Добавлено.", "info");
                       },
                 error: function (msg) {
-                    CreateAlert("что-то пошло не так","warning");
+                    CreateAlert("Что-то пошло не так","warning");
                       }
                   })
 
@@ -393,29 +393,20 @@
     function AddPack(id) {
 
         var a = document.getElementById(id);
-
-        //if (a.innerHTML != "Добавить") {
-        //    //alert("Error:225");
-        //    return false;
-        //}
-
-             a.innerHTML = "Пожалуйста, подождите, идёт процесс добавления...";
-             $.ajax(
-                 {
-                     type: "POST",
-                     data: { pack_id: id },
-                     url: '@Url.Action("AddPackToMyLib", "PublicLibrary")',
-                     success: function (msg) {
-                         a.innerHTML = "Добавлено!";
-                     },
-                     error: function (msg) {
-                         alert("Error:226");
-                     }
-                 })
-
-
-
-             return false;
+        a.innerHTML = "Пожалуйста, подождите, идёт процесс добавления...";
+        $.ajax(
+            {
+                type: "POST",
+                data: { pack_id: id },
+                url: '@Url.Action("AddPackToMyLib", "PublicLibrary")',
+                success: function (msg) {
+                    CreateAlert("Добавлено.", "info");
+                },
+                error: function (msg) {
+                    CreateAlert("Что-то пошло не так", "warning");
+                }
+            })
+        return false;
     };
 
 
