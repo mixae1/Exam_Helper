@@ -22,6 +22,19 @@ namespace Exam_Helper.ViewsModel
         public List<QuestionInfo> questions { get; set; }
     }
 
+    /// <summary>
+    /// вспомогательных класс для хранения значения усвоения материала по 3 видам тестирования 
+    /// считается : считаем кол-во верных ответов / кол-во всех заданий в методе тестирования ,потом прибавляем к значениям
+    /// из бд
+    /// </summary>
+    public class StatsInfo
+    {
+        public double MissWords { get; set; }
+
+        public double PuzzleTest { get; set; }
+
+        public double WrongText { get; set; }
+    }
 
 
     public class QuestionInfo
@@ -30,5 +43,7 @@ namespace Exam_Helper.ViewsModel
         public bool IsUser { get; set; }
         public bool IsSearched { get; set; }
         public bool IsSelected { get; set; }
+
+       public StatsInfo stats { get; set; }
     }
 }
