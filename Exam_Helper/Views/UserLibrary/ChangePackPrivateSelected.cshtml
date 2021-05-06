@@ -1,0 +1,58 @@
+@model Exam_Helper.ViewsModel.Libs.ClassForChangePrivateSelectedConfirmed
+
+<div class="modal-content">
+    <div class="modal-header">
+        <h4 class="modal-title" style="color:darkred">Вы точно хотите @(Model.publish ? "опубликовать" : "скрыть")?</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    </div>
+
+    <hr />
+    <div class="modal-body">
+        <dl class="row">
+            <dt class="col-sm-10">
+                Список паков:
+            </dt>
+            @for (int i = 0; i < Model.tuples.Count; i++)
+            {
+                <dd class="col-sm-10">
+                    <label>@Model.tuples[i].Title</label>
+                </dd>
+            }
+
+        </dl>
+    </div>
+
+    <div class="modal-footer">
+        <div class="form-group">
+            <div class="d-flex">
+                <button type="button" class="btn btn-danger" onclick="ChangePackPrivateSelectedComfirm()" data-dismiss="modal">@(Model.publish ? "Опубликовать" : "Скрыть")</button>|
+                <button type="button" class="btn btn-light" data-dismiss="modal">Вернуться в библиотеку</button>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<script>
+    function ChangePackPrivateSelectedComfirm() {
+        var _ids = [];
+        @foreach(var item in Model.tuples)
+        {
+            @:_ids.push(@(item.Id));
+        }
+
+        $.ajax({
+        type: "POST",
+            url: '@(Url.ActionLink("ChangePackPrivateSelectedComfirmed", "UserLibrary"))',
+            data: { ids: _ids, publish: ('@(Model.publish)' === 'True') }
+        }).done(function (dqs) {
+
+            //$('div[class="accordion"][id="accordionExample"][data-type="question"]').filter(function () {
+            //    return dqs.includes(this.dataset.id.toString());
+            //}).remove();
+
+            CreateAlert("Приватность изменена.", "info");
+
+        })
+    };
+</script>
