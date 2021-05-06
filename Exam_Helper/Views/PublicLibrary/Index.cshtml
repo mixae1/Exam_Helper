@@ -43,8 +43,15 @@
             }
             </div>
         </div>
-        <div class="form-group pb-2 bd-highlight ml-auto p-2">
+        <div class="form-group pb-2 bd-highlight ml-auto p-2" style="display:flex;">
             <input type="text" name="SearchString" class="form-control" placeholder="Поиск.." id="Search">
+            @{
+                if (_signInManager.IsSignedIn(User))
+                {
+                    <input type="text" class="form-control" placeholder="Поиск по хэшу.."  style="max-width: 300px;" id="ProcessHash" />
+                }
+            }
+
         </div>
         <div class="collapse show mt-3" id="collapseAllQuestion">
             @foreach (var item in Model.questions.Where(x => x.question.IsPrivate == false && x.IsSearched).Select(x => x.question))
@@ -186,6 +193,25 @@
     var lastChecked = null;
 
     var alerts = document.getElementsByClassName("closebtn");
+
+    document.getElementById('ProcessHash').addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            console.log(event.srcElement.value);
+            $.ajax({
+                type: 'GET',
+                data: { hash: event.srcElement.value },
+                url: '@Url.Action("AddHashQP", "PublicLibrary")',
+                success: function (data) {
+                    $('#dialogContent').html(data);
+                    $('#modDialog').modal('show');
+                },
+                error: function (data) {
+                    CreateAlert("Неправильный id.", "warning");
+                }
+            })
+        }
+    });
 
     function CreateAlert(str, type) {
         $('#Alerts').empty();
@@ -357,7 +383,7 @@
                     CreateAlert("Добавлено.", "info");
                       },
                 error: function (msg) {
-                    CreateAlert("что-то пошло не так","warning");
+                    CreateAlert("Что-то пошло не так","warning");
                       }
                   })
 
@@ -367,29 +393,20 @@
     function AddPack(id) {
 
         var a = document.getElementById(id);
-
-        //if (a.innerHTML != "Добавить") {
-        //    //alert("Error:225");
-        //    return false;
-        //}
-
-             a.innerHTML = "Пожалуйста, подождите, идёт процесс добавления...";
-             $.ajax(
-                 {
-                     type: "POST",
-                     data: { pack_id: id },
-                     url: '@Url.Action("AddPackToMyLib", "PublicLibrary")',
-                     success: function (msg) {
-                         a.innerHTML = "Добавлено!";
-                     },
-                     error: function (msg) {
-                         alert("Error:226");
-                     }
-                 })
-
-
-
-             return false;
+        a.innerHTML = "Пожалуйста, подождите, идёт процесс добавления...";
+        $.ajax(
+            {
+                type: "POST",
+                data: { pack_id: id },
+                url: '@Url.Action("AddPackToMyLib", "PublicLibrary")',
+                success: function (msg) {
+                    CreateAlert("Добавлено.", "info");
+                },
+                error: function (msg) {
+                    CreateAlert("Что-то пошло не так", "warning");
+                }
+            })
+        return false;
     };
 
 

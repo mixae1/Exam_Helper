@@ -1,5 +1,5 @@
 ﻿@model Exam_Helper.Question
-
+@inject SignInManager<User> _signInManager;
 <div class="modal-content">
     <div class="modal-header">
         <h4 class="modal-title" style="color:darkred">Подробности вопроса</h4>
@@ -63,6 +63,14 @@
     <div class="modal-footer">
         <div class="form-group">
             <div class="d-flex">
+                @if (_signInManager.IsSignedIn(User))
+                {
+                    <a type="button" class="btn btn-light" onclick="AddQAtQd('@("q" + Model.Id.ToString())')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
+                        </svg>
+                    </a>
+                }
                 <a type="button" class="btn btn-light" asp-action="QRedirectToTest" asp-route-id="@Model.Id">Пройти тестирование</a>
                 <a type="button" class="btn btn-light" asp-action="Index">Вернуться в библиотеку</a>
             </div>
@@ -72,3 +80,19 @@
 
 </div>
 
+<script>
+    function AddQAtQd(id) {
+        $.ajax(
+            {
+                type: "Post",
+                data: { ques_id: id },
+                url: '@Url.Action("AddQuestionToMyLib", "PublicLibrary")',
+                success: function (msg) {
+                    CreateAlert("Добавлено.", "info");
+                      },
+                error: function (msg) {
+                    CreateAlert("Что-то пошло не так.","warning");
+                      }
+                  })
+    }
+</script>

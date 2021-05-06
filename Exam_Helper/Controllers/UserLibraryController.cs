@@ -1015,7 +1015,5 @@ namespace Exam_Helper.Controllers
             //это что за безобразие!
             return "inDeveloping";
         }
-
-
     }
 }
