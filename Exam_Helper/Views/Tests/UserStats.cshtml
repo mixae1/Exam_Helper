@@ -3,38 +3,42 @@
     ViewData["Title"] = "UserStats";
 }
 
-<h1>Здесь могла бы быть ваша статистика</h1>
+<main class="container" style="height: 60vh; max-width: 70vh; min-width: 40vh; margin-top: 15vh;">
+    <form asp-action="UserStats" class="container d-flex flex-column">
+        <h1>Здесь могла бы быть ваша статистика</h1>
+        <div class="stats  d-flex flex-column align-content-between pt-2 pb-2">
+            <input type="hidden" id="answer" name="userAnswer"/>
+            <input type="hidden" id="userURL" name="userURL"/>
+            <input type="hidden" name="userName" value="@User.Identity.Name">
+            <div class="mb-2">
+                <span>Исправление ошибок </span>
+                <span id="Wrong_user">Процент выполнения: </span>
+            </div>
 
-<form asp-action="UserStats">
 
-    <input type="hidden"  id="answer" name="userAnswer" />
-    <input type="hidden" id="userURL" name="userURL"/>
-    <input type="hidden" name="userName" value="@User.Identity.Name">
-    <div>
-        <span>Исправление ошибок </span>
-        <span id="Wrong_user">Процент выполнения: </span>
-    </div>
+            <div class="mb-2">
+                <span>Воссоздание по частям</span>
+                <span id="Puzzle_user">Процент выполнения:</span>
+            </div>
 
+            <div class="mb-2">
+                <span>Вставка пропущенных слов </span>
+                <span id="Mis_user">Процент выполнения:</span>
+            </div>
+            <span> При подсчете процента выполнения заданий учитываются все результаты, полученные при нажатии кнопки "Проверить ответ" (доработать) </span>
+        </div>
+        <div class="buttons">
+            <a asp-controller="@Model.ReturnControllerName" asp-action="UserStats">
+                <input type="submit" value="Вернуться в библиотеку" onclick="$('#userURL').val('@Model.ReturnControllerName')" class="btn btn-primary mt-1"/>
+            </a>
 
-    <div>
-        <span>Воссоздание по частям</span>
-        <span id="Puzzle_user">Процент выполнения:</span>
-    </div>
+            <a asp-controller="@Model.ControllerName" asp-action="UserStats">
+                <input type="submit" value="Вернуться к выбору метода тестирования" onclick="$('#userURL').val('@Model.ControllerName')" class="btn btn-primary mt-1"/>
+            </a>
+        </div>
 
-    <div>
-        <span>Вставка пропущенных слов </span>
-        <span id="Mis_user">Процент выполнения:</span>
-    </div>
-    <span> При подсчете процента выполнения заданий учитываются все результаты, полученные при  нажатии кнопки "Проверить ответ" (доработать) </span>
-    <a asp-controller="@Model.ReturnControllerName" asp-action="UserStats">
-        <input type="submit" value="Вернуться в библиотеку" onclick="$('#userURL').val('@Model.ReturnControllerName')" class="btn btn-primary" />
-    </a>
-
-    <a asp-controller="@Model.ControllerName" asp-action="UserStats">
-        <input type="submit" value="Вернуться к выбору метода тестирования" onclick="$('#userURL').val('@Model.ControllerName')" class="btn btn-primary" />
-    </a>
-
-</form>
+    </form>
+</main>
 
 
 <script>

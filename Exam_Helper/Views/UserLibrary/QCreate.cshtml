@@ -23,7 +23,7 @@
                 <span>
                     <b>@Html.DisplayNameFor(model => model.Title)<span class="colortext" style="color:red">*</span>:</b>
                     <br />
-                    <input asp-for="@Model.Title" type="text" class="form-control w-100">
+                    <input asp-for="@Model.Title" type="text" class="form-control w-100 input-name">
                     <span asp-validation-for="@Model.Title" class="text-danger"></span>
                 </span>
             </div>
@@ -56,13 +56,13 @@
                 <div class="d-flex">
                     <div id="stList" class="d-flex flex-wrap ml-3 mt-2">
                     </div>
-                    <button onclick="RemoveLastSelectedTag()" style="width: 30px; height: 30px;" class="ml-1 mt-4 bg-light">&times;</button>
+                    <button style="width: 30px; height: 30px;" class="ml-1 mt-4 bg-light deleteButton">&times;</button>
                 </div>
             </div>
         </div>
 
         <div class="form-group">
-            <input type="submit" value="Создать" class="btn btn-success"/>
+            <button class="btn btn-success">Создать</button>
             <a asp-action="Index">
                 <button type="button" class="btn btn-secondary">Обратно к списку</button>
             </a>
@@ -85,6 +85,14 @@
         LoadTags(tags);
         Tune();
     });
+    
+    $(".input-name").keypress(function(e){
+         if(e.keyCode == 13) return false;
+    });
+    $(".deleteButton").click(function (){
+        RemoveLastSelectedTag()
+    })
+    
 </script>
 
 @section Scripts {

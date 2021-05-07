@@ -44,13 +44,15 @@
         {
             <p>Мы не можем создать данный тест для этого вопроса.</p>
         }
-        <a asp-controller=@Temp_Model.ReturnControllerName asp-action="Index" class="container">
-            <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
-        </a>
-
-        <a asp-controller="@Temp_Model.ControllerName" asp-action="Index">
-            <input type="button" value="Вернуться к выбору метода тестирования" class="btn btn-primary" />
-        </a>
+        <div class="container d-flex flex-column">
+            <a asp-controller=@Temp_Model.ReturnControllerName asp-action="Index">
+                <input type="button" value="Вернуться в библиотеку" class="btn btn-primary mt-1" />
+            </a>
+    
+            <a asp-controller="@Temp_Model.ControllerName" asp-action="Index">
+                <input type="button" value="Вернуться к выбору метода тестирования" class="btn btn-primary mt-1 mb-1" />
+            </a>
+        </div>
 
         <div class="container form-group">
             @if (Temp_Model.isMulti)

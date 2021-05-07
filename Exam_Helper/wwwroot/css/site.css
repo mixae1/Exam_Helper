@@ -77,6 +77,9 @@ html {
         display: inline-block;
         margin-top: 15px;
     }
+    .stat-per{
+        font-size: 13px;
+    }
 }
 @media screen and (max-height: 550px){
     #first_icon {
@@ -122,6 +125,9 @@ html {
 @media screen and (max-width: 350px) {
     .test-page{
         margin-top: 10vh;
+    }
+    .stat-per{
+        font-size: 10px;
     }
 }
 @media (min-width: 768px) {

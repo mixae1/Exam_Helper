@@ -194,24 +194,27 @@
 
     var alerts = document.getElementsByClassName("closebtn");
 
-    document.getElementById('ProcessHash').addEventListener("keyup", function (event) {
-        if (event.keyCode === 13) {
-            event.preventDefault();
-            console.log(event.srcElement.value);
-            $.ajax({
-                type: 'GET',
-                data: { hash: event.srcElement.value },
-                url: '@Url.Action("AddHashQP", "PublicLibrary")',
-                success: function (data) {
-                    $('#dialogContent').html(data);
-                    $('#modDialog').modal('show');
-                },
-                error: function (data) {
-                    CreateAlert("Неправильный id.", "warning");
-                }
-            })
-        }
-    });
+    if (document.getElementById('ProcessHash')){
+        document.getElementById('ProcessHash').addEventListener("keyup", function (event) {
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                console.log(event.srcElement.value);
+                $.ajax({
+                    type: 'GET',
+                    data: { hash: event.srcElement.value },
+                    url: '@Url.Action("AddHashQP", "PublicLibrary")',
+                    success: function (data) {
+                        $('#dialogContent').html(data);
+                        $('#modDialog').modal('show');
+                    },
+                    error: function (data) {
+                        CreateAlert("Неправильный id.", "warning");
+                    }
+                })
+            }
+        });    
+    }
+    
 
     function CreateAlert(str, type) {
         $('#Alerts').empty();
@@ -353,13 +356,15 @@
     }
 
     $("#button_Que").click(function () {
-        $('#collapseAllPacks').removeClass('show');
+        $('#collapseAllPacks').removeClass('show');   
+        console.log("ASS");
         if (SelectedPage != Page.QuestionPage) SelectedPage = Page.QuestionPage;
         else SelectedPage = Page.None;
         lastChecked = null;
     });
     $("#button_Pack").click(function () {
         $('#collapseAllQuestion').removeClass('show');
+        console.log("ASS");
         if (SelectedPage != Page.PackPage) SelectedPage = Page.PackPage;
         else SelectedPage = Page.None;
         lastChecked = null;
