@@ -67,12 +67,12 @@
     </form>
 </main>
 
-
 <script>
     $(document).ready(function () {
         SetInput("input#tInput");
         SetTagListForChoice("div#tList");
         SetTagListForSelected("div#stList");
+
         var tags = [];
         @foreach(var tagName in Model.tags.LoadedTags)
         {

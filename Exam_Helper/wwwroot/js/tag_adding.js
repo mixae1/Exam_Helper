@@ -81,12 +81,18 @@ function ProcessTag(name) {
         selectedTags.push(name);
         AppendTagToSelected(name);
     }
+    CorrectDeleteButton();
+}
+
+function PushTagToSelected(name) {
+    selectedTags.push(name);
+    AppendTagToSelected(name);
+    CorrectDeleteButton();
 }
 
 function AppendTagToSelected(name) {
     st_ul.append("<span class='badge badge-secondary'>" + name + "</span>");
     st_ul.append("<input name='tags.SelectedTags' value='" + name + "' hidden/>");
-    CorrectDeleteButton();
 }
 
 function ChooseTag(name) {

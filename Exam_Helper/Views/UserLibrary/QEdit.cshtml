@@ -7,58 +7,53 @@
 <head>
     <script src="~/js/tag_adding.js"></script>
 </head>
-<main class="container p-2">
+<main class="container d-flex flex-column align-items-center">
     <h1>Редактирование</h1>
     <h4>Вопрос</h4>
-
-
     <hr color="brown" />
-
     <div class="instruction">
-        <span>Поля,помеченные (<span class="colortext" style="color:red">*</span>) ,обязательны для заполнения:</span>
+        <span>Поля, помеченные (<span class="colortext" style="color:red">*</span>), обязательны для заполнения:</span>
     </div>
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <form asp-action="QEdit">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-        <input type="hidden" asp-for="Id" />
-
-        <div class="d-flex justify-content-between pt-3 pb-3">
-            <span>
-                <b>@Html.DisplayNameFor(model => model.Title)<span class="colortext" style="color:red">*</span>:</b>
-                <input asp-for="Title" type="text" class="form-control w-100">
-            </span>
-            <span asp-validation-for="Title" class="text-danger"></span>
-        </div>
-        <div class="d-flex justify-content-between pt-3 pb-3">
-            <span>
-                <b>@Html.DisplayNameFor(model => model.Definition)<span class="colortext" style="color:red">*</span>:</b>
-                <br />
-                <textarea asp-for="Definition" id="textarea" style="white-space: pre-wrap; width: 70vh; margin-top: 2vh;" rows="3"></textarea>
-                <span asp-validation-for="Definition" class="text-danger"></span>
-            </span>
-        </div>
-        <div class="d-flex justify-content-between pt-3 pb-3">
-            <span>
-                <b>@Html.DisplayNameFor(model => model.Proof):</b>
-                <br />
-                <textarea asp-for="Proof" id="textarea" style="white-space: pre-wrap; width: 120vh; margin-top: 2vh;" rows="10"></textarea>
-                <span asp-validation-for="Proof" class="text-danger"></span>
-
-            </span>
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.Title)<span class="colortext" style="color:red">*</span>:</b>
+            <br />
+            <input asp-for="@Model.Title" type="text" class="form-control input-name" style="width: 800px;">
+            <span asp-validation-for="@Model.Title" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="@Model.tags" class="control-label"></label>
-            <div style="display: flex;">
+            <b>@Html.DisplayNameFor(model => model.Definition)<span class="colortext" style="color:red">*</span>:</b>
+            <br />
+            <textarea asp-for="@Model.Definition" id="textarea" rows="3" class="form-control"></textarea>
+            <br />
+            <span asp-validation-for="@Model.Definition" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.Proof):</b>
+            <br />
+            <textarea asp-for="@Model.Proof" id="textarea" rows="5" class="form-control"></textarea>
+        </div>
+
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.tags):</b>
+            <br />
+            <div class="d-flex flex-column">
                 <div>
-                    <input class="form-control" id="tInput" type="text" placeholder="Выберите или создайте" autocomplete="off">
+                    <input class="form-control w-25" id="tInput" type="text" placeholder="Выберите или создайте" autocomplete="off">
                     <div class="list-group" style="max-height: 288px; overflow-y: scroll; display: none;" id="tList"></div>
                 </div>
-
-                <div id="stList" style="display: flex;">
-
+                <div class="d-flex">
+                    <div id="stList" class="d-flex flex-wrap ml-3 mt-2">
+                    </div>
+                    <div class="mt-2">
+                        <a style="width: 30px; height: 30px; align-items: center; margin: 5px; padding: 0; display: none;" class="btn bg-light deleteButton">&times;</a>
+                    </div>
                 </div>
-                <span onclick="RemoveLastSelectedTag()">&times;</span>
             </div>
         </div>
 
@@ -68,8 +63,10 @@
                 <button type="button" class="btn btn-secondary">Обратно к списку</button>
             </a>
         </div>
+
     </form>
 </main>
+
 <script>
     $(document).ready(function () {
         SetInput("input#tInput");
@@ -83,12 +80,34 @@
         }
         @foreach(var tagName in Model.tags.SelectedTags)
         {
-            @:AppendTagToSelected("@(new Microsoft.AspNetCore.Html.HtmlString(tagName))");
+            @:PushTagToSelected("@(new Microsoft.AspNetCore.Html.HtmlString(tagName))");
         }
         LoadTags(tags);
         Tune();
+
+        $(".input-name").keypress(function (e) {
+            if (e.keyCode == 13) return false;
+        });
+        $(".deleteButton").click(function () {
+            RemoveLastSelectedTag()
+        })
     });
 </script>
+
+<style>
+    textarea {
+        width: 300px;
+    }
+
+    .badge {
+        display: flex;
+        align-items: center;
+        height: 30px;
+        font-size: 15px;
+        background-color: #778899;
+        margin: 5px;
+    }
+</style>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
