@@ -194,7 +194,80 @@
 
     var alerts = document.getElementsByClassName("closebtn");
 
-    if (document.getElementById('ProcessHash')){
+    function CreateAlert(str, type) {
+        $('#Alerts').empty();
+        $('#Alerts').append('<div class="alert ' + type + '"><span class="closebtn">×</span><strong>' + str + '</strong></div>');
+        alerts = document.getElementsByClassName("closebtn");
+        console.log(alerts);
+        alerts[alerts.length - 1].onclick = function () {
+            var div = this.parentElement;
+            div.style.opacity = "0";
+            setTimeout(function () { div.style.display = "none"; }, 600);
+        }
+        setTimeout(function () { $('#Alerts').empty(); }, 5000);
+    };
+
+    function CheckAll(flag) {
+        switch (SelectedPage) {
+            case Page.QuestionPage:
+                $("input#qSelect").prop("checked", flag);
+                break;
+            case Page.PackPage:
+                $("input#pSelect").prop("checked", flag);
+                break;
+        }
+    };
+
+    $(document).ready(function () {
+
+        $('input#qSelect').on('click', function (e) {
+            var $checkboxes = $('input#qSelect');
+            if (!lastChecked) {
+                lastChecked = this;
+            }
+
+            if (e.shiftKey) {
+                var start = $checkboxes.index(this);
+                var end = $checkboxes.index(lastChecked);
+                $checkboxes.slice(Math.min(start, end), Math.max(start, end) + 1).prop("checked", lastChecked.checked);
+            }
+            lastChecked = this;
+        });
+
+        $('input#pSelect').on('click', function (e) {
+            var $checkboxes = $('input#pSelect');
+            if (!lastChecked) {
+                lastChecked = this;
+            }
+
+            if (e.shiftKey) {
+                var start = $checkboxes.index(this);
+                var end = $checkboxes.index(lastChecked);
+                $checkboxes.slice(Math.min(start, end), Math.max(start, end) + 1).prop("checked", lastChecked.checked);
+            }
+            lastChecked = this;
+        });
+
+        $("#Search").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("div[data-fordisabling*='dq']").filter(function () {
+                $(this).toggle(
+                    $(this).find("span#qTitle").text().toLowerCase().indexOf(value) > -1 ||
+                    $(this).find("span#qTags").text().toLowerCase().indexOf(value) > -1 ||
+                    $(this).find("span#qDefinition").text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+
+        $("#Search").on("keyup", function () {
+            var value = $(this).val().toLowerCase();
+            $("div[data-fordisabling*='dp']").filter(function () {
+                $(this).toggle(
+                    $(this).find("span#pName").text().toLowerCase().indexOf(value) > -1 ||
+                    $(this).find("span#pTags").text().toLowerCase().indexOf(value) > -1 ||
+                    $(this).find("span#pqList").text().toLowerCase().indexOf(value) > -1)
+            });
+        });
+
         document.getElementById('ProcessHash').addEventListener("keyup", function (event) {
             if (event.keyCode === 13) {
                 event.preventDefault();
@@ -212,83 +285,22 @@
                     }
                 })
             }
-        });    
-    }
-    
-
-    function CreateAlert(str, type) {
-        $('#Alerts').empty();
-        $('#Alerts').append('<div class="alert ' + type + '"><span class="closebtn">×</span><strong>' + str + '</strong></div>');
-        alerts = document.getElementsByClassName("closebtn");
-        console.log(alerts);
-        alerts[alerts.length - 1].onclick = function () {
-            var div = this.parentElement;
-            div.style.opacity = "0";
-            setTimeout(function () { div.style.display = "none"; }, 600);
-        }
-        setTimeout(function () { $('#Alerts').empty(); }, 5000);
-    };
-
-    $('input#qSelect').on('click', function (e) {
-        var $checkboxes = $('input#qSelect');
-        if (!lastChecked) {
-            lastChecked = this;
-        }
-
-        if (e.shiftKey) {
-            var start = $checkboxes.index(this);
-            var end = $checkboxes.index(lastChecked);
-            $checkboxes.slice(Math.min(start, end), Math.max(start, end) + 1).prop("checked", lastChecked.checked);
-        }
-        lastChecked = this;
-    });
-
-    $('input#pSelect').on('click', function (e) {
-        var $checkboxes = $('input#pSelect');
-        if (!lastChecked) {
-            lastChecked = this;
-        }
-
-        if (e.shiftKey) {
-            var start = $checkboxes.index(this);
-            var end = $checkboxes.index(lastChecked);
-            $checkboxes.slice(Math.min(start, end), Math.max(start, end) + 1).prop("checked", lastChecked.checked);
-        }
-        lastChecked = this;
-    });
-
-    function CheckAll(flag) {
-        switch (SelectedPage) {
-            case Page.QuestionPage:
-                $("input#qSelect").prop("checked", flag);
-                break;
-            case Page.PackPage:
-                $("input#pSelect").prop("checked", flag);
-                break;
-        }
-    };
-
-    $(document).ready(function () {
-        $("#Search").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("div[data-fordisabling*='dq']").filter(function () {
-                $(this).toggle(
-                    $(this).find("span#qTitle").text().toLowerCase().indexOf(value) > -1 ||
-                    $(this).find("span#qTags").text().toLowerCase().indexOf(value) > -1 ||
-                    $(this).find("span#qDefinition").text().toLowerCase().indexOf(value) > -1)
-            });
         });
-    });
 
-    $(document).ready(function () {
-        $("#Search").on("keyup", function () {
-            var value = $(this).val().toLowerCase();
-            $("div[data-fordisabling*='dp']").filter(function () {
-                $(this).toggle(
-                    $(this).find("span#pName").text().toLowerCase().indexOf(value) > -1 ||
-                    $(this).find("span#pTags").text().toLowerCase().indexOf(value) > -1 ||
-                    $(this).find("span#pqList").text().toLowerCase().indexOf(value) > -1)
-            });
+        $("#button_Que").click(function () {
+            $('#collapseAllPacks').removeClass('show');
+            console.log("ASS");
+            if (SelectedPage != Page.QuestionPage) SelectedPage = Page.QuestionPage;
+            else SelectedPage = Page.None;
+            lastChecked = null;
+        });
+
+        $("#button_Pack").click(function () {
+            $('#collapseAllQuestion').removeClass('show');
+            console.log("ASS");
+            if (SelectedPage != Page.PackPage) SelectedPage = Page.PackPage;
+            else SelectedPage = Page.None;
+            lastChecked = null;
         });
     });
 
@@ -354,21 +366,6 @@
             }
         }
     }
-
-    $("#button_Que").click(function () {
-        $('#collapseAllPacks').removeClass('show');   
-        console.log("ASS");
-        if (SelectedPage != Page.QuestionPage) SelectedPage = Page.QuestionPage;
-        else SelectedPage = Page.None;
-        lastChecked = null;
-    });
-    $("#button_Pack").click(function () {
-        $('#collapseAllQuestion').removeClass('show');
-        console.log("ASS");
-        if (SelectedPage != Page.PackPage) SelectedPage = Page.PackPage;
-        else SelectedPage = Page.None;
-        lastChecked = null;
-    });
 
     function AddQuestion(id) {
         var a = document.getElementById(id);

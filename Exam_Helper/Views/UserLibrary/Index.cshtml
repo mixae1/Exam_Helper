@@ -214,35 +214,6 @@
         setTimeout(function () { $('#Alerts').empty(); }, 5000);
     };
 
-
-    $('input#qSelect').on('click', function (e) {
-        var $checkboxes = $('input#qSelect');
-        if (!lastChecked) {
-            lastChecked = this;
-        }
-
-        if (e.shiftKey) {
-            var start = $checkboxes.index(this);
-            var end = $checkboxes.index(lastChecked);
-            $checkboxes.slice(Math.min(start, end), Math.max(start, end) + 1).prop("checked", lastChecked.checked);
-        }
-        lastChecked = this;
-    });
-
-    $('input#pSelect').on('click', function (e) {
-        var $checkboxes = $('input#pSelect');
-        if (!lastChecked) {
-            lastChecked = this;
-        }
-
-        if (e.shiftKey) {
-            var start = $checkboxes.index(this);
-            var end = $checkboxes.index(lastChecked);
-            $checkboxes.slice(Math.min(start, end), Math.max(start, end) + 1).prop("checked", lastChecked.checked);
-        }
-        lastChecked = this;
-    });
-
     function CheckAll(flag) {
         switch (SelectedPage) {
             case Page.QuestionPage:
@@ -255,6 +226,35 @@
     };
 
     $(document).ready(function () {
+
+        $('input#qSelect').on('click', function (e) {
+            var $checkboxes = $('input#qSelect');
+            if (!lastChecked) {
+                lastChecked = this;
+            }
+
+            if (e.shiftKey) {
+                var start = $checkboxes.index(this);
+                var end = $checkboxes.index(lastChecked);
+                $checkboxes.slice(Math.min(start, end), Math.max(start, end) + 1).prop("checked", lastChecked.checked);
+            }
+            lastChecked = this;
+        });
+
+        $('input#pSelect').on('click', function (e) {
+            var $checkboxes = $('input#pSelect');
+            if (!lastChecked) {
+                lastChecked = this;
+            }
+
+            if (e.shiftKey) {
+                var start = $checkboxes.index(this);
+                var end = $checkboxes.index(lastChecked);
+                $checkboxes.slice(Math.min(start, end), Math.max(start, end) + 1).prop("checked", lastChecked.checked);
+            }
+            lastChecked = this;
+        });
+
         SearchString.on("keyup", function () {
             var value = SearchString.val().toLowerCase();
             $("div[class='accordion'][id='accordionExample'][data-type='question']").filter(function () {
@@ -265,9 +265,7 @@
                     aCard.find("span#qDefinition").text().toLowerCase().indexOf(value) > -1)
             });
         });
-    });
 
-    $(document).ready(function () {
         SearchString.on("keyup", function () {
             var value = SearchString.val().toLowerCase();
             $("div[class='accordion'][id='accordionExample'][data-type='pack']").filter(function () {
@@ -278,15 +276,28 @@
                     aCard.find("span#pqList").text().toLowerCase().indexOf(value) > -1)
             });
         });
-    });
 
-    $(document).ready(function () {
         if (screen.width < 768) {
             $(document).ready(function () {
                 $('.card-header').addClass('flex-column')
                 $('.card-header').addClass('mt-2')
             });
         }
+
+        $("#button_Que").click(function () {
+            $('#collapseAllPacks').removeClass('show');
+            if (SelectedPage != Page.QuestionPage) SelectedPage = Page.QuestionPage;
+            else SelectedPage = Page.None;
+            lastChecked = null;
+        });
+
+        $("#button_Pack").click(function () {
+            $('#collapseAllQuestion').removeClass('show');
+            if (SelectedPage != Page.PackPage) SelectedPage = Page.PackPage;
+            else SelectedPage = Page.None;
+            lastChecked = null;
+        });
+
     });
 
     $(function () {
@@ -356,19 +367,6 @@
             }
         }
     }
-
-    $("#button_Que").click(function () {
-        $('#collapseAllPacks').removeClass('show');
-        if (SelectedPage != Page.QuestionPage) SelectedPage = Page.QuestionPage;
-        else SelectedPage = Page.None;
-        lastChecked = null;
-    });
-    $("#button_Pack").click(function () {
-        $('#collapseAllQuestion').removeClass('show');
-        if (SelectedPage != Page.PackPage) SelectedPage = Page.PackPage;
-        else SelectedPage = Page.None;
-        lastChecked = null;
-    });
 
     function ChangeQuestionPrivate(id) {
         var a = document.getElementById(id);
