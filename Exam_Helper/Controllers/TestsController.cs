@@ -299,8 +299,15 @@ namespace Exam_Helper.Controllers
                 {
                     var singleStat = Statsdata[i].Split(';');
                     var singleInput = inputData[i].Split(';');
-                    singleStat[0] = (int.Parse(singleStat[0]) + int.Parse(singleInput[0])).ToString();
-                    singleStat[1] = (int.Parse(singleStat[1]) + int.Parse(singleInput[1])).ToString();
+
+                    //Для подсчета глобальной статистики
+                    //singleStat[0] = (int.Parse(singleStat[0]) + int.Parse(singleInput[0])).ToString();
+                    //  singleStat[1] = (int.Parse(singleStat[1]) + int.Parse(singleInput[1])).ToString();
+
+                    //учитывается только результат последнего прохождения
+                    singleStat[0] = (int.Parse(singleInput[0])).ToString();
+                    singleStat[1] = (int.Parse(singleInput[1])).ToString();
+
                     Statsdata[i] = singleStat[0] + ';' + singleStat[1];
                 }
                 atest.ServiceInfo = string.Join("|", Statsdata);
