@@ -85,7 +85,8 @@ function ProcessTag(name) {
 
 function AppendTagToSelected(name) {
     st_ul.append("<span class='badge badge-secondary'>" + name + "</span>");
-    st_ul.append("<input name='tags.SelectedTags' value='"+name+"' hidden/>");
+    st_ul.append("<input name='tags.SelectedTags' value='" + name + "' hidden/>");
+    CorrectDeleteButton();
 }
 
 function ChooseTag(name) {
@@ -101,4 +102,14 @@ function RemoveLastSelectedTag() {
     st_ul.find("input[name='tags.SelectedTags']").filter(function () {
         if (this.value == name) $(this).remove();
     });
+    CorrectDeleteButton();
+}
+
+function CorrectDeleteButton() {
+    if (st_ul.find("input[name='tags.SelectedTags']").length == 0) {
+        $('.deleteButton').hide();
+    }
+    else {
+        $('.deleteButton').show();
+    }
 }

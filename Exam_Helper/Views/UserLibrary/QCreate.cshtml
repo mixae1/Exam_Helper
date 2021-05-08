@@ -7,47 +7,41 @@
     <script src="~/js/tag_adding.js"></script>
 </head>
 
-<main class="container p-2">
+<main class="container d-flex flex-column align-items-center">
     <h1>Создание</h1>
     <h4>Вопрос</h4>
-    
     <hr color="brown" />
-    
     <div class="instruction">
         <span>Поля, помеченные (<span class="colortext" style="color:red">*</span>), обязательны для заполнения:</span>
     </div>
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <form asp-action="QCreate">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
         <div class="form-group">
-            <div class="d-flex justify-content-between pt-3 pb-3">
-                <span>
-                    <b>@Html.DisplayNameFor(model => model.Title)<span class="colortext" style="color:red">*</span>:</b>
-                    <br />
-                    <input asp-for="@Model.Title" type="text" class="form-control w-100 input-name">
-                    <span asp-validation-for="@Model.Title" class="text-danger"></span>
-                </span>
-            </div>
-    
-            <div class="d-flex justify-content-between pt-3 pb-3">
-                <span>
-                    <b>@Html.DisplayNameFor(model => model.Definition)<span class="colortext" style="color:red">*</span>:</b>
-                    <br />
-                    <textarea asp-for="@Model.Definition" id="textarea" rows="3"></textarea>
-                    <br />
-                    <span asp-validation-for="@Model.Definition" class="text-danger"></span>
-                </span>
-            </div>
-            <div class="d-flex justify-content-between pt-3 pb-3">
-                <span>
-                    <b>@Html.DisplayNameFor(model => model.Proof):</b>
-                    <br />
-                    <textarea asp-for="@Model.Proof" id="textarea" rows="5"></textarea>
-                </span>
-            </div>
+            <b>@Html.DisplayNameFor(model => model.Title)<span class="colortext" style="color:red">*</span>:</b>
+            <br />
+            <input asp-for="@Model.Title" type="text" class="form-control input-name" style="width: 800px;">
+            <span asp-validation-for="@Model.Title" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="@Model.tags" class="control-label"></label>
+            <b>@Html.DisplayNameFor(model => model.Definition)<span class="colortext" style="color:red">*</span>:</b>
+            <br />
+            <textarea asp-for="@Model.Definition" id="textarea" rows="3" class="form-control"></textarea>
+            <br />
+            <span asp-validation-for="@Model.Definition" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.Proof):</b>
+            <br />
+            <textarea asp-for="@Model.Proof" id="textarea" rows="5" class="form-control"></textarea>
+        </div>
+
+        <div class="form-group">
+            <b>@Html.DisplayNameFor(model => model.tags):</b>
+            <br />
             <div class="d-flex flex-column">
                 <div>
                     <input class="form-control w-25" id="tInput" type="text" placeholder="Выберите или создайте" autocomplete="off">
@@ -56,7 +50,9 @@
                 <div class="d-flex">
                     <div id="stList" class="d-flex flex-wrap ml-3 mt-2">
                     </div>
-                    <button style="width: 30px; height: 30px;" class="ml-1 mt-4 bg-light deleteButton">&times;</button>
+                    <div class="mt-2">
+                        <a style="width: 30px; height: 30px; align-items: center; margin: 5px; padding: 0; display: none;" class="btn bg-light deleteButton">&times;</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -84,31 +80,32 @@
         }
         LoadTags(tags);
         Tune();
+
+        $(".input-name").keypress(function(e){
+             if(e.keyCode == 13) return false;
+        });
+        $(".deleteButton").click(function (){
+            RemoveLastSelectedTag()
+        })
     });
-    
-    $(".input-name").keypress(function(e){
-         if(e.keyCode == 13) return false;
-    });
-    $(".deleteButton").click(function (){
-        RemoveLastSelectedTag()
-    })
-    
+
+
 </script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 <style>
-    textarea{
+    textarea {
         width: 300px;
     }
-    .badge{
+
+    .badge {
         display: flex;
         align-items: center;
-        height: 50px;
+        height: 30px;
         font-size: 15px;
         background-color: #778899;
-        margin-top: 5px;
-        margin-left: 5px;
+        margin: 5px;
     }
 </style>
