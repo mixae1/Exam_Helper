@@ -106,15 +106,23 @@
             var id_elem = $(elem).children("[id^=draggable]");
             console.log('id is ' + $(id_elem).attr("id"));
             if ($(id_elem).attr("id") === ('draggable' + ans[index])) {
+                $(this).removeClass("none");
                 $(this).removeClass("wrong");
                 $(this).addClass("right");
                 correctAns++;
             }
             else {
+                $(this).removeClass("none");
                 $(this).removeClass("right");
                 $(this).addClass("wrong");
             }
-            setTimeout(function () { $('.droppable-elems').children().children().css("background-color", "white"); }, 3000);
+            setTimeout(function ()
+            {
+                $('.droppable-elems').children().children().removeClass("right");
+                $('.droppable-elems').children().children().removeClass("wrong");
+                $('.droppable-elems').children().children().addClass("none");
+            }
+                , 3000);
             all++;
         });
 
@@ -242,6 +250,10 @@
 
     .wrong {
         background-color: red;
+    }
+
+    .none{
+        background-color: white;
     }
 
     .hover {
