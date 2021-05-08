@@ -130,7 +130,7 @@ namespace Exam_Helper.Controllers
 
             if (!a || !f) return 0;
 
-            return s_val != 0 ? Math.Round(f_val * 1.0 / s_val,2)*100 : 0;
+            return s_val != 0 ? (int)(Math.Round(f_val * 1.0 / s_val,2)*100) : 0;
         }
 
 
