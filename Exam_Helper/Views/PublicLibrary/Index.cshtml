@@ -71,7 +71,7 @@
                                     </div>
 
                                   
-                                        <button class="btn text-center titleText" type="button" data-toggle="collapse" data-target="#q_collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="q_collapse_@item.Id.ToString()">
+                                        <button class="btn text-center titleText check-height" type="button" data-toggle="collapse" data-target="#q_collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="q_collapse_@item.Id.ToString()">
                                             <span class="h4" id="qTitle">@item.Title </span>
                                         </button>
                                   
@@ -97,7 +97,7 @@
 
                         <div id="q_collapse_@item.Id.ToString()" class="collapse container" aria-labelledby="headingOne" data-parent="#accordionExample">
                             <div class="card-body d-flex flex-column align-content-center p-2 mt-2 mb-2">
-                                <div class="row row-cols-auto ml-2">
+                                <div class="row row-cols-auto ml-1">
                                     @foreach (var t in item.TagIds.Split(';'))
                                     {
                                         if (!string.IsNullOrEmpty(t))
@@ -133,13 +133,13 @@
                                         }
                                     </div>
                                     <div class="row row-cols-auto align-items-center ml-3">
-                                        <button class="btn" type="button" data-toggle="collapse" data-target="#p_collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="p_collapse_@item.Id.ToString()">
+                                        <button class="btn check-height" type="button" data-toggle="collapse" data-target="#p_collapse_@item.Id.ToString()" aria-expanded="false" aria-controls="p_collapse_@item.Id.ToString()">
                                             <span class="h4 titleText" id="pName"> @Html.DisplayFor(modelItem => item.Name) </span>
                                         </button>
                                     </div>
                                 </div>
                                 <div class="btn-group justify-content-center align-items-center actionButton pr-5">
-                                    <button type="button" class="btn collapse btn-info dropdown-toggle action-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="p_collapse_@item.Id.ToString()" data-parent="#accordionExample">
+                                    <button type="button " class="btn collapse btn-info dropdown-toggle action-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="p_collapse_@item.Id.ToString()" data-parent="#accordionExample">
                                         Действия
                                     </button>
                                     <div class="dropdown-menu">
@@ -157,12 +157,12 @@
                         </div>
                         <div id="p_collapse_@item.Id.ToString()" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
                             <div class="card-body d-flex flex-column">
-                                <div class="row row-cols-auto ml-2">
+                                <div class="row row-cols-auto ml-1">
                                     @foreach (var t in item.TagsId.Split(';'))
                                     {
                                         if (!string.IsNullOrEmpty(t))
                                         {
-                                            <div class="alert alert-info text-center">
+                                            <div class="alert alert-info tags text-center">
                                                 <span class="cardTags"  id="pTags">@Html.DisplayFor(modelItem => modelItem.tags.Find(x => x.Id == int.Parse(t)).Title) </span>
                                             </div>
                                         }
@@ -171,7 +171,7 @@
                                 @foreach (var quesId in item.QuestionSet.Split(";"))
                                     {
                                         <div class="d-flex flex-column justify-content-between pt-2 pb-3">
-                                            <a class="compItem" asp-action="QDetails" asp-route-id="@quesId" id="pqList"> @Model.questions.FirstOrDefault(x => x.question.Id.ToString() == quesId).question.Title</a>
+                                            <a class="compItem pack-a" asp-action="QDetails" asp-route-id="@quesId" id="pqList"> @Model.questions.FirstOrDefault(x => x.question.Id.ToString() == quesId).question.Title</a>
                                         </div>
                                     }
                             </div>
@@ -416,10 +416,9 @@
 
 <style>
     .card-body {
-        min-height: 100px;
+        min-height: 50px;
     }
     .alert {
-        padding: 20px;
         color: white;
         opacity: 1;
         transition: opacity 0.6s;
@@ -456,6 +455,12 @@
     #qSelect {
         height:15px;
         width:15px;
+    }
+    .tags{
+        max-width: 150px;
+        min-width: 75px;
+        min-height: 30px;
+        max-height: 100px;
     }
     
 </style>

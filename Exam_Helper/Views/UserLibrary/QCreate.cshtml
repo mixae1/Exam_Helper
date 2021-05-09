@@ -7,11 +7,11 @@
     <script src="~/js/tag_adding.js"></script>
 </head>
 
-<main class="container d-flex flex-column align-items-center">
+<main class="container d-flex flex-column align-items-center q-main">
     <h1>Создание</h1>
-    <h4>Вопрос</h4>
+    <h4>Вопроса</h4>
     <hr color="brown" />
-    <div class="instruction">
+    <div class="instruction mt-3">
         <span>Поля, помеченные (<span class="colortext" style="color:red">*</span>), обязательны для заполнения:</span>
     </div>
 
@@ -21,7 +21,7 @@
         <div class="form-group">
             <b>@Html.DisplayNameFor(model => model.Title)<span class="colortext" style="color:red">*</span>:</b>
             <br />
-            <input asp-for="@Model.Title" type="text" class="form-control input-name" style="width: 800px;">
+            <input asp-for="@Model.Title" type="text" class="form-control input-name" style="width: 300px;">
             <span asp-validation-for="@Model.Title" class="text-danger"></span>
         </div>
 
@@ -44,11 +44,11 @@
             <br />
             <div class="d-flex flex-column">
                 <div>
-                    <input class="form-control w-25" id="tInput" type="text" placeholder="Выберите или создайте" autocomplete="off">
+                    <input class="form-control" id="tInput" type="text" placeholder="Выберите или создайте" autocomplete="off">
                     <div class="list-group" style="max-height: 288px; overflow-y: scroll; display: none;" id="tList"></div>
                 </div>
                 <div class="d-flex">
-                    <div id="stList" class="d-flex flex-wrap ml-3 mt-2">
+                    <div id="stList" style="width: 300px;" class="d-flex flex-wrap ml-3 mt-2">
                     </div>
                     <div class="mt-2">
                         <a style="width: 30px; height: 30px; align-items: center; margin: 5px; padding: 0; display: none;" class="btn bg-light deleteButton">&times;</a>
@@ -96,9 +96,6 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
 <style>
-    textarea {
-        width: 300px;
-    }
 
     .badge {
         display: flex;

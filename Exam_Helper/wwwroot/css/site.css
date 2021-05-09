@@ -45,6 +45,7 @@ html {
 
     .tags {
         width: 50%;
+        height: 50%;
     }
     html {
         font-size: 13px;
@@ -80,6 +81,13 @@ html {
     .stat-per{
         font-size: 13px;
     }
+    /*.q-main{*/
+    /*    width: 50%;*/
+    /*}*/
+    /*.q-main textarea, input{*/
+    /*    width: 50%;*/
+    /*}*/
+    
 }
 @media screen and (max-height: 550px){
     #first_icon {
@@ -161,7 +169,9 @@ html {
         flex-direction: column;
     }
 }*/
-
+.pack-a{
+    color: black;
+}
 .border-top {
   border-top: 1px solid #e5e5e5;
 }
