@@ -172,7 +172,7 @@ namespace Exam_Helper.TestMethods
                                 htmlParts[buf[i - 1]] = Char.ToLower(htmlParts[buf[i - 1]][0]) + htmlParts[buf[i - 1]].Substring(1);
                             }
                         }
-                        htmlParts[buf[i - 1]] = "<label class=\"wr-label\" data-answer=\"" + parts[buf[i - 1]] + "\">" + htmlParts[buf[i - 1]];
+                        htmlParts[buf[i - 1]] = "<label class=\"wr-label\" data-answer=\"" + parts[buf[i - 1]] + " \">" + htmlParts[buf[i - 1]];
                     }
                 }
                 else
@@ -209,7 +209,7 @@ namespace Exam_Helper.TestMethods
                 for(int i = 0; i < Math.Max(number_of_numbers * instructions.percent, 1); i++)
                 {
                     htmlParts[positions_of_numbers_in_parts[i]] =
-                        "<label class=\"wr-label\" data-answer=\"" + parts[positions_of_numbers_in_parts[i]] + "\">" + (int.Parse(parts[positions_of_numbers_in_parts[i]]) + RandIntAtRange(3)).ToString() + " </label>";
+                        "<label class=\"wr-label\" data-answer=\"" + parts[positions_of_numbers_in_parts[i]] + " \">" + (int.Parse(parts[positions_of_numbers_in_parts[i]]) + RandIntAtRange(3)).ToString() + " </label>";
                 }
                 
                 anyChanges = true;
@@ -229,7 +229,7 @@ namespace Exam_Helper.TestMethods
                 for (int i = 0; i < Math.Max(number_of_signes * instructions.percent, 1); i++)
                 {
                     htmlParts[positions_of_signes_in_parts[i]] =
-                        "<label class=\"wr-label\" data-answer=\"" + parts[positions_of_signes_in_parts[i]] + "\">" + RandSign(parts[positions_of_signes_in_parts[i]][0]) + " </label>";
+                        "<label class=\"wr-label\" data-answer=\"" + parts[positions_of_signes_in_parts[i]] + " \">" + RandSign(parts[positions_of_signes_in_parts[i]][0]) + " </label>";
                 }
 
                 anyChanges = true;
@@ -253,7 +253,7 @@ namespace Exam_Helper.TestMethods
                 for (int i = 0; i < Math.Max(number_of_latin * instructions.percent, 2); i++)
                 {
                     htmlParts[positions_of_latin_in_parts[i]] =
-                        "<label class=\"wr-label\" data-answer=\"" + parts[positions_of_latin_in_parts[i]] + "\">" + RandLatin(parts[positions_of_latin_in_parts[i]][0], set_of_latin.ToList()) + " </label>";
+                        "<label class=\"wr-label\" data-answer=\"" + parts[positions_of_latin_in_parts[i]] + " \">" + RandLatin(parts[positions_of_latin_in_parts[i]][0], set_of_latin.ToList()) + " </label>";
                 }
 
                 anyChanges = true;
