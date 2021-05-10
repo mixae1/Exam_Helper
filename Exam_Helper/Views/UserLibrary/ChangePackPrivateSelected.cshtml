@@ -1,8 +1,8 @@
-@model Exam_Helper.ViewsModel.Libs.ClassForChangePrivateSelectedConfirmed
+п»ї@model Exam_Helper.ViewsModel.Libs.ClassForChangePrivateSelectedConfirmed
 
 <div class="modal-content">
     <div class="modal-header">
-        <h4 class="modal-title" style="color:darkred">Вы точно хотите @(Model.publish ? "опубликовать" : "скрыть")?</h4>
+        <h4 class="modal-title" style="color:darkred">Р’С‹ С‚РѕС‡РЅРѕ С…РѕС‚РёС‚Рµ @(Model.publish ? "РѕРїСѓР±Р»РёРєРѕРІР°С‚СЊ" : "СЃРєСЂС‹С‚СЊ")?</h4>
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
     </div>
 
@@ -10,7 +10,7 @@
     <div class="modal-body">
         <dl class="row">
             <dt class="col-sm-10">
-                Список паков:
+               РЎРїРёСЃРѕРє РїР°РєРѕРІ:
             </dt>
             @for (int i = 0; i < Model.tuples.Count; i++)
             {
@@ -25,8 +25,8 @@
     <div class="modal-footer">
         <div class="form-group">
             <div class="d-flex">
-                <button type="button" class="btn btn-danger" onclick="ChangePackPrivateSelectedComfirm()" data-dismiss="modal">@(Model.publish ? "Опубликовать" : "Скрыть")</button>|
-                <button type="button" class="btn btn-light" data-dismiss="modal">Вернуться в библиотеку</button>
+                <button type="button" class="btn btn-danger" onclick="ChangePackPrivateSelectedComfirm()" data-dismiss="modal">@(Model.publish ? "РћРїСѓР±Р»РёРєРѕРІР°С‚СЊ" : "РЎРєСЂС‹С‚СЊ")</button>|
+                <button type="button" class="btn btn-light" data-dismiss="modal">Р’РµСЂРЅСѓС‚СЊСЃСЏ РІ Р±РёР±Р»РёРѕС‚РµРєСѓ</button>
             </div>
 
         </div>
@@ -51,7 +51,7 @@
             //    return dqs.includes(this.dataset.id.toString());
             //}).remove();
 
-            CreateAlert("Приватность изменена.", "info");
+            CreateAlert("РџСЂРёРІР°С‚РЅРѕСЃС‚СЊ РёР·РјРµРЅРµРЅР°.", "info");
 
         })
     };
