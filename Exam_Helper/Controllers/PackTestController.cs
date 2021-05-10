@@ -129,7 +129,7 @@ namespace Exam_Helper.Controllers
             ViewData["ReturnControllerName"] = HttpContext.Session.GetString("ReturnControllerName");
             var models = new TestChoiceViewModel()
             {
-                TestMethodsNames = new string[] { "NameAndDesc", "TestConstructor", "Dummy" },
+                TestMethodsNames = new string[] { "NameAndDesc", "TestConstructor"},
                 TestsMethodsIds = new int[] { 1, 2, 3 },
             };
             return View(models);
@@ -213,8 +213,8 @@ namespace Exam_Helper.Controllers
 
                 switch (TestMethodId)
                 {
-                    case 2: return RedirectToAction(nameof(TestsController.TheWrongTextTest), nameof(Tests), new { Instruction = "50;true;false;false;false", ControllerName = "PackTest", isMulti = true });
-                    case 1: return RedirectToAction(nameof(TestsController.MissingWordsTest), nameof(Tests), new {Instruction= "50;false;1", ControllerName = "PackTest", isMulti = true });
+                    case 2: return RedirectToAction(nameof(TestsController.TheWrongTextTest), nameof(Tests), new { Instruction = "50;true;false;false;false;1", ControllerName = "PackTest", isMulti = true });
+                    case 1: return RedirectToAction(nameof(TestsController.MissingWordsTest), nameof(Tests), new {Instruction= "50;false;false;false;1", ControllerName = "PackTest", isMulti = true });
                     case 0: return RedirectToAction(nameof(TestsController.PuzzleTest), nameof(Tests), new { Instruction= "50;false;false;0;1", ControllerName = "PackTest", isMulti = true });
                 }
 
