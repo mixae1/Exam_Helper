@@ -34,9 +34,6 @@
                                                 case "NameAndDesc": @:Cопоставить название и определение
                                                     break;
 
-                                                case "Dummy": @:Методы тестирования/заучивания
-                                                    break;
-
                                                 default:
                                                     @Model.TestMethodsNames[i]
                                                     break;
@@ -88,6 +85,14 @@
 <script>
     const multitesting_pack = $("#collapse_TestConstructor > div");
 
+
+    $(function () {
+
+        localStorage.removeItem('userStats/MissingWords');
+        localStorage.removeItem('userStats/Puzzle');
+        localStorage.removeItem('userStats/Wrong');
+        localStorage.setItem('testfinished', 'f');
+    });
 
     function MakeInstruction() {
         var curr_method;

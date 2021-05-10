@@ -5,10 +5,10 @@
 
 <main class="container" style="height: 60vh; max-width: 70vh; min-width: 40vh; margin-top: 15vh;">
     <form asp-action="UserStats" class="container d-flex flex-column">
-        <h1>Здесь могла бы быть ваша статистика</h1>
+        <h1>Результаты прохождения метода тестирования "Конструктор тестов"</h1>
         <div class="stats  d-flex flex-column align-content-between pt-2 pb-2">
-            <input type="hidden" id="answer" name="userAnswer"/>
-            <input type="hidden" id="userURL" name="userURL"/>
+            <input type="hidden" id="answer" name="userAnswer" />
+            <input type="hidden" id="userURL" name="userURL" />
             <input type="hidden" name="userName" value="@User.Identity.Name">
             <div class="mb-2">
                 <span>Исправление ошибок </span>
@@ -25,7 +25,11 @@
                 <span>Вставка пропущенных слов </span>
                 <span id="Mis_user">Процент выполнения:</span>
             </div>
-            <span> При подсчете процента выполнения заданий учитываются все результаты, полученные при нажатии кнопки "Проверить ответ" (доработать) </span>
+            <span> При подсчете процента выполнения заданий учитываются все результаты, полученные при нажатии кнопки "Проверить ответ" </span>
+            @if (Model.ControllerName.Equals("PackTest"))
+            {
+                <span style="color:red">*Результат прохождения для данного метода тестирования  не отображается в библиотеке пользователя </span>
+            }
         </div>
         <div class="buttons">
             <a asp-controller="@Model.ReturnControllerName" asp-action="UserStats">
