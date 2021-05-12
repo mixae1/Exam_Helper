@@ -127,6 +127,9 @@
                                             </span>
 
                                         </p>
+                                        <p class="d-flex flex-wrap">
+                                            К сожалению данный метод не работает на мобильных устройствах.
+                                        </p>
                                     </div>
                                     break;
 
@@ -339,10 +342,10 @@
 
     <div class="d-flex flex-wrap">
         <div class="form-group">
-            <button type="submit" class="btn btn-primary mr-2" id="sumbit" onclick="MakeInstruction()">Сделать выбор</button>
+            <button type="submit" class="btn btn-lib mr-2" id="sumbit" onclick="MakeInstruction()">Сделать выбор</button>
         </div>
         <a asp-controller=@ViewData["ReturnControllerName"] asp-action="Index">
-            <input type="button" value="Вернуться в библиотеку" class="btn btn-primary" />
+            <input type="button" value="Вернуться в библиотеку" class="btn btn-lib" />
         </a>
     </div>
     </form>

@@ -21,7 +21,7 @@
         <div class="form-group">
             <b>@Html.DisplayNameFor(model => model.Title)<span class="colortext" style="color:red">*</span>:</b>
             <br />
-            <input asp-for="@Model.Title" type="text" class="form-control input-name" style="width: 800px;">
+            <input asp-for="@Model.Title" type="text" class="form-control input-name" style="width: 300px;">
             <span asp-validation-for="@Model.Title" class="text-danger"></span>
         </div>
 
@@ -44,23 +44,23 @@
             <br />
             <div class="d-flex flex-column">
                 <div>
-                    <input class="form-control w-25" id="tInput" type="text" placeholder="Выберите или создайте" autocomplete="off">
+                    <input class="form-control" id="tInput" type="text" placeholder="Выберите или создайте" autocomplete="off">
                     <div class="list-group" style="max-height: 288px; overflow-y: scroll; display: none;" id="tList"></div>
                 </div>
                 <div class="d-flex">
-                    <div id="stList" class="d-flex flex-wrap ml-3 mt-2">
+                    <div id="stList" style="width: 300px;" class="d-flex flex-wrap ml-3 mt-2">
                     </div>
                     <div class="mt-2">
-                        <a style="width: 30px; height: 30px; align-items: center; margin: 5px; padding: 0; display: none;" class="btn bg-light deleteButton">&times;</a>
+                        <a style="width: 30px; height: 30px; align-items: center; margin: 5px; padding: 0; display: none;" class="btn btn-lib deleteButton">&times;</a>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="form-group">
-            <input type="submit" value="Сохранить" class="btn btn-success" />
+            <input type="submit" value="Сохранить" class="btn btn-lib" />
             <a asp-action="Index">
-                <button type="button" class="btn btn-secondary">Обратно к списку</button>
+                <button type="button" class="btn btn-lib">Обратно к списку</button>
             </a>
         </div>
 

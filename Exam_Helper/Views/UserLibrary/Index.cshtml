@@ -25,35 +25,35 @@
             <div class="container ul-buttons">
                 <div class="container bd-highlight pt-3" style="padding-bottom:1rem;">
                     <div class="row row-cols-auto justify-content-center">
-                        <button class="btn btn-outline-info m-2" type="button" id="button_Que" data-toggle="collapse" data-target="#collapseAllQuestion" aria-expanded="true" aria-controls="collapseAllQuestion">
+                        <button class="btn btn-lib m-2" type="button" id="button_Que" data-toggle="collapse" data-target="#collapseAllQuestion" aria-expanded="true" aria-controls="collapseAllQuestion">
                             Вопросы
                         </button>
-                        <button class="btn btn-outline-info m-2" type="button" id="button_Pack" data-toggle="collapse" data-target="#collapseAllPacks" aria-expanded="true" aria-controls="collapseAllPacks">
+                        <button class="btn btn-lib m-2" type="button" id="button_Pack" data-toggle="collapse" data-target="#collapseAllPacks" aria-expanded="true" aria-controls="collapseAllPacks">
                             Паки
                         </button>
-                        <a class="btn btn-outline-info m-2" type="button" asp-action="QCreate">
+                        <a class="btn btn-lib m-2" type="button" asp-action="QCreate">
                             Добавить вопрос
                         </a>
-                        <a class="btn btn-outline-info m-2" type="button" asp-action="PCreate">
+                        <a class="btn btn-lib m-2" type="button" asp-action="PCreate">
                             Добавить пак
                         </a>
                     </div>
                 </div>
                 <div class="container">
                     <div class="row row-cols-auto justify-content-center">
-                        <button class="btn btn-outline-info m-2" type="button" onclick="EngageSelected('delete')" id="DeleteSelectedButton">
+                        <button class="btn btn-lib m-2" type="button" onclick="EngageSelected('delete')" id="DeleteSelectedButton">
                             Удалить выбранное
                         </button>
-                        <button class="btn btn-outline-info m-2" type="button" onclick="EngageSelected('publish')" id="PublishSelectedButton">
+                        <button class="btn btn-lib m-2" type="button" onclick="EngageSelected('publish')" id="PublishSelectedButton">
                             Опубликовать выбранное
                         </button>
-                        <button class="btn btn-outline-info m-2" type="button" onclick="EngageSelected('hide')" id="HideSelectedButton">
+                        <button class="btn btn-lib m-2" type="button" onclick="EngageSelected('hide')" id="HideSelectedButton">
                             Скрыть выбранное
                         </button>
-                        <button class="btn btn-outline-info m-2" type="button" onclick="CheckAll(true)">
+                        <button class="btn btn-lib m-2" type="button" onclick="CheckAll(true)">
                             Выделить всё
                         </button>
-                        <button class="btn btn-outline-info m-2" type="button" onclick="CheckAll(false)">
+                        <button class="btn btn-lib m-2" type="button" onclick="CheckAll(false)">
                             Убрать выделение
                         </button>
                     </div>
@@ -77,11 +77,7 @@
 
                                          
                                             <button class="btn text-center titleText d-flex align-items-center check-height-user" type="button" data-toggle="collapse" data-target="#q_collapse_@item.question.Id.ToString()" aria-expanded="false" aria-controls="q_collapse_@item.question.Id.ToString()">
-                                                <span class="h4" id="qTitle">@Html.DisplayFor(modelItem=>item.question.Title) </span> 
-                                                <span class="d-flex ml-2 stat-per">
-                                                    <p style="color: green;" class="m-0">@item.stats.MissWords %</p>
-                                                    <p style="color: red;" class="m-0 ml-2">@item.stats.WrongText %</p>
-                                                </span>
+                                                <span class="h4" id="qTitle">@Html.DisplayFor(modelItem=>item.question.Title) </span>
                                             </button>
                                             
 
@@ -108,16 +104,24 @@
                                     <div class="card-body d-flex flex-column align-content-center p-2 mt-2 mb-2">
                                         <div class="row row-cols-auto ml-1">
                                             @foreach (var t in item.question.TagIds.Split(';'))
+                                            {
+                                                if (!string.IsNullOrEmpty(t))
                                                 {
-                                                    if (!string.IsNullOrEmpty(t))
-                                                    {
-                                                        <div class="alert alert-info text-center tags mt-1">
-                                                            <span class="cardTags" id="qTags">@Html.DisplayFor(modelItem => modelItem.tags.Find(x => x.Id == int.Parse(t)).Title) </span>
-                                                        </div>
-                                                    }
+                                                    <div class="alert alert-info text-center tags mt-1">
+                                                        <span class="cardTags" id="qTags">@Html.DisplayFor(modelItem => modelItem.tags.Find(x => x.Id == int.Parse(t)).Title) </span>
+                                                    </div>
                                                 }
+                                            }
                                         </div>
                                         <span class="h5 pt-1" style="white-space: pre-wrap; margin-bottom: 0rem!important;" id="qDefinition">@Html.DisplayFor(model=>item.question.Definition)</span>
+                                        <div class="d-flex flex-column mt-4 flex-wrap stat">
+                                            <p class="text-color m-0">Результаты последнего прохождения: </p>
+                                            <div class="d-flex flex-wrap justify-content-start">
+                                                <p class="p-1"> Метод пропущенных слов: @item.stats.MissWords %</p>
+                                                <p class="p-1"> Воссоздание по частям: @item.stats.PuzzleTest %</p>
+                                                <p class="p-1"> Исправление ошибок: @item.stats.WrongText %</p>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -422,6 +426,11 @@
 </script>
 
 <style>
+    .stat{
+        font-weight: 500;
+        line-height: 1.2;
+        font-size: 1.1rem;
+    }
     .ul-buttons{
         max-height: 200px;
         overflow-y: auto;

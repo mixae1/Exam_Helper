@@ -1,4 +1,5 @@
 ﻿@using Exam_Helper.ViewsModel
+@using System.ComponentModel
 @model Exam_Helper.ViewsModel.TestParent
 @{
     ViewData["Title"] = "View";
@@ -37,31 +38,33 @@
             </div>
 
             <div class="container form-group">
-                <input type="submit" value="Проверить ответ" class="btn btn-primary" id="CheckAnswers" />
+                <input type="submit" value="Проверить ответ" class="btn btn-lib" id="CheckAnswers" />
             </div>
         }
         else
         {
-            <p>Мы не можем создать данный тест для этого вопроса.</p>
+            <div class="container" style="margin-top: 15vh">
+                <p>Мы не можем создать данный тест для этого вопроса.</p>
+            </div>
         }
         <div class="container d-flex flex-column">
             <a asp-controller=@Temp_Model.ReturnControllerName asp-action="Index">
-                <input type="button" value="Вернуться в библиотеку" class="btn btn-primary mt-1" />
+                <input type="button" value="Вернуться в библиотеку" class="btn btn-lib mt-1" />
             </a>
     
             <a asp-controller="@Temp_Model.ControllerName" asp-action="Index">
-                <input type="button" value="Вернуться к выбору метода тестирования" class="btn btn-primary mt-1 mb-1" />
+                <input type="button" value="Вернуться к выбору метода тестирования" class="btn btn-lib mt-1 mb-1" />
             </a>
         </div>
 
         <div class="container form-group">
             @if (Temp_Model.isMulti)
-                @Html.ActionLink("Cледующее задание", "MultiTesting", (Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-primary" })
+                @Html.ActionLink("Cледующее задание", "MultiTesting", (Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-lib" })
 
             @if (Temp_Model.IsSuccessed && !Temp_Model.isMulti)
             {
-                @Html.ActionLink("Пройти еще раз", "PuzzleTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-primary" })
-                <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#parts-modal">
+                @Html.ActionLink("Пройти еще раз", "PuzzleTest", "Tests", new { Instruction = Temp_Model.TestInstructions }, new { @type = "button", @class = "btn btn-lib" })
+                <button class="btn btn-lib" type="button" data-toggle="modal" data-target="#parts-modal">
                     Подсказка
                 </button>
                 <div class="modal fade" id="parts-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

@@ -11,6 +11,10 @@ $(".alert").css("background-color",localStorage.getItem("bc"))
 $(".draggable-elems").css("border-color",localStorage.getItem("bc"))
 $(".wrong-text").css("border-color",localStorage.getItem("bc"))
 $(".miss-words").css("border-color",localStorage.getItem("bc"))
+$(".panel-body-multi").css("border-color",localStorage.getItem("bc"))
+$(".panel-body").css("border-color",localStorage.getItem("bc"))
+$(".btn-lib").css("border-color",localStorage.getItem("bc"))
+$(".text-color").css("color",localStorage.getItem("bc"))
 
 $(".action-button").css("background-color",localStorage.getItem("bc"))
 
@@ -27,6 +31,10 @@ $('.change-color').click(function () {
     $(".wrong-text").css("border-color",color)
     $(".miss-words").css("border-color",color)
     $(".test-card").css("border-color",color)
+    $(".text-color").css("color",color)
+    $(".panel-body-multi").css("border-color",color)
+    $(".panel-body").css("border-color",color)
+    $(".btn-lib").css("border-color",color)
     // $(".btn-outline-info").css("border-color",color)
     let bc = $(".card").css("border-color")
     console.log(bc);

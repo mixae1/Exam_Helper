@@ -202,6 +202,9 @@ body {
 #logout, #registration, #login {
     color:black;
 }
+.btn-lib{
+    border-width: 2px;
+}
 .footer {
   position: absolute;
   bottom: 0;

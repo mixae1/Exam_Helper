@@ -3,25 +3,25 @@
     ViewData["Title"] = "UserStats";
 }
 
-<main class="container" style="height: 60vh; max-width: 70vh; min-width: 40vh; margin-top: 15vh;">
+<main class="container" style="height: 60vh; max-width: 70vh; min-width: 40vh; margin-top: 15vh; margin-bottom: 15px;">
     <form asp-action="UserStats" class="container d-flex flex-column">
-        <h1>Результаты прохождения метода тестирования "Конструктор тестов"</h1>
-        <div class="stats  d-flex flex-column align-content-between pt-2 pb-2">
+        <h2>Результаты прохождения метода тестирования "Конструктор тестов"</h2>
+        <div class="stats  d-flex flex-column align-content-between pt-5 pb-2">
             <input type="hidden" id="answer" name="userAnswer" />
             <input type="hidden" id="userURL" name="userURL" />
             <input type="hidden" name="userName" value="@User.Identity.Name">
-            <div class="mb-2">
+            <div class="mb-4">
                 <span>Исправление ошибок </span>
                 <span id="Wrong_user">Процент выполнения: </span>
             </div>
 
 
-            <div class="mb-2">
+            <div class="mb-4">
                 <span>Воссоздание по частям</span>
                 <span id="Puzzle_user">Процент выполнения:</span>
             </div>
 
-            <div class="mb-2">
+            <div class="mb-5">
                 <span>Вставка пропущенных слов </span>
                 <span id="Mis_user">Процент выполнения:</span>
             </div>
@@ -33,11 +33,11 @@
         </div>
         <div class="buttons">
             <a asp-controller="@Model.ReturnControllerName" asp-action="UserStats">
-                <input type="submit" value="Вернуться в библиотеку" onclick="$('#userURL').val('@Model.ReturnControllerName')" class="btn btn-primary mt-1"/>
+                <input type="submit" value="Вернуться в библиотеку" onclick="$('#userURL').val('@Model.ReturnControllerName')" class="btn btn-lib mt-2"/>
             </a>
 
             <a asp-controller="@Model.ControllerName" asp-action="UserStats">
-                <input type="submit" value="Вернуться к выбору метода тестирования" onclick="$('#userURL').val('@Model.ControllerName')" class="btn btn-primary mt-1"/>
+                <input type="submit" value="Вернуться к выбору метода тестирования" onclick="$('#userURL').val('@Model.ControllerName')" class="btn btn-lib mt-2"/>
             </a>
         </div>
 
@@ -87,3 +87,9 @@
 
 
 </script>
+
+<style>
+    .mb-4, .mb-5 span{
+        font-size: 18px;
+    }
+</style>

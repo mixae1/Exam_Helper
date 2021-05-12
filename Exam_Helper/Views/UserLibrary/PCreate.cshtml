@@ -19,7 +19,7 @@
             <input asp-for="@Model.pack_name" class="form-control" />
             <span asp-validation-for="@Model.pack_name" class="text-danger"></span>
         </div>
-        <div style="display:flex; flex-direction: row; justify-content: center;">
+        <div style="display:flex; flex-direction: row; justify-content: center;" class="flex-wrap">
             <div class="form-group">
                 <label asp-for="@Model.questions" class="control-label"></label>:
                 <ul class="list-group" id="questions" style="height: 288px; overflow-y: scroll; width: 284px;">
@@ -85,10 +85,10 @@
                 <span asp-validation-for="@Model.tags" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
-            <input type="submit" value="Создать" class="btn btn-success" />
+        <div class="form-group mt-3">
+            <input type="submit" value="Создать" class="btn btn-lib" />
             <a asp-action="Index">
-                <button type="button" class="btn btn-secondary">Обратно к списку</button>
+                <button type="button" class="btn btn-lib">Обратно к списку</button>
             </a>
         </div>
     </form>
