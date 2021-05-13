@@ -22,7 +22,7 @@ namespace Exam_Helper.ViewsModel.Account
         [Display(Name = "Пароль")]
         public string Password { get; set; }
 
-        [Required(ErrorMessage = "Подтверждение пароль не задано")]
+        [Required(ErrorMessage = "Нет подтверждения пароля")]
         [Compare("Password", ErrorMessage = "Пароли не совпадают")]
         [DataType(DataType.Password, ErrorMessage = "Пароль некорректен")]
         [Display(Name = "Подтверждение пароля")]
