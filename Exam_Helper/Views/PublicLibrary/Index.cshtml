@@ -267,25 +267,27 @@
                     $(this).find("span#pqList").text().toLowerCase().indexOf(value) > -1)
             });
         });
-
-        document.getElementById('ProcessHash').addEventListener("keyup", function (event) {
-            if (event.keyCode === 13) {
-                event.preventDefault();
-                console.log(event.srcElement.value);
-                $.ajax({
-                    type: 'GET',
-                    data: { hash: event.srcElement.value },
-                    url: '@Url.Action("AddHashQP", "PublicLibrary")',
-                    success: function (data) {
-                        $('#dialogContent').html(data);
-                        $('#modDialog').modal('show');
-                    },
-                    error: function (data) {
-                        CreateAlert("Неправильный id.", "warning");
-                    }
-                })
-            }
-        });
+            
+        if (document.getElementById('ProcessHash')){
+            document.getElementById('ProcessHash').addEventListener("keyup", function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    console.log(event.srcElement.value);
+                    $.ajax({
+                        type: 'GET',
+                        data: { hash: event.srcElement.value },
+                        url: '@Url.Action("AddHashQP", "PublicLibrary")',
+                        success: function (data) {
+                            $('#dialogContent').html(data);
+                            $('#modDialog').modal('show');
+                        },
+                        error: function (data) {
+                            CreateAlert("Неправильный id.", "warning");
+                        }
+                    })
+                }
+            });   
+        }
 
         $("#button_Que").click(function () {
             $('#collapseAllPacks').removeClass('show');
