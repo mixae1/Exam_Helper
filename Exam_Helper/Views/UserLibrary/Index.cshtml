@@ -116,6 +116,7 @@
                                         <span class="h5 pt-1" style="white-space: pre-wrap; margin-bottom: 0rem!important;" id="qDefinition">@Html.DisplayFor(model=>item.question.Definition)</span>
                                         <div class="d-flex flex-column mt-4 flex-wrap stat">
                                             <p class="text-color m-0">Результаты последнего прохождения: </p>
+                                            <p style="font-size: small; color: gray;">Примечание: учитывается только конструктор тестов для вопросов</p>
                                             <div class="d-flex flex-wrap justify-content-start">
                                                 <p class="p-1"> Метод пропущенных слов: @item.stats.MissWords %</p>
                                                 <p class="p-1"> Воссоздание по частям: @item.stats.PuzzleTest %</p>

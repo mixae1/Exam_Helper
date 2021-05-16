@@ -6,11 +6,12 @@
     var Temp_Model = Model as TestInfoPuzzle;
 }
 
-<main>
-    <div class="main d-flex flex-column test-page">
+<main style="margin-top: 25vh;" class="container d-flex align-items-center test-page">
+    <div>
 
         @{int num_ans = 0; int num = 0; }
 
+        <h2>@Temp_Model.Title</h2>
         @if (Temp_Model.IsSuccessed)
         {
             <div class="container droppable-elems justify-content-start">
@@ -43,7 +44,8 @@
         }
         else
         {
-            <div class="container" style="margin-top: 15vh">
+            <h5>Воссоздание по частям.</h5>
+            <div class="container" style="margin-top: 3vh">
                 <p>Мы не можем создать данный тест для этого вопроса.</p>
             </div>
         }
@@ -51,7 +53,7 @@
             <a asp-controller=@Temp_Model.ReturnControllerName asp-action="Index">
                 <input type="button" value="Вернуться в библиотеку" class="btn btn-lib mt-1" />
             </a>
-    
+
             <a asp-controller="@Temp_Model.ControllerName" asp-action="Index">
                 <input type="button" value="Вернуться к выбору метода тестирования" class="btn btn-lib mt-1 mb-1" />
             </a>
@@ -59,7 +61,7 @@
 
         <div class="container form-group">
             @if (Temp_Model.isMulti)
-                @Html.ActionLink("Cледующее задание", "MultiTesting", (Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-lib" })
+                @Html.ActionLink("Cледующее задание", "MultiTesting", (Temp_Model.ControllerName), new { Instruction = "" }, new { @type = "button", @class = "btn btn-lib" + (Temp_Model.IsSuccessed ? " isDisabled" : ""), id = "nextTask" })
 
             @if (Temp_Model.IsSuccessed && !Temp_Model.isMulti)
             {
@@ -93,8 +95,10 @@
 
 
 <script>
-
     $("#CheckAnswers").click(function CheckAnswers() {
+
+        $('#nextTask').removeClass('isDisabled');
+
         var ans = [];
         @if (Temp_Model.IsSuccessed)
          @for(int i = 0; i< Temp_Model.RightIndexes.Length; i++)
@@ -214,6 +218,13 @@
 </script>
 
 <style>
+    .isDisabled {
+        color: currentColor;
+        cursor: not-allowed;
+        opacity: 0.5;
+        text-decoration: none;
+        pointer-events: none;
+    }
     main {
         margin-top: 5%;
     }
