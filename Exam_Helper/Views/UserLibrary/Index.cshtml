@@ -8,7 +8,7 @@
 @inject UserManager<User> UserManager;
 
 <main class="container" style="padding-top: 3vh;">
-    <div id="Alerts" style="position: absolute; right: 0; top: 0;">
+    <div id="Alerts" style="position: fixed; right: 0; top: 0; z-index:9999;">
     </div>
     <form id="form">
         <div class="container">
@@ -388,12 +388,13 @@
                 url: '@Url.Action("ChangeQuestionPrivate", "UserLibrary")',
                 success: function (msg) {
                     a.innerHTML = lastText;
+                    CreateAlert('Приватность изменена', 'info'); 
                       },
                 error: function (msg) {
                     CreateAlert('Something went wrong', '');
                       }
             })
-
+          
         return false;
     };
 
@@ -413,6 +414,7 @@
                 url: '@Url.Action("ChangePackPrivate", "UserLibrary")',
                 success: function (msg) {
                     a.innerHTML = lastText;
+                    CreateAlert('Приватность изменена', 'info'); 
                       },
                 error: function (msg) {
                     a.innerHTML = "Ошибка.";
